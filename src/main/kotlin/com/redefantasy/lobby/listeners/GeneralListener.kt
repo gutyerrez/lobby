@@ -4,6 +4,7 @@ import com.redefantasy.core.shared.CoreProvider
 import com.redefantasy.core.shared.groups.Group
 import com.redefantasy.core.spigot.CoreSpigotConstants
 import com.redefantasy.core.spigot.CoreSpigotProvider
+import com.redefantasy.core.spigot.misc.utils.Title
 import com.redefantasy.lobby.misc.scoreboard.ScoreboardManager
 import net.md_5.bungee.api.chat.ComponentBuilder
 import org.bukkit.Bukkit
@@ -35,7 +36,7 @@ class GeneralListener : Listener {
         val player = event.player
         val user = CoreProvider.Cache.Local.USERS.provide().fetchById(player.uniqueId)
 
-        player.resetTitle()
+        Title.clear(player)
 
         player.maxHealth = 2.0
 
