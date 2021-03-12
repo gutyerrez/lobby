@@ -13,7 +13,7 @@ object ScoreboardManager {
         val user = CoreProvider.Cache.Local.USERS.provide().fetchById(player.uniqueId)
         val groupPrefix = user?.getHighestGroup()?.getFancyDisplayName() ?: "§7Membro"
 
-        val scoreboard = BaseScoreboard(player)
+        val scoreboard = BaseScoreboard()
 
         val onlineUsers = CoreProvider.Cache.Redis.USERS_STATUS.provide().fetchUsers()
 
@@ -37,7 +37,7 @@ object ScoreboardManager {
         scoreboard.set(1, "§3")
         scoreboard.set(0, "§e  redefantasy.com")
 
-        player.scoreboard = scoreboard.scoreboard
+        scoreboard.send(arrayOf(player))
     }
 
 }

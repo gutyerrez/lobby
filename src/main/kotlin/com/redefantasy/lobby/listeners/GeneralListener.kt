@@ -34,27 +34,12 @@ class GeneralListener : Listener {
         event: PlayerJoinEvent
     ) {
         val player = event.player
-        val user = CoreProvider.Cache.Local.USERS.provide().fetchById(player.uniqueId)
 
         Title.clear(player)
 
         player.maxHealth = 2.0
 
-        Bukkit.getOnlinePlayers().forEach {
-            val _user = CoreProvider.Cache.Local.USERS.provide().fetchById(it.uniqueId)
-
-            val scoreboard1 = player.scoreboard
-            val scoreboard2 = it.scoreboard
-
-            val team1 = scoreboard1.getTeam("zzz_${it.name}") ?: scoreboard1.registerNewTeam("zzz_${it.name}")
-            val team2 = scoreboard2.getTeam("zzz_${player.name}") ?: scoreboard2.registerNewTeam("zzz_${player.name}")
-
-            team1.prefix = _user?.getHighestGroup()?.getColoredPrefix() ?: "§7"
-            team2.prefix = user?.getHighestGroup()?.getColoredPrefix() ?: "§7"
-
-            team1.addEntry(it.name)
-            team2.addEntry(player.name)
-        }
+        player.scoreboard.objectives.forEach { it.unregister() }
 
         val spawnSerializedLocation = CoreSpigotProvider.Repositories.Postgres.SPAWN_REPOSITORY.provide().fetch()
 
