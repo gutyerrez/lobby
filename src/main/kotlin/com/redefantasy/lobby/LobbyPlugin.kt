@@ -1,7 +1,7 @@
 package com.redefantasy.lobby
 
-import com.redefantasy.core.spigot.listeners.GeneralListener
 import com.redefantasy.core.spigot.misc.plugin.CustomPlugin
+import com.redefantasy.lobby.listeners.GeneralListener
 import org.bukkit.Bukkit
 
 /**

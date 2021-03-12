@@ -18,12 +18,15 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent
 import org.bukkit.event.entity.EntityDamageEvent
 import org.bukkit.event.inventory.ClickType
 import org.bukkit.event.inventory.InventoryClickEvent
-import org.bukkit.event.player.*
+import org.bukkit.event.player.AsyncPlayerChatEvent
+import org.bukkit.event.player.PlayerInteractAtEntityEvent
+import org.bukkit.event.player.PlayerInteractEvent
+import org.bukkit.event.player.PlayerJoinEvent
 
 /**
  * @author Gutyerrez
  */
-class GeneralListeners : Listener {
+class GeneralListener : Listener {
 
     @EventHandler
     fun on(
@@ -31,6 +34,8 @@ class GeneralListeners : Listener {
     ) {
         val player = event.player
         val user = CoreProvider.Cache.Local.USERS.provide().fetchById(player.uniqueId)
+
+        player.resetTitle()
 
         player.maxHealth = 2.0
 
