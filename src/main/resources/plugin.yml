@@ -1,0 +1,6 @@
+name: Lobby
+main: com.redefantasy.lobby.LobbyPlugin
+version: 0.1-ALPHA
+author: Gutyerrez
+depend:
+  - Core
