@@ -18,7 +18,7 @@ object ScoreboardManager {
         val user = LobbyProvider.Cache.Local.LOBBY_USERS.provide().fetchById(player.uniqueId)!!
 
         val fancyGroupName = user.getHighestGroup().getFancyDisplayName()
-        val scoreboard = LobbyScoreboard(player)
+        val scoreboard = LobbyScoreboard()
         val onlineUsers = CoreProvider.Cache.Redis.USERS_STATUS.provide().fetchUsers()
 
         scoreboard.registerTeams()
