@@ -1,11 +1,11 @@
 package com.redefantasy.lobby.misc.scoreboard
 
 import com.redefantasy.core.shared.CoreProvider
-import com.redefantasy.core.shared.users.data.User
 import com.redefantasy.core.shared.users.storage.table.UsersTable
-import com.redefantasy.core.spigot.misc.scoreboard.bukkit.BaseScoreboard
 import com.redefantasy.core.spigot.misc.scoreboard.bukkit.GroupScoreboard
+import com.redefantasy.lobby.LobbyProvider
 import org.apache.commons.lang3.StringUtils
+import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 import org.jetbrains.exposed.dao.id.EntityID
 
@@ -18,7 +18,7 @@ object ScoreboardManager {
         val user = CoreProvider.Cache.Local.USERS.provide().fetchById(player.uniqueId)
         val fancyGroupName = user?.getHighestGroup()?.getFancyDisplayName() ?: "§7Membro"
 
-        val scoreboard = BaseScoreboard()
+        val scoreboard = LobbyScoreboard(player)
 
         val onlineUsers = CoreProvider.Cache.Redis.USERS_STATUS.provide().fetchUsers()
 
@@ -49,7 +49,7 @@ object ScoreboardManager {
                 }: §a${onlineUsers.size}"
             )
 
-            i--
+            if (i >= 4) i--
         }
 
         val bukkitApplicationName = CoreProvider.application.displayName.split(" ")[1]
@@ -61,12 +61,19 @@ object ScoreboardManager {
 
         scoreboard.send(arrayOf(player))
 
-        val groupScoreboard = GroupScoreboard()
+        Bukkit.getOnlinePlayers().forEach {
+            val targetUser = LobbyProvider.Cache.Local.LOBBY_USERS.provide().fetchById(
+                EntityID(
+                    it.uniqueId,
+                    UsersTable
+                )
+            )!!
 
-        groupScoreboard.registerUser(user ?: User(
-            EntityID(player.uniqueId, UsersTable),
-            player.name
-        ))
+            val groupBoard = targetUser.scoreboard as GroupScoreboard
+
+            groupBoard.registerUser(user!!)
+            scoreboard.registerUser(targetUser)
+        }
     }
 
 }

@@ -64,6 +64,9 @@ dependencies {
     // eventbus
     compileOnly("org.greenrobot:eventbus:3.2.0")
 
+    // caffeine
+    compileOnly("com.github.ben-manes.caffeine:caffeine:2.8.5")
+
     // core
     compileOnly("com.redefantasy:core-shared:0.1-ALPHA")
     compileOnly("com.redefantasy:core-spigot:0.1-ALPHA")

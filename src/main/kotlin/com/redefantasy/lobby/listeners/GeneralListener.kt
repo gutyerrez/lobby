@@ -2,10 +2,10 @@ package com.redefantasy.lobby.listeners
 
 import com.redefantasy.core.shared.CoreProvider
 import com.redefantasy.core.shared.groups.Group
-import com.redefantasy.core.spigot.CoreSpigotConstants
-import com.redefantasy.core.spigot.CoreSpigotProvider
 import com.redefantasy.core.spigot.misc.utils.Title
+import com.redefantasy.lobby.LobbyProvider
 import com.redefantasy.lobby.misc.scoreboard.ScoreboardManager
+import com.redefantasy.lobby.user.data.LobbyUser
 import net.md_5.bungee.api.chat.ComponentBuilder
 import org.bukkit.Bukkit
 import org.bukkit.entity.EntityType
@@ -19,10 +19,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent
 import org.bukkit.event.entity.EntityDamageEvent
 import org.bukkit.event.inventory.ClickType
 import org.bukkit.event.inventory.InventoryClickEvent
-import org.bukkit.event.player.AsyncPlayerChatEvent
-import org.bukkit.event.player.PlayerInteractAtEntityEvent
-import org.bukkit.event.player.PlayerInteractEvent
-import org.bukkit.event.player.PlayerJoinEvent
+import org.bukkit.event.player.*
 
 /**
  * @author Gutyerrez
@@ -41,13 +38,22 @@ class GeneralListener : Listener {
 
         player.scoreboard.objectives.forEach { it.unregister() }
 
-        val spawnSerializedLocation = CoreSpigotProvider.Repositories.Postgres.SPAWN_REPOSITORY.provide().fetch()
+        val user = CoreProvider.Cache.Local.USERS.provide().fetchById(player.uniqueId)!!
 
-        if (spawnSerializedLocation !== null) player.teleport(
-            CoreSpigotConstants.BUKKIT_LOCATION_PARSER.apply(spawnSerializedLocation)
+        LobbyProvider.Cache.Local.LOBBY_USERS.provide().put(
+            LobbyUser(user)
         )
 
         ScoreboardManager.construct(player)
+    }
+
+    @EventHandler
+    fun on(
+        event: PlayerQuitEvent
+    ) {
+        val player = event.player
+
+        LobbyProvider.Cache.Local.LOBBY_USERS.provide().remove(player.uniqueId)
     }
 
     @EventHandler
@@ -114,11 +120,9 @@ class GeneralListener : Listener {
         if (event.cause === EntityDamageEvent.DamageCause.VOID && event.entity is Player) {
             val player = event.entity
 
-            val spawnSerializedLocation = CoreSpigotProvider.Repositories.Postgres.SPAWN_REPOSITORY.provide().fetch()
+            val world = Bukkit.getWorld("world")
 
-            if (spawnSerializedLocation !== null) player.teleport(
-                CoreSpigotConstants.BUKKIT_LOCATION_PARSER.apply(spawnSerializedLocation)
-            )
+            player.teleport(world.spawnLocation)
         }
     }
 
@@ -166,6 +170,15 @@ class GeneralListener : Listener {
                     .create()
             )
         }
+    }
+
+    @EventHandler
+    fun on(
+        event: PlayerInitialSpawnEvent
+    ) {
+        val world = Bukkit.getWorld("world")
+
+        event.spawnLocation = world.spawnLocation
     }
 
     @EventHandler
