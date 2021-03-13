@@ -5,7 +5,7 @@ import com.redefantasy.core.spigot.CoreSpigotProvider
 import com.redefantasy.core.spigot.misc.plugin.CustomPlugin
 import com.redefantasy.lobby.listeners.GeneralListener
 import com.redefantasy.lobby.misc.button.HotBarManager
-import com.redefantasy.lobby.misc.button.implementations.LobbySelectorHotBarButton
+import com.redefantasy.lobby.misc.button.server.selector.button.ServerSelectorHotBarButton
 import org.bukkit.Bukkit
 
 /**
@@ -29,7 +29,7 @@ class LobbyPlugin : CustomPlugin(false) {
          */
 
         HotBarManager.registerHotBarButton(
-            LobbySelectorHotBarButton()
+            ServerSelectorHotBarButton()
         )
 
         /**

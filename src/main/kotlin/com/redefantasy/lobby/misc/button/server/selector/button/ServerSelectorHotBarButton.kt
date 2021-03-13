@@ -1,8 +1,8 @@
-package com.redefantasy.lobby.misc.button.implementations
+package com.redefantasy.lobby.misc.button.server.selector.button
 
 import com.redefantasy.core.spigot.misc.utils.ItemBuilder
 import com.redefantasy.lobby.misc.button.HotBarButton
-import net.md_5.bungee.api.chat.TextComponent
+import com.redefantasy.lobby.misc.button.server.selector.inventory.ServerSelectorInventory
 import org.bukkit.Material
 import org.bukkit.event.player.PlayerInteractEvent
 import org.greenrobot.eventbus.Subscribe
@@ -10,7 +10,7 @@ import org.greenrobot.eventbus.Subscribe
 /**
  * @author Gutyerrez
  */
-class LobbySelectorHotBarButton : HotBarButton(
+class ServerSelectorHotBarButton : HotBarButton(
     ItemBuilder(Material.COMPASS)
         .name("§bSelecionar Servidor")
         .lore(
@@ -29,7 +29,9 @@ class LobbySelectorHotBarButton : HotBarButton(
     ) {
         val player = event.player
 
-        player.sendMessage(TextComponent("Yeah"))
+        player.openInventory(
+            ServerSelectorInventory()
+        )
     }
 
 }
