@@ -21,6 +21,8 @@ object ScoreboardManager {
         val scoreboard = LobbyScoreboard(player)
         val onlineUsers = CoreProvider.Cache.Redis.USERS_STATUS.provide().fetchUsers()
 
+        scoreboard.registerTeams()
+
         scoreboard.setTitle("§6§lREDE FANTASY")
         scoreboard.set(15, "§0")
         scoreboard.set(14, "§f Online: §7${onlineUsers.size}")
