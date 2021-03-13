@@ -156,9 +156,9 @@ class GeneralListener : Listener {
         val player = event.player
         val user = CoreProvider.Cache.Local.USERS.provide().fetchById(player.uniqueId)
 
-        if (user === null || !user.hasGroup(Group.HELPER)) {
-            event.isCancelled = true
+        event.isCancelled = true
 
+        if (user === null || !user.hasGroup(Group.HELPER)) {
             return
         }
 
@@ -179,7 +179,12 @@ class GeneralListener : Listener {
     ) {
         val world = Bukkit.getWorld("world")
 
-        event.spawnLocation = world.spawnLocation
+        val spawnLocation = world.spawnLocation.clone()
+
+        spawnLocation.yaw = 0F
+        spawnLocation.pitch = 180F
+
+        event.spawnLocation = spawnLocation
     }
 
     @EventHandler
