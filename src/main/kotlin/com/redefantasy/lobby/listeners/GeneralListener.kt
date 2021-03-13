@@ -61,55 +61,14 @@ class GeneralListener : Listener {
 
     @EventHandler
     fun on(
-        event: BlockBreakEvent
-    ) {
-        val player = event.player
-        val user = CoreProvider.Cache.Local.USERS.provide().fetchById(player.uniqueId)
-
-        if ((user === null || !user.isLogged()) && user!!.hasGroup(Group.MANAGER)) {
-            event.isCancelled = true
-        }
-    }
-
-    @EventHandler
-    fun on(
-        event: BlockPlaceEvent
-    ) {
-        val player = event.player
-        val user = CoreProvider.Cache.Local.USERS.provide().fetchById(player.uniqueId)
-
-        if ((user === null || !user.isLogged()) && user!!.hasGroup(Group.MANAGER)) {
-            event.isCancelled = true
-        }
-    }
-
-    @EventHandler
-    fun on(
-        event: PlayerInteractEvent
-    ) {
-        val player = event.player
-        val user = CoreProvider.Cache.Local.USERS.provide().fetchById(player.uniqueId)
-
-        if ((user === null || !user.isLogged()) && user!!.hasGroup(Group.MANAGER)) {
-            event.isCancelled = true
-        }
-    }
-
-    @EventHandler
-    fun on(
         event: InventoryClickEvent
     ) {
         if (event.whoClicked !is Player) return
 
-        val player = event.whoClicked as Player
-        val user = CoreProvider.Cache.Local.USERS.provide().fetchById(player.uniqueId)
+        event.isCancelled = true
 
-        if ((user === null || !user.isLogged()) && user!!.hasGroup(Group.MANAGER)) {
+        if (event.click === ClickType.NUMBER_KEY)
             event.isCancelled = true
-
-            if (event.click === ClickType.NUMBER_KEY)
-                event.isCancelled = true
-        }
     }
 
     @EventHandler
@@ -183,10 +142,42 @@ class GeneralListener : Listener {
 
         val spawnLocation = world.spawnLocation.clone()
 
-        spawnLocation.yaw = 0F
-        spawnLocation.pitch = 180F
+        spawnLocation.yaw = 180F
+        spawnLocation.pitch = 0F
 
         event.spawnLocation = spawnLocation
+    }
+
+    @EventHandler
+    fun on(
+        event: PlayerInteractEvent
+    ) {
+        val player = event.player
+        val item = player.itemInHand
+
+        event.isCancelled = true
+
+        if (item !== null) {
+            val hotBarButton = HotBarManager.getHotBarButton(item)
+
+            if (hotBarButton !== null) {
+                HotBarManager.getEventBus(hotBarButton)?.post(event)
+            }
+        }
+    }
+
+    @EventHandler
+    fun on(
+        event: BlockBreakEvent
+    ) {
+        event.isCancelled = true
+    }
+
+    @EventHandler
+    fun on(
+        event: BlockPlaceEvent
+    ) {
+        event.isCancelled = true
     }
 
     @EventHandler
