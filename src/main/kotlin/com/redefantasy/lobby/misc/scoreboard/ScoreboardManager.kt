@@ -15,11 +15,10 @@ import org.jetbrains.exposed.dao.id.EntityID
 object ScoreboardManager {
 
     fun construct(player: Player) {
-        val user = CoreProvider.Cache.Local.USERS.provide().fetchById(player.uniqueId)
-        val fancyGroupName = user?.getHighestGroup()?.getFancyDisplayName() ?: "§7Membro"
+        val user = LobbyProvider.Cache.Local.LOBBY_USERS.provide().fetchById(player.uniqueId)!!
 
+        val fancyGroupName = user.getHighestGroup().getFancyDisplayName()
         val scoreboard = LobbyScoreboard(player)
-
         val onlineUsers = CoreProvider.Cache.Redis.USERS_STATUS.provide().fetchUsers()
 
         scoreboard.setTitle("§6§lREDE FANTASY")
@@ -59,7 +58,7 @@ object ScoreboardManager {
         scoreboard.set(1, "§3")
         scoreboard.set(0, "§e  loja.redefantasy.com")
 
-        scoreboard.send(arrayOf(player))
+        user.scoreboard = scoreboard
 
         Bukkit.getOnlinePlayers().forEach {
             val targetUser = LobbyProvider.Cache.Local.LOBBY_USERS.provide().fetchById(
@@ -71,9 +70,15 @@ object ScoreboardManager {
 
             val groupBoard = targetUser.scoreboard as GroupScoreboard
 
-            groupBoard.registerUser(user!!)
+            groupBoard.registerUser(user)
             scoreboard.registerUser(targetUser)
         }
+
+        scoreboard.send(
+            arrayOf(
+                player
+            )
+        )
     }
 
 }
