@@ -2,9 +2,11 @@ package com.redefantasy.lobby.misc.button.server.selector.inventory
 
 import com.redefantasy.core.shared.CoreProvider
 import com.redefantasy.core.shared.applications.ApplicationType
+import com.redefantasy.core.shared.applications.status.ApplicationStatus
 import com.redefantasy.core.shared.echo.packets.ConnectUserToApplicationPacket
 import com.redefantasy.core.spigot.inventory.CustomInventory
 import com.redefantasy.core.spigot.misc.utils.ItemBuilder
+import net.md_5.bungee.api.chat.TextComponent
 import org.bukkit.Material
 import org.bukkit.entity.Player
 
@@ -16,38 +18,45 @@ class ServerSelectorInventory : CustomInventory(
     3 * 9
 ) {
 
-    private val SLOTS = arrayOf(
-        10, 11, 12, 13, 14, 15, 16
-    )
-
     init {
-        val serversCount = CoreProvider.Cache.Local.SERVERS.provide().fetchAll().size
+        this.construct()
+    }
 
-        CoreProvider.Cache.Local.SERVERS.provide().fetchAll().forEach {
-            val bukkitSpawnApplication = CoreProvider.Cache.Local.APPLICATIONS.provide().fetchByServerAndApplicationType(
-                it,
+    private fun construct() {
+        val factionsAlphaBukkitSpawnApplication =
+            CoreProvider.Cache.Local.APPLICATIONS.provide().fetchByServerAndApplicationType(
+                CoreProvider.Cache.Local.SERVERS.provide().fetchByName("FACTIONS_ALPHA")!!,
                 ApplicationType.SERVER_SPAWN
             )
 
-            println(serversCount % this.SLOTS.size)
-            println(serversCount / this.SLOTS.size)
-
-            println("---")
-
-            println(this.SLOTS.size % serversCount)
-            println(this.SLOTS.size / serversCount)
+        if (factionsAlphaBukkitSpawnApplication !== null) {
+            val bukkitSpawnApplicationStatus = CoreProvider.Cache.Redis.APPLICATIONS_STATUS.provide().fetchApplicationStatusByApplication(
+                factionsAlphaBukkitSpawnApplication,
+                ApplicationStatus::class
+            )
 
             this.setItem(
-                serversCount % this.SLOTS.size,
-                ItemBuilder(Material.STONE)
+                13,
+                ItemBuilder(Material.TNT)
+                    .name("§bFactions Ômega")
+                    .lore(
+                        arrayOf(
+                            "§7Bah meu lança uma lore legal ai."
+                        )
+                    )
                     .build()
             ) { event ->
                 val player = event.whoClicked as Player
                 val user = CoreProvider.Cache.Local.USERS.provide().fetchById(player.uniqueId)
 
+                if (bukkitSpawnApplicationStatus === null) {
+                    player.sendMessage(TextComponent("§cEste servidor está offline."))
+                    return@setItem
+                }
+
                 val packet = ConnectUserToApplicationPacket(
                     user?.id,
-                    bukkitSpawnApplication
+                    factionsAlphaBukkitSpawnApplication
                 )
 
                 CoreProvider.Databases.Redis.ECHO.provide().publishToApplications(
