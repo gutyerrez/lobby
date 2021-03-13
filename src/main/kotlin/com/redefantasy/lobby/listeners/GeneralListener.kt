@@ -4,6 +4,7 @@ import com.redefantasy.core.shared.CoreProvider
 import com.redefantasy.core.shared.groups.Group
 import com.redefantasy.core.spigot.misc.utils.Title
 import com.redefantasy.lobby.LobbyProvider
+import com.redefantasy.lobby.misc.button.HotBarManager
 import com.redefantasy.lobby.misc.scoreboard.ScoreboardManager
 import com.redefantasy.lobby.user.data.LobbyUser
 import net.md_5.bungee.api.chat.ComponentBuilder
@@ -46,6 +47,7 @@ class GeneralListener : Listener {
         )
 
         ScoreboardManager.construct(player)
+        HotBarManager.giveToPlayer(player)
     }
 
     @EventHandler

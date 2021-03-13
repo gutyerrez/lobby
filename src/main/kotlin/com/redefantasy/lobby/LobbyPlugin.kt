@@ -4,6 +4,8 @@ import com.redefantasy.core.spigot.CoreSpigotConstants
 import com.redefantasy.core.spigot.CoreSpigotProvider
 import com.redefantasy.core.spigot.misc.plugin.CustomPlugin
 import com.redefantasy.lobby.listeners.GeneralListener
+import com.redefantasy.lobby.misc.button.HotBarManager
+import com.redefantasy.lobby.misc.button.implementations.LobbySelectorHotBarButton
 import org.bukkit.Bukkit
 
 /**
@@ -21,6 +23,14 @@ class LobbyPlugin : CustomPlugin(false) {
         pluginManager.registerEvents(GeneralListener(), this)
 
         val spawnSerializedLocation = CoreSpigotProvider.Repositories.Postgres.SPAWN_REPOSITORY.provide().fetch()
+
+        /**
+         * Hot Bar Buttons
+         */
+
+        HotBarManager.registerHotBarButton(
+            LobbySelectorHotBarButton()
+        )
 
         /**
          * World settings
