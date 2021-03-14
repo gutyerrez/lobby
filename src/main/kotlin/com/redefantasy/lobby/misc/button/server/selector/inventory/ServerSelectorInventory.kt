@@ -9,6 +9,8 @@ import com.redefantasy.core.spigot.misc.utils.ItemBuilder
 import net.md_5.bungee.api.chat.TextComponent
 import org.bukkit.Material
 import org.bukkit.entity.Player
+import org.bukkit.event.inventory.InventoryClickEvent
+import java.util.function.Consumer
 
 /**
  * @author Gutyerrez
@@ -23,10 +25,11 @@ class ServerSelectorInventory : CustomInventory(
     }
 
     private fun construct() {
-        val factionsOmegaBukkitSpawnApplication = CoreProvider.Cache.Local.APPLICATIONS.provide().fetchByServerAndApplicationType(
-            CoreProvider.Cache.Local.SERVERS.provide().fetchByName("FACTIONS_OMEGA")!!,
-            ApplicationType.SERVER_SPAWN
-        )
+        val factionsOmegaBukkitSpawnApplication =
+            CoreProvider.Cache.Local.APPLICATIONS.provide().fetchByServerAndApplicationType(
+                CoreProvider.Cache.Local.SERVERS.provide().fetchByName("FACTIONS_OMEGA")!!,
+                ApplicationType.SERVER_SPAWN
+            )
 
         this.setItem(
             13,
@@ -37,43 +40,45 @@ class ServerSelectorInventory : CustomInventory(
                         "§7Bah meu lança uma lore legal ai."
                     )
                 )
-                .build()
-        ) { event ->
-            if (factionsOmegaBukkitSpawnApplication !== null) {
-                val factionsOmegaBukkitSpawnApplicationStatus = CoreProvider.Cache.Redis.APPLICATIONS_STATUS.provide().fetchApplicationStatusByApplication(
-                    factionsOmegaBukkitSpawnApplication,
-                    ApplicationStatus::class
-                )
+                .build(),
+            Consumer<InventoryClickEvent> {
+                if (factionsOmegaBukkitSpawnApplication !== null) {
+                    val factionsOmegaBukkitSpawnApplicationStatus =
+                        CoreProvider.Cache.Redis.APPLICATIONS_STATUS.provide().fetchApplicationStatusByApplication(
+                            factionsOmegaBukkitSpawnApplication,
+                            ApplicationStatus::class
+                        )
 
-                println(factionsOmegaBukkitSpawnApplication)
+                    println(factionsOmegaBukkitSpawnApplication)
 
-                val player = event.whoClicked as Player
-                val user = CoreProvider.Cache.Local.USERS.provide().fetchById(player.uniqueId)
+                    val player = it.whoClicked as Player
+                    val user = CoreProvider.Cache.Local.USERS.provide().fetchById(player.uniqueId)
 
-                if (factionsOmegaBukkitSpawnApplicationStatus === null) {
-                    println("nullo")
+                    if (factionsOmegaBukkitSpawnApplicationStatus === null) {
+                        println("nullo")
 
-                    player.sendMessage(TextComponent("§cEste servidor está offline."))
-                    return@setItem
-                }
+                        player.sendMessage(TextComponent("§cEste servidor está offline."))
+                        return@Consumer
+                    }
 
-                println(factionsOmegaBukkitSpawnApplicationStatus)
+                    println(factionsOmegaBukkitSpawnApplicationStatus)
 
-                val packet = ConnectUserToApplicationPacket(
-                    user?.id,
-                    factionsOmegaBukkitSpawnApplication
-                )
-
-                println("Enviar o packet")
-
-                CoreProvider.Databases.Redis.ECHO.provide().publishToApplications(
-                    packet,
-                    CoreProvider.Cache.Local.APPLICATIONS.provide().fetchByApplicationType(
-                        ApplicationType.PROXY
+                    val packet = ConnectUserToApplicationPacket(
+                        user?.id,
+                        factionsOmegaBukkitSpawnApplication
                     )
-                )
+
+                    println("Enviar o packet")
+
+                    CoreProvider.Databases.Redis.ECHO.provide().publishToApplications(
+                        packet,
+                        CoreProvider.Cache.Local.APPLICATIONS.provide().fetchByApplicationType(
+                            ApplicationType.PROXY
+                        )
+                    )
+                }
             }
-        }
+        )
     }
 
 }
