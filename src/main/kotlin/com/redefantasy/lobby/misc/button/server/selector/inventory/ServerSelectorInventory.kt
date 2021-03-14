@@ -1,5 +1,6 @@
 package com.redefantasy.lobby.misc.button.server.selector.inventory
 
+import com.redefantasy.core.shared.CoreConstants
 import com.redefantasy.core.shared.CoreProvider
 import com.redefantasy.core.shared.applications.ApplicationType
 import com.redefantasy.core.shared.applications.status.ApplicationStatus
@@ -64,7 +65,9 @@ class ServerSelectorInventory : CustomInventory(
                             return
                         }
 
-                        println(factionsOmegaBukkitSpawnApplicationStatus.toString())
+                        val json = CoreConstants.GSON.toJson(factionsOmegaBukkitSpawnApplicationStatus)
+
+                        println(json)
 
                         val packet = ConnectUserToApplicationPacket(
                             user?.id,
