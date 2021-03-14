@@ -5,12 +5,12 @@ import com.redefantasy.core.shared.applications.ApplicationType
 import com.redefantasy.core.shared.applications.status.ApplicationStatus
 import com.redefantasy.core.shared.echo.packets.ConnectUserToApplicationPacket
 import com.redefantasy.core.spigot.inventory.CustomInventory
+import com.redefantasy.core.spigot.inventory.ICustomInventory
 import com.redefantasy.core.spigot.misc.utils.ItemBuilder
 import net.md_5.bungee.api.chat.TextComponent
 import org.bukkit.Material
 import org.bukkit.entity.Player
 import org.bukkit.event.inventory.InventoryClickEvent
-import java.util.function.Consumer
 
 /**
  * @author Gutyerrez
@@ -41,41 +41,45 @@ class ServerSelectorInventory : CustomInventory(
                     )
                 )
                 .build(),
-            Consumer<InventoryClickEvent> {
-                if (factionsOmegaBukkitSpawnApplication !== null) {
-                    val factionsOmegaBukkitSpawnApplicationStatus =
-                        CoreProvider.Cache.Redis.APPLICATIONS_STATUS.provide().fetchApplicationStatusByApplication(
-                            factionsOmegaBukkitSpawnApplication,
-                            ApplicationStatus::class
+            object : ICustomInventory.ConsumerClickListener {
+                override fun accept(
+                    event: InventoryClickEvent
+                ) {
+                    if (factionsOmegaBukkitSpawnApplication !== null) {
+                        val factionsOmegaBukkitSpawnApplicationStatus =
+                            CoreProvider.Cache.Redis.APPLICATIONS_STATUS.provide().fetchApplicationStatusByApplication(
+                                factionsOmegaBukkitSpawnApplication,
+                                ApplicationStatus::class
+                            )
+
+                        println(factionsOmegaBukkitSpawnApplication)
+
+                        val player = event.whoClicked as Player
+                        val user = CoreProvider.Cache.Local.USERS.provide().fetchById(player.uniqueId)
+
+                        if (factionsOmegaBukkitSpawnApplicationStatus === null) {
+                            println("nullo")
+
+                            player.sendMessage(TextComponent("§cEste servidor está offline."))
+                            return
+                        }
+
+                        println(factionsOmegaBukkitSpawnApplicationStatus)
+
+                        val packet = ConnectUserToApplicationPacket(
+                            user?.id,
+                            factionsOmegaBukkitSpawnApplication
                         )
 
-                    println(factionsOmegaBukkitSpawnApplication)
+                        println("Enviar o packet")
 
-                    val player = it.whoClicked as Player
-                    val user = CoreProvider.Cache.Local.USERS.provide().fetchById(player.uniqueId)
-
-                    if (factionsOmegaBukkitSpawnApplicationStatus === null) {
-                        println("nullo")
-
-                        player.sendMessage(TextComponent("§cEste servidor está offline."))
-                        return@Consumer
+                        CoreProvider.Databases.Redis.ECHO.provide().publishToApplications(
+                            packet,
+                            CoreProvider.Cache.Local.APPLICATIONS.provide().fetchByApplicationType(
+                                ApplicationType.PROXY
+                            )
+                        )
                     }
-
-                    println(factionsOmegaBukkitSpawnApplicationStatus)
-
-                    val packet = ConnectUserToApplicationPacket(
-                        user?.id,
-                        factionsOmegaBukkitSpawnApplication
-                    )
-
-                    println("Enviar o packet")
-
-                    CoreProvider.Databases.Redis.ECHO.provide().publishToApplications(
-                        packet,
-                        CoreProvider.Cache.Local.APPLICATIONS.provide().fetchByApplicationType(
-                            ApplicationType.PROXY
-                        )
-                    )
                 }
             }
         )
