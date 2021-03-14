@@ -23,8 +23,8 @@ class ServerSelectorInventory : CustomInventory(
     }
 
     private fun construct() {
-        val factionsAlphaBukkitSpawnApplication = CoreProvider.Cache.Local.APPLICATIONS.provide().fetchByServerAndApplicationType(
-            CoreProvider.Cache.Local.SERVERS.provide().fetchByName("FACTIONS_ALPHA")!!,
+        val factionsOmegaBukkitSpawnApplication = CoreProvider.Cache.Local.APPLICATIONS.provide().fetchByServerAndApplicationType(
+            CoreProvider.Cache.Local.SERVERS.provide().fetchByName("FACTIONS_OMEGA")!!,
             ApplicationType.SERVER_SPAWN
         )
 
@@ -39,24 +39,32 @@ class ServerSelectorInventory : CustomInventory(
                 )
                 .build()
         ) { event ->
-            if (factionsAlphaBukkitSpawnApplication !== null) {
-                val bukkitSpawnApplicationStatus = CoreProvider.Cache.Redis.APPLICATIONS_STATUS.provide().fetchApplicationStatusByApplication(
-                    factionsAlphaBukkitSpawnApplication,
+            if (factionsOmegaBukkitSpawnApplication !== null) {
+                val factionsOmegaBukkitSpawnApplicationStatus = CoreProvider.Cache.Redis.APPLICATIONS_STATUS.provide().fetchApplicationStatusByApplication(
+                    factionsOmegaBukkitSpawnApplication,
                     ApplicationStatus::class
                 )
+
+                println(factionsOmegaBukkitSpawnApplication)
 
                 val player = event.whoClicked as Player
                 val user = CoreProvider.Cache.Local.USERS.provide().fetchById(player.uniqueId)
 
-                if (bukkitSpawnApplicationStatus === null) {
+                if (factionsOmegaBukkitSpawnApplicationStatus === null) {
+                    println("nullo")
+
                     player.sendMessage(TextComponent("§cEste servidor está offline."))
                     return@setItem
                 }
 
+                println(factionsOmegaBukkitSpawnApplicationStatus)
+
                 val packet = ConnectUserToApplicationPacket(
                     user?.id,
-                    factionsAlphaBukkitSpawnApplication
+                    factionsOmegaBukkitSpawnApplication
                 )
+
+                println("Enviar o packet")
 
                 CoreProvider.Databases.Redis.ECHO.provide().publishToApplications(
                     packet,

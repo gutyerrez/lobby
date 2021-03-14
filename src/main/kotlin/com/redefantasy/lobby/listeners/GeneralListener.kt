@@ -48,6 +48,11 @@ class GeneralListener : Listener {
             LobbyUser(user)
         )
 
+        if (user.hasGroup(Group.HERO)) {
+            player.allowFlight = true
+            player.isFlying = true
+        }
+
         ScoreboardManager.construct(player)
         HotBarManager.giveToPlayer(player)
     }
