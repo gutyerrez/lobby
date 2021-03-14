@@ -47,6 +47,8 @@ class ServerSelectorInventory : CustomInventory(
                     factionsOmegaBukkitSpawnApplication
                 )
 
+                println("asd")
+
                 CoreProvider.Databases.Redis.ECHO.provide().publishToApplications(
                     packet,
                     CoreProvider.Cache.Local.APPLICATIONS.provide().fetchByApplicationType(
