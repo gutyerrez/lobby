@@ -1,13 +1,10 @@
 package com.redefantasy.lobby.misc.button.server.selector.inventory
 
-import com.redefantasy.core.shared.CoreConstants
 import com.redefantasy.core.shared.CoreProvider
 import com.redefantasy.core.shared.applications.ApplicationType
-import com.redefantasy.core.shared.applications.status.ApplicationStatus
 import com.redefantasy.core.shared.echo.packets.ConnectUserToApplicationPacket
 import com.redefantasy.core.spigot.inventory.CustomInventory
 import com.redefantasy.core.spigot.misc.utils.ItemBuilder
-import net.md_5.bungee.api.chat.TextComponent
 import org.bukkit.Material
 import org.bukkit.entity.Player
 
@@ -41,37 +38,14 @@ class ServerSelectorInventory : CustomInventory(
                 )
                 .build()
         ) { it ->
-            println("asd")
-
             if (factionsOmegaBukkitSpawnApplication !== null) {
-                val factionsOmegaBukkitSpawnApplicationStatus =
-                    CoreProvider.Cache.Redis.APPLICATIONS_STATUS.provide().fetchApplicationStatusByApplication(
-                        factionsOmegaBukkitSpawnApplication,
-                        ApplicationStatus::class
-                    )
-
-                println(factionsOmegaBukkitSpawnApplication)
-
                 val player = it.whoClicked as Player
                 val user = CoreProvider.Cache.Local.USERS.provide().fetchById(player.uniqueId)
-
-                if (factionsOmegaBukkitSpawnApplicationStatus === null) {
-                    println("nullo")
-
-                    player.sendMessage(TextComponent("§cEste servidor está offline."))
-                    return@setItem
-                }
-
-                val json = CoreConstants.GSON.toJson(factionsOmegaBukkitSpawnApplicationStatus)
-
-                println(" --> $json")
 
                 val packet = ConnectUserToApplicationPacket(
                     user?.id,
                     factionsOmegaBukkitSpawnApplication
                 )
-
-                println("Enviar o packet")
 
                 CoreProvider.Databases.Redis.ECHO.provide().publishToApplications(
                     packet,
