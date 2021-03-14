@@ -64,7 +64,7 @@ class ServerSelectorInventory : CustomInventory(
                             return
                         }
 
-                        println(factionsOmegaBukkitSpawnApplicationStatus)
+                        println(factionsOmegaBukkitSpawnApplicationStatus.toString())
 
                         val packet = ConnectUserToApplicationPacket(
                             user?.id,
