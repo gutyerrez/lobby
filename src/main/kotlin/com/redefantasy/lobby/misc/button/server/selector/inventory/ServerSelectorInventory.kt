@@ -23,29 +23,28 @@ class ServerSelectorInventory : CustomInventory(
     }
 
     private fun construct() {
-        val factionsAlphaBukkitSpawnApplication =
-            CoreProvider.Cache.Local.APPLICATIONS.provide().fetchByServerAndApplicationType(
-                CoreProvider.Cache.Local.SERVERS.provide().fetchByName("FACTIONS_ALPHA")!!,
-                ApplicationType.SERVER_SPAWN
-            )
+        val factionsAlphaBukkitSpawnApplication = CoreProvider.Cache.Local.APPLICATIONS.provide().fetchByServerAndApplicationType(
+            CoreProvider.Cache.Local.SERVERS.provide().fetchByName("FACTIONS_ALPHA")!!,
+            ApplicationType.SERVER_SPAWN
+        )
 
-        if (factionsAlphaBukkitSpawnApplication !== null) {
-            val bukkitSpawnApplicationStatus = CoreProvider.Cache.Redis.APPLICATIONS_STATUS.provide().fetchApplicationStatusByApplication(
-                factionsAlphaBukkitSpawnApplication,
-                ApplicationStatus::class
-            )
-
-            this.setItem(
-                13,
-                ItemBuilder(Material.TNT)
-                    .name("§bFactions Ômega")
-                    .lore(
-                        arrayOf(
-                            "§7Bah meu lança uma lore legal ai."
-                        )
+        this.setItem(
+            13,
+            ItemBuilder(Material.TNT)
+                .name("§bFactions Ômega")
+                .lore(
+                    arrayOf(
+                        "§7Bah meu lança uma lore legal ai."
                     )
-                    .build()
-            ) { event ->
+                )
+                .build()
+        ) { event ->
+            if (factionsAlphaBukkitSpawnApplication !== null) {
+                val bukkitSpawnApplicationStatus = CoreProvider.Cache.Redis.APPLICATIONS_STATUS.provide().fetchApplicationStatusByApplication(
+                    factionsAlphaBukkitSpawnApplication,
+                    ApplicationStatus::class
+                )
+
                 val player = event.whoClicked as Player
                 val user = CoreProvider.Cache.Local.USERS.provide().fetchById(player.uniqueId)
 
