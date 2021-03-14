@@ -9,6 +9,7 @@ import com.redefantasy.lobby.misc.scoreboard.ScoreboardManager
 import com.redefantasy.lobby.user.data.LobbyUser
 import net.md_5.bungee.api.chat.ComponentBuilder
 import org.bukkit.Bukkit
+import org.bukkit.Location
 import org.bukkit.entity.EntityType
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
@@ -21,6 +22,7 @@ import org.bukkit.event.entity.EntityDamageEvent
 import org.bukkit.event.inventory.ClickType
 import org.bukkit.event.inventory.InventoryClickEvent
 import org.bukkit.event.player.*
+import org.bukkit.event.weather.WeatherChangeEvent
 
 /**
  * @author Gutyerrez
@@ -140,12 +142,14 @@ class GeneralListener : Listener {
     ) {
         val world = Bukkit.getWorld("world")
 
-        val spawnLocation = world.spawnLocation.clone()
-
-        spawnLocation.yaw = 180F
-        spawnLocation.pitch = 0F
-
-        event.spawnLocation = spawnLocation
+        event.spawnLocation = Location(
+            world,
+            0.5,
+            78.0,
+            -0.5,
+            180F,
+            0F
+        )
     }
 
     @EventHandler
@@ -227,6 +231,14 @@ class GeneralListener : Listener {
         event: BlockFadeEvent
     ) {
         event.isCancelled = true
+    }
+
+    @EventHandler
+    fun on(
+        event: WeatherChangeEvent
+    ) {
+        if (event.toWeatherState())
+            event.isCancelled = true
     }
 
 }

@@ -1,7 +1,5 @@
 package com.redefantasy.lobby
 
-import com.redefantasy.core.spigot.CoreSpigotConstants
-import com.redefantasy.core.spigot.CoreSpigotProvider
 import com.redefantasy.core.spigot.misc.plugin.CustomPlugin
 import com.redefantasy.lobby.listeners.GeneralListener
 import com.redefantasy.lobby.misc.button.HotBarManager
@@ -22,8 +20,6 @@ class LobbyPlugin : CustomPlugin(false) {
 
         pluginManager.registerEvents(GeneralListener(), this)
 
-        val spawnSerializedLocation = CoreSpigotProvider.Repositories.Postgres.SPAWN_REPOSITORY.provide().fetch()
-
         /**
          * Hot Bar Buttons
          */
@@ -36,7 +32,6 @@ class LobbyPlugin : CustomPlugin(false) {
          * World settings
          */
         Bukkit.getServer().worlds.forEach {
-
             it.setStorm(false)
 
             it.isThundering = false
@@ -57,16 +52,6 @@ class LobbyPlugin : CustomPlugin(false) {
             it.setGameRuleValue("doDaylightCycle", "false")
 
             it.time = 1200
-
-            if (spawnSerializedLocation !== null) {
-                val spawnLocation = CoreSpigotConstants.BUKKIT_LOCATION_PARSER.apply(spawnSerializedLocation)
-
-                it.setSpawnLocation(
-                    spawnLocation.blockX,
-                    spawnLocation.blockY,
-                    spawnLocation.blockZ
-                )
-            }
         }
     }
 
