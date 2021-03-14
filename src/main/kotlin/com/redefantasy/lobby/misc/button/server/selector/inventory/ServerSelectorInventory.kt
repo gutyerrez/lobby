@@ -10,8 +10,6 @@ import com.redefantasy.core.spigot.misc.utils.ItemBuilder
 import net.md_5.bungee.api.chat.TextComponent
 import org.bukkit.Material
 import org.bukkit.entity.Player
-import org.bukkit.event.inventory.InventoryClickEvent
-import java.util.function.Consumer
 
 /**
  * @author Gutyerrez
@@ -41,47 +39,48 @@ class ServerSelectorInventory : CustomInventory(
                         "§7Bah meu lança uma lore legal ai."
                     )
                 )
-                .build(),
-            Consumer<InventoryClickEvent> {
-                if (factionsOmegaBukkitSpawnApplication !== null) {
-                    val factionsOmegaBukkitSpawnApplicationStatus =
-                        CoreProvider.Cache.Redis.APPLICATIONS_STATUS.provide().fetchApplicationStatusByApplication(
-                            factionsOmegaBukkitSpawnApplication,
-                            ApplicationStatus::class
-                        )
+                .build()
+        ) { it ->
+            println("asd")
 
-                    println(factionsOmegaBukkitSpawnApplication)
-
-                    val player = it.whoClicked as Player
-                    val user = CoreProvider.Cache.Local.USERS.provide().fetchById(player.uniqueId)
-
-                    if (factionsOmegaBukkitSpawnApplicationStatus === null) {
-                        println("nullo")
-
-                        player.sendMessage(TextComponent("§cEste servidor está offline."))
-                        return@Consumer
-                    }
-
-                    val json = CoreConstants.GSON.toJson(factionsOmegaBukkitSpawnApplicationStatus)
-
-                    println(" --> $json")
-
-                    val packet = ConnectUserToApplicationPacket(
-                        user?.id,
-                        factionsOmegaBukkitSpawnApplication
+            if (factionsOmegaBukkitSpawnApplication !== null) {
+                val factionsOmegaBukkitSpawnApplicationStatus =
+                    CoreProvider.Cache.Redis.APPLICATIONS_STATUS.provide().fetchApplicationStatusByApplication(
+                        factionsOmegaBukkitSpawnApplication,
+                        ApplicationStatus::class
                     )
 
-                    println("Enviar o packet")
+                println(factionsOmegaBukkitSpawnApplication)
 
-                    CoreProvider.Databases.Redis.ECHO.provide().publishToApplications(
-                        packet,
-                        CoreProvider.Cache.Local.APPLICATIONS.provide().fetchByApplicationType(
-                            ApplicationType.PROXY
-                        )
-                    )
+                val player = it.whoClicked as Player
+                val user = CoreProvider.Cache.Local.USERS.provide().fetchById(player.uniqueId)
+
+                if (factionsOmegaBukkitSpawnApplicationStatus === null) {
+                    println("nullo")
+
+                    player.sendMessage(TextComponent("§cEste servidor está offline."))
+                    return@setItem
                 }
+
+                val json = CoreConstants.GSON.toJson(factionsOmegaBukkitSpawnApplicationStatus)
+
+                println(" --> $json")
+
+                val packet = ConnectUserToApplicationPacket(
+                    user?.id,
+                    factionsOmegaBukkitSpawnApplication
+                )
+
+                println("Enviar o packet")
+
+                CoreProvider.Databases.Redis.ECHO.provide().publishToApplications(
+                    packet,
+                    CoreProvider.Cache.Local.APPLICATIONS.provide().fetchByApplicationType(
+                        ApplicationType.PROXY
+                    )
+                )
             }
-        )
+        }
     }
 
 }
