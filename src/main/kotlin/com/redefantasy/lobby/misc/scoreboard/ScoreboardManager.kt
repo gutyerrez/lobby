@@ -116,15 +116,15 @@ object ScoreboardManager {
 
         val scoreboard = user.scoreboard
 
-        for (slot in slots) {
-            println(slot)
+        slots.forEach {
+            println(it)
 
-            when (slot) {
+            when (it) {
                 Slot.ONLINE_PLAYERS -> {
                     val onlineUsers = CoreProvider.Cache.Redis.USERS_STATUS.provide().fetchUsers()
 
                     scoreboard.set(14, "§f Online: §7${onlineUsers.size}")
-                    break
+                    return
                 }
                 Slot.SERVER_LIST -> {
                     var i = 11
@@ -150,7 +150,7 @@ object ScoreboardManager {
 
                         if (i >= 4) i--
                     }
-                    break
+                    return
                 }
             }
         }
