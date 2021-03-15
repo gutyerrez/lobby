@@ -117,6 +117,8 @@ object ScoreboardManager {
         val scoreboard = user.scoreboard
 
         for (slot in slots) {
+            println(slot)
+
             when (slot) {
                 Slot.ONLINE_PLAYERS -> {
                     val onlineUsers = CoreProvider.Cache.Redis.USERS_STATUS.provide().fetchUsers()
