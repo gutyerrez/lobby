@@ -65,13 +65,9 @@ object ScoreboardManager {
         val fancyGroupName = user.getHighestGroup().getFancyDisplayName()
         val scoreboard = LobbyScoreboard()
 
-        scoreboard.send(
-            arrayOf(
-                player
-            )
-        )
-
         scoreboard.registerTeams()
+
+        user.scoreboard = scoreboard
 
         scoreboard.setTitle("§6§lREDE FANTASY")
         scoreboard.set(15, "§0")
@@ -91,8 +87,6 @@ object ScoreboardManager {
         scoreboard.set(1, "§3")
         scoreboard.set(0, "§e  loja.redefantasy.com")
 
-        user.scoreboard = scoreboard
-
         Bukkit.getOnlinePlayers().forEach {
             val targetUser = LobbyProvider.Cache.Local.LOBBY_USERS.provide().fetchById(
                 EntityID(
@@ -108,6 +102,8 @@ object ScoreboardManager {
         }
 
         this.WITH_SCORE_BOARD[player.uniqueId] = System.currentTimeMillis()
+
+        scoreboard.send(arrayOf(player))
     }
 
     fun update(player: Player, vararg slots: Slot) {
