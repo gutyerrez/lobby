@@ -47,8 +47,6 @@ class ServerSelectorInventory : CustomInventory(
                 val player = it.whoClicked as Player
                 val user = CoreProvider.Cache.Local.USERS.provide().fetchById(player.uniqueId)
 
-                println(factionsOmegaBukkitSpawnApplication.toString())
-
                 val packet = ConnectUserToApplicationPacket(
                     user?.id,
                     factionsOmegaBukkitSpawnApplication

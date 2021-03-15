@@ -179,6 +179,14 @@ class GeneralListener : Listener {
 
     @EventHandler
     fun on(
+        event: WeatherChangeEvent
+    ) {
+        if (event.toWeatherState())
+            event.isCancelled = true
+    }
+
+    @EventHandler
+    fun on(
         event: BlockBreakEvent
     ) {
         event.isCancelled = true
@@ -242,10 +250,9 @@ class GeneralListener : Listener {
 
     @EventHandler
     fun on(
-        event: WeatherChangeEvent
+        event: PlayerDropItemEvent
     ) {
-        if (event.toWeatherState())
-            event.isCancelled = true
+        event.isCancelled = true
     }
 
 }
