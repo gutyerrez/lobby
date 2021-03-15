@@ -65,6 +65,12 @@ object ScoreboardManager {
         val fancyGroupName = user.getHighestGroup().getFancyDisplayName()
         val scoreboard = LobbyScoreboard()
 
+        scoreboard.send(
+            arrayOf(
+                player
+            )
+        )
+
         scoreboard.registerTeams()
 
         scoreboard.setTitle("§6§lREDE FANTASY")
@@ -100,12 +106,6 @@ object ScoreboardManager {
             groupBoard.registerUser(user)
             scoreboard.registerUser(targetUser)
         }
-
-        scoreboard.send(
-            arrayOf(
-                player
-            )
-        )
 
         this.WITH_SCORE_BOARD[player.uniqueId] = System.currentTimeMillis()
     }
