@@ -5,6 +5,7 @@ import com.redefantasy.lobby.listeners.GeneralListener
 import com.redefantasy.lobby.misc.button.HotBarManager
 import com.redefantasy.lobby.misc.button.server.selector.button.ServerSelectorHotBarButton
 import org.bukkit.Bukkit
+import org.bukkit.entity.Item
 
 /**
  * @author Gutyerrez
@@ -62,6 +63,12 @@ class LobbyPlugin : CustomPlugin(false) {
             it.setGameRuleValue("doDaylightCycle", "false")
 
             it.time = 1200
+
+            it.livingEntities.forEach { livingEntity ->
+                if (livingEntity is Item) {
+                    livingEntity.remove()
+                }
+            }
         }
     }
 
