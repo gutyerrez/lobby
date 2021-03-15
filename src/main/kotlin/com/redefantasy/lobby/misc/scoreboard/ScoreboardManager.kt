@@ -117,41 +117,35 @@ object ScoreboardManager {
         val scoreboard = user.scoreboard
 
         slots.forEach {
-            println(it)
+            when (it) {
+                Slot.ONLINE_PLAYERS -> {
+                    val onlineUsers = CoreProvider.Cache.Redis.USERS_STATUS.provide().fetchUsers()
 
-            run loop@ {
-                when (it) {
-                    Slot.ONLINE_PLAYERS -> {
-                        val onlineUsers = CoreProvider.Cache.Redis.USERS_STATUS.provide().fetchUsers()
+                    scoreboard.set(14, "§f Online: §7${onlineUsers.size}")
+                }
+                Slot.SERVER_LIST -> {
+                    var i = 11
 
-                        scoreboard.set(14, "§f Online: §7${onlineUsers.size}")
-                        return@loop
-                    }
-                    Slot.SERVER_LIST -> {
-                        var i = 11
+                    CoreProvider.Cache.Local.SERVERS.provide().fetchAll().forEach {
+                        val onlineUsers = CoreProvider.Cache.Redis.USERS_STATUS.provide().fetchUsersByServer(it)
 
-                        CoreProvider.Cache.Local.SERVERS.provide().fetchAll().forEach {
-                            val onlineUsers = CoreProvider.Cache.Redis.USERS_STATUS.provide().fetchUsersByServer(it)
-
-                            scoreboard.set(
-                                i, "§f ${
-                                    StringUtils.replaceEach(
-                                        it.displayName,
-                                        arrayOf(
-                                            "Rankup",
-                                            "Factions"
-                                        ),
-                                        arrayOf(
-                                            "R.",
-                                            "F."
-                                        )
+                        scoreboard.set(
+                            i, "§f ${
+                                StringUtils.replaceEach(
+                                    it.displayName,
+                                    arrayOf(
+                                        "Rankup",
+                                        "Factions"
+                                    ),
+                                    arrayOf(
+                                        "R.",
+                                        "F."
                                     )
-                                }: §a${onlineUsers.size}"
-                            )
+                                )
+                            }: §a${onlineUsers.size}"
+                        )
 
-                            if (i >= 4) i--
-                        }
-                        return@loop
+                        if (i >= 4) i--
                     }
                 }
             }
