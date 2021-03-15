@@ -11,12 +11,16 @@ import org.apache.commons.lang3.StringUtils
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 import org.jetbrains.exposed.dao.id.EntityID
+import java.util.*
 import java.util.function.Consumer
+import java.util.stream.Collectors
 
 /**
  * @author Gutyerrez
  */
 object ScoreboardManager {
+
+    private val WITH_SCORE_BOARD = mutableMapOf<UUID, Long>()
 
     val UPDATE_SCOREBOARD = Consumer<LobbyUser> {
         this.update(
@@ -26,21 +30,27 @@ object ScoreboardManager {
     }
 
     init {
-        val queue = Queues.newConcurrentLinkedQueue<Player>()
+        val queue = Queues.newConcurrentLinkedQueue<LobbyUser>()
 
         Bukkit.getScheduler().runTaskTimer(
             LobbyPlugin.instance,
             {
-               if (queue.isEmpty() && Bukkit.getOnlinePlayers().isEmpty()) return@runTaskTimer
+                if (queue.isEmpty() && Bukkit.getOnlinePlayers().isEmpty()) return@runTaskTimer
 
                 if (queue.isEmpty() && Bukkit.getOnlinePlayers().isNotEmpty()) {
-                    queue.addAll(Bukkit.getOnlinePlayers())
+                    queue.addAll(
+                        Bukkit.getOnlinePlayers().stream()
+                            .filter { this.WITH_SCORE_BOARD.containsKey(it.uniqueId) }
+                            .map {
+                                LobbyProvider.Cache.Local.LOBBY_USERS.provide().fetchById(
+                                    it.uniqueId
+                                )
+                            }
+                            .collect(Collectors.toSet())
+                    )
                 }
 
-                val player = queue.poll()
-                val lobbyUser = LobbyProvider.Cache.Local.LOBBY_USERS.provide().fetchById(
-                    player.uniqueId
-                )
+                val lobbyUser = queue.poll()
 
                 if (lobbyUser !== null) this.UPDATE_SCOREBOARD.accept(lobbyUser)
             },
@@ -96,6 +106,8 @@ object ScoreboardManager {
                 player
             )
         )
+
+        this.WITH_SCORE_BOARD[player.uniqueId] = System.currentTimeMillis()
     }
 
     fun update(player: Player, vararg slots: Slot) {
