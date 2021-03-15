@@ -33,7 +33,12 @@ class ServerSelectorInventory : CustomInventory(
                 .name("§bFactions Ômega")
                 .lore(
                     arrayOf(
-                        "§7Bah meu lança uma lore legal ai."
+                        "",
+                        "§7  Convoque sua facção, consrtua sua base,",
+                        "§7  defenda-se de invasões adversárias",
+                        "§7  e realize suas próprias invasões.",
+                        "",
+                        "§aClique para jogar!"
                     )
                 )
                 .build()
@@ -48,8 +53,6 @@ class ServerSelectorInventory : CustomInventory(
                     user?.id,
                     factionsOmegaBukkitSpawnApplication
                 )
-
-                println("asd")
 
                 CoreProvider.Databases.Redis.ECHO.provide().publishToApplications(
                     packet,

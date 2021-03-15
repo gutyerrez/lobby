@@ -1,6 +1,5 @@
 package com.redefantasy.lobby.misc.button
 
-import org.bukkit.Material
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 import org.greenrobot.eventbus.EventBus
@@ -41,7 +40,7 @@ object HotBarManager {
 
         player.inventory.heldItemSlot = 4
 
-        player.inventory.armorContents.forEach { it.type = Material.AIR }
+        player.inventory.armorContents = null
 
         this.BUTTONS.forEach {
             player.inventory.setItem(

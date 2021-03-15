@@ -42,6 +42,8 @@ class GeneralListener : Listener {
         player.scoreboard.objectives.forEach { it.unregister() }
         player.scoreboard.teams.forEach { it.unregister() }
 
+        player.spigot().collidesWithEntities = false
+
         val user = CoreProvider.Cache.Local.USERS.provide().fetchById(player.uniqueId)!!
 
         LobbyProvider.Cache.Local.LOBBY_USERS.provide().put(

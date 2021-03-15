@@ -11,6 +11,16 @@ import org.bukkit.Bukkit
  */
 class LobbyPlugin : CustomPlugin(false) {
 
+    companion object {
+
+        lateinit var instance: CustomPlugin
+
+    }
+
+    init {
+        instance = this
+    }
+
     override fun onEnable() {
         super.onEnable()
 
