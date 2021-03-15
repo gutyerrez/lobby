@@ -23,9 +23,12 @@ object ScoreboardManager {
     private val WITH_SCORE_BOARD = mutableMapOf<UUID, Long>()
 
     val UPDATE_SCOREBOARD = Consumer<LobbyUser> {
+        println("Nah")
+
         this.update(
             it.player,
-            Slot.ONLINE_PLAYERS
+            Slot.ONLINE_PLAYERS,
+            Slot.SERVER_LIST
         )
     }
 
@@ -51,6 +54,8 @@ object ScoreboardManager {
                 }
 
                 val lobbyUser = queue.poll()
+
+                println("BAH MEU")
 
                 if (lobbyUser !== null) this.UPDATE_SCOREBOARD.accept(lobbyUser)
             },
