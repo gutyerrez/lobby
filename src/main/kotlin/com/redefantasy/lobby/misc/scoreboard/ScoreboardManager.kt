@@ -143,6 +143,7 @@ object ScoreboardManager {
 
                         if (i >= 4) i--
                     }
+                    break
                 }
             }
         }
