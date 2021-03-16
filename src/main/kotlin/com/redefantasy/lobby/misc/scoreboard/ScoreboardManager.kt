@@ -123,13 +123,13 @@ object ScoreboardManager {
                 Slot.SERVER_LIST -> {
                     var i = 11
 
-                    CoreProvider.Cache.Local.SERVERS.provide().fetchAll().forEach {
-                        val onlineUsers = CoreProvider.Cache.Redis.USERS_STATUS.provide().fetchUsersByServer(it)
+                    CoreProvider.Cache.Local.SERVERS.provide().fetchAll().forEach { server ->
+                        val onlineUsers = CoreProvider.Cache.Redis.USERS_STATUS.provide().fetchUsersByServer(server)
 
                         scoreboard.set(
                             i, "§f ${
                                 StringUtils.replaceEach(
-                                    it.displayName,
+                                    server.displayName,
                                     arrayOf(
                                         "Rankup",
                                         "Factions"
