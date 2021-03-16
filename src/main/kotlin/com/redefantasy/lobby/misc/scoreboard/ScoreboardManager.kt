@@ -57,7 +57,7 @@ object ScoreboardManager {
                 if (lobbyUser !== null && player !== null) this.UPDATE_SCOREBOARD.accept(lobbyUser)
             },
             0,
-            5
+            20 * 5
         )
     }
 
