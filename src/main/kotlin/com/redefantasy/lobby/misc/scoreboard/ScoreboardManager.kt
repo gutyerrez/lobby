@@ -52,8 +52,9 @@ object ScoreboardManager {
                 }
 
                 val lobbyUser = queue.poll()
+                val player = Bukkit.getPlayer(lobbyUser.getUniqueId())
 
-                if (lobbyUser !== null) this.UPDATE_SCOREBOARD.accept(lobbyUser)
+                if (lobbyUser !== null && player !== null) this.UPDATE_SCOREBOARD.accept(lobbyUser)
             },
             0,
             5
