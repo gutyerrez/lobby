@@ -1,5 +1,6 @@
 package com.redefantasy.lobby.misc.button.server.selector.inventory
 
+import com.redefantasy.core.shared.CoreConstants
 import com.redefantasy.core.shared.CoreProvider
 import com.redefantasy.core.shared.applications.ApplicationType
 import com.redefantasy.core.shared.echo.packets.ConnectUserToApplicationPacket
@@ -7,6 +8,7 @@ import com.redefantasy.core.spigot.inventory.CustomInventory
 import com.redefantasy.core.spigot.misc.utils.ItemBuilder
 import org.bukkit.Material
 import org.bukkit.entity.Player
+import java.util.concurrent.TimeUnit
 
 /**
  * @author Gutyerrez
@@ -21,11 +23,10 @@ class ServerSelectorInventory : CustomInventory(
     }
 
     private fun construct() {
-        val factionsOmegaBukkitSpawnApplication =
-            CoreProvider.Cache.Local.APPLICATIONS.provide().fetchByServerAndApplicationType(
-                CoreProvider.Cache.Local.SERVERS.provide().fetchByName("FACTIONS_OMEGA")!!,
-                ApplicationType.SERVER_SPAWN
-            )
+        val factionsOmegaBukkitSpawnApplication = CoreProvider.Cache.Local.APPLICATIONS.provide().fetchByServerAndApplicationType(
+            CoreProvider.Cache.Local.SERVERS.provide().fetchByName("FACTIONS_OMEGA")!!,
+            ApplicationType.SERVER_SPAWN
+        )
 
         this.setItem(
             13,
@@ -45,10 +46,12 @@ class ServerSelectorInventory : CustomInventory(
         ) { it ->
             if (factionsOmegaBukkitSpawnApplication !== null) {
                 val player = it.whoClicked as Player
-                val user = CoreProvider.Cache.Local.USERS.provide().fetchById(player.uniqueId)
+                val user = CoreProvider.Cache.Local.USERS.provide().fetchById(player.uniqueId)!!
+
+                if (CoreConstants.COOLDOWNS.inCooldown(user, "connect-to-server")) return@setItem
 
                 val packet = ConnectUserToApplicationPacket(
-                    user?.id,
+                    user.id,
                     factionsOmegaBukkitSpawnApplication
                 )
 
@@ -57,6 +60,12 @@ class ServerSelectorInventory : CustomInventory(
                     CoreProvider.Cache.Local.APPLICATIONS.provide().fetchByApplicationType(
                         ApplicationType.PROXY
                     )
+                )
+
+                CoreConstants.COOLDOWNS.start(
+                    user,
+                    "connect-to-server",
+                    TimeUnit.SECONDS.toMillis(3)
                 )
             }
         }
