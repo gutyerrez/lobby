@@ -29,7 +29,7 @@ class PreferencesHotBarButton : HotBarButton(
     ) {
         val player = event.player
 
-        player.openInventory(PreferencesInventory())
+        PreferencesInventory(player)
     }
 
 }

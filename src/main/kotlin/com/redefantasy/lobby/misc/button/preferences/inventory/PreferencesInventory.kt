@@ -12,7 +12,7 @@ import java.util.function.Consumer
 /**
  * @author Gutyerrez
  */
-class PreferencesInventory : CustomInventory(
+class PreferencesInventory(private val player: Player) : CustomInventory(
     "Preferências",
     6 * 9
 ) {
@@ -26,8 +26,7 @@ class PreferencesInventory : CustomInventory(
     )
 
     init {
-        val player = this.viewers[0] as Player
-        val user = CoreProvider.Cache.Local.USERS.provide().fetchById(player.uniqueId)!!
+        val user = CoreProvider.Cache.Local.USERS.provide().fetchById(this.player.uniqueId)!!
         val preferences = user.getPreferences()
 
         preferences.forEachIndexed { index, preference ->
@@ -38,6 +37,8 @@ class PreferencesInventory : CustomInventory(
                 preference
             )
         }
+
+        this.player.openInventory(this)
     }
 
     private fun setPreferenceItem(
