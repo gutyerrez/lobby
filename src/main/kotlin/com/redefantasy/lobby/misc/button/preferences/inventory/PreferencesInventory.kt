@@ -51,7 +51,11 @@ class PreferencesInventory(private val player: Player) : CustomInventory(
             Consumer<InventoryClickEvent> {
                 val bus = PreferenceRegistry.BUS[preference.name]
 
+                println("opa!")
+
                 if (bus !== null) {
+                    println("Não é null")
+
                     bus.post(it)
                 }
             }
