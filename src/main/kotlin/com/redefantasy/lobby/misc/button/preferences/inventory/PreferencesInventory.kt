@@ -43,7 +43,7 @@ class PreferencesInventory(private val player: Player) : CustomInventory(
 
     private fun setPreferenceItem(
         slot: Int,
-        preference: Preference<*>
+        preference: Preference
     ) {
         this.setItem(
             slot,
