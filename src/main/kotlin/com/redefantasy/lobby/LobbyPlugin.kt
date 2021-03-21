@@ -95,32 +95,28 @@ class LobbyPlugin : CustomPlugin(false) {
         }
 
         AsyncScheduler.scheduleAsyncRepeatingTask(
-            {
-                println("called task")
-
-                object : ApplicationStatusTask(
-                    ApplicationStatus(
-                        CoreProvider.application.name,
-                        ApplicationType.LOBBY,
-                        null,
-                        InetSocketAddress(
-                            this.server.ip,
-                            this.server.port
-                        ),
-                        this.onlineSince
-                    )
+            object : ApplicationStatusTask(
+                ApplicationStatus(
+                    CoreProvider.application.name,
+                    ApplicationType.LOBBY,
+                    null,
+                    InetSocketAddress(
+                        this.server.ip,
+                        this.server.port
+                    ),
+                    this.onlineSince
+                )
+            ) {
+                override fun buildApplicationStatus(
+                    applicationStatus: ApplicationStatus
                 ) {
-                    override fun buildApplicationStatus(
-                        applicationStatus: ApplicationStatus
-                    ) {
-                        println("build status")
+                    println("build status")
 
-                        val runtime = Runtime.getRuntime()
+                    val runtime = Runtime.getRuntime()
 
-                        applicationStatus.heapSize = runtime.totalMemory()
-                        applicationStatus.heapMaxSize = runtime.maxMemory()
-                        applicationStatus.heapFreeSize = runtime.freeMemory()
-                    }
+                    applicationStatus.heapSize = runtime.totalMemory()
+                    applicationStatus.heapMaxSize = runtime.maxMemory()
+                    applicationStatus.heapFreeSize = runtime.freeMemory()
                 }
             },
             0,
