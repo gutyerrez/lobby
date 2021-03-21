@@ -3,9 +3,11 @@ package com.redefantasy.lobby.misc.button.server.selector.inventory
 import com.redefantasy.core.shared.CoreConstants
 import com.redefantasy.core.shared.CoreProvider
 import com.redefantasy.core.shared.applications.ApplicationType
+import com.redefantasy.core.shared.applications.status.ApplicationStatus
 import com.redefantasy.core.shared.echo.packets.ConnectUserToApplicationPacket
 import com.redefantasy.core.spigot.inventory.CustomInventory
 import com.redefantasy.core.spigot.misc.utils.ItemBuilder
+import net.md_5.bungee.api.chat.TextComponent
 import org.bukkit.Material
 import org.bukkit.entity.Player
 import java.util.concurrent.TimeUnit
@@ -50,6 +52,25 @@ class ServerSelectorInventory : CustomInventory(
 
                 if (CoreConstants.COOLDOWNS.inCooldown(user, "connect-to-server")) return@setItem
 
+                val factionsOmegaBukkitSpawnApplicationStatus = CoreProvider.Cache.Redis.APPLICATIONS_STATUS.provide().fetchApplicationStatusByApplication(
+                    factionsOmegaBukkitSpawnApplication,
+                    ApplicationStatus::class
+                )
+
+                if (factionsOmegaBukkitSpawnApplicationStatus === null) {
+                    player.sendMessage(
+                        TextComponent("§cO servidor está offline.")
+                    )
+                    return@setItem
+                }
+
+                if (CoreProvider.Cache.Local.MAINTENANCE.provide().fetch(factionsOmegaBukkitSpawnApplication) == true) {
+                    player.sendMessage(
+                        TextComponent("§cEste servidor encontra-se em manutenção.")
+                    )
+                    return@setItem
+                }
+
                 val packet = ConnectUserToApplicationPacket(
                     user.id,
                     factionsOmegaBukkitSpawnApplication
@@ -65,7 +86,7 @@ class ServerSelectorInventory : CustomInventory(
                 CoreConstants.COOLDOWNS.start(
                     user,
                     "connect-to-server",
-                    TimeUnit.SECONDS.toMillis(3)
+                    TimeUnit.SECONDS.toMillis(5)
                 )
             }
         }

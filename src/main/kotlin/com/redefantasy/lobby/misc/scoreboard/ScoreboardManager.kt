@@ -2,12 +2,12 @@ package com.redefantasy.lobby.misc.scoreboard
 
 import com.google.common.collect.Queues
 import com.redefantasy.core.shared.CoreProvider
+import com.redefantasy.core.shared.applications.ApplicationType
 import com.redefantasy.core.shared.users.storage.table.UsersTable
 import com.redefantasy.core.spigot.misc.scoreboard.bukkit.GroupScoreboard
 import com.redefantasy.lobby.LobbyPlugin
 import com.redefantasy.lobby.LobbyProvider
 import com.redefantasy.lobby.user.data.LobbyUser
-import org.apache.commons.lang3.StringUtils
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 import org.jetbrains.exposed.dao.id.EntityID
@@ -124,22 +124,23 @@ object ScoreboardManager {
                     var i = 11
 
                     CoreProvider.Cache.Local.SERVERS.provide().fetchAll().forEach { server ->
+                        val bukkitSpawnApplication = CoreProvider.Cache.Local.APPLICATIONS.provide().fetchByServerAndApplicationType(
+                            server,
+                            ApplicationType.SERVER_SPAWN
+                        )
+
                         val onlineUsers = CoreProvider.Cache.Redis.USERS_STATUS.provide().fetchUsersByServer(server)
 
+                        val statusString: String = when {
+                            bukkitSpawnApplication === null -> "§cOff."
+                            CoreProvider.Cache.Local.MAINTENANCE.provide().fetch(bukkitSpawnApplication) == true -> {
+                                "§cMan."
+                            }
+                            else -> "§a${onlineUsers.size}"
+                        }
+
                         scoreboard.set(
-                            i, "§f ${
-                                StringUtils.replaceEach(
-                                    server.displayName,
-                                    arrayOf(
-                                        "Rankup",
-                                        "Factions"
-                                    ),
-                                    arrayOf(
-                                        "R.",
-                                        "F."
-                                    )
-                                )
-                            }: §a${onlineUsers.size}"
+                            i, "§f ${server.getFancyDisplayName()}: $statusString"
                         )
 
                         if (i >= 4) i--
