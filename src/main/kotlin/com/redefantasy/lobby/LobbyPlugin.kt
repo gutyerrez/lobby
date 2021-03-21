@@ -1,6 +1,11 @@
 package com.redefantasy.lobby
 
+import com.redefantasy.core.shared.CoreProvider
+import com.redefantasy.core.shared.applications.ApplicationType
+import com.redefantasy.core.shared.applications.status.ApplicationStatus
+import com.redefantasy.core.shared.applications.status.task.ApplicationStatusTask
 import com.redefantasy.core.shared.misc.preferences.PreferenceRegistry
+import com.redefantasy.core.shared.scheduler.AsyncScheduler
 import com.redefantasy.core.spigot.misc.plugin.CustomPlugin
 import com.redefantasy.core.spigot.misc.preferences.tell.TellPreference
 import com.redefantasy.lobby.listeners.GeneralListener
@@ -9,6 +14,8 @@ import com.redefantasy.lobby.misc.button.preferences.button.PreferencesHotBarBut
 import com.redefantasy.lobby.misc.button.server.selector.button.ServerSelectorHotBarButton
 import org.bukkit.Bukkit
 import org.bukkit.entity.Item
+import java.net.InetSocketAddress
+import java.util.concurrent.TimeUnit
 
 /**
  * @author Gutyerrez
@@ -25,10 +32,14 @@ class LobbyPlugin : CustomPlugin(false) {
         instance = this
     }
 
+    private var onlineSince = 0L
+
     override fun onEnable() {
         super.onEnable()
 
         LobbyProvider.prepare()
+
+        this.onlineSince = System.currentTimeMillis()
 
         val pluginManager = Bukkit.getServer().pluginManager
 
@@ -82,6 +93,36 @@ class LobbyPlugin : CustomPlugin(false) {
                 }
             }
         }
+
+        AsyncScheduler.scheduleAsyncRepeatingTask(
+            {
+                object : ApplicationStatusTask(
+                    ApplicationStatus(
+                        CoreProvider.application.name,
+                        ApplicationType.LOBBY,
+                        null,
+                        InetSocketAddress(
+                            this.server.ip,
+                            this.server.port
+                        ),
+                        this.onlineSince
+                    )
+                ) {
+                    override fun buildApplicationStatus(
+                        applicationStatus: ApplicationStatus
+                    ) {
+                        val runtime = Runtime.getRuntime()
+
+                        applicationStatus.heapSize = runtime.totalMemory()
+                        applicationStatus.heapMaxSize = runtime.maxMemory()
+                        applicationStatus.heapFreeSize = runtime.freeMemory()
+                    }
+                }
+            },
+            0,
+            1,
+            TimeUnit.SECONDS
+        )
     }
 
 }
