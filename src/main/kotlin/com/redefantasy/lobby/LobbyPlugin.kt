@@ -117,6 +117,8 @@ class LobbyPlugin : CustomPlugin(false) {
                     applicationStatus.heapSize = runtime.totalMemory()
                     applicationStatus.heapMaxSize = runtime.maxMemory()
                     applicationStatus.heapFreeSize = runtime.freeMemory()
+
+                    println(this)
                 }
             },
             0,
