@@ -110,15 +110,11 @@ class LobbyPlugin : CustomPlugin(false) {
                 override fun buildApplicationStatus(
                     applicationStatus: ApplicationStatus
                 ) {
-                    println("build status")
-
                     val runtime = Runtime.getRuntime()
 
                     applicationStatus.heapSize = runtime.totalMemory()
                     applicationStatus.heapMaxSize = runtime.maxMemory()
                     applicationStatus.heapFreeSize = runtime.freeMemory()
-
-                    println(this)
                 }
             },
             0,
