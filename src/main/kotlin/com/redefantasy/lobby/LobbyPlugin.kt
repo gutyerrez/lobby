@@ -96,6 +96,8 @@ class LobbyPlugin : CustomPlugin(false) {
 
         AsyncScheduler.scheduleAsyncRepeatingTask(
             {
+                println("called task")
+
                 object : ApplicationStatusTask(
                     ApplicationStatus(
                         CoreProvider.application.name,
@@ -111,6 +113,8 @@ class LobbyPlugin : CustomPlugin(false) {
                     override fun buildApplicationStatus(
                         applicationStatus: ApplicationStatus
                     ) {
+                        println("build status")
+
                         val runtime = Runtime.getRuntime()
 
                         applicationStatus.heapSize = runtime.totalMemory()
