@@ -3,6 +3,7 @@ package com.redefantasy.lobby.misc.scoreboard
 import com.google.common.collect.Queues
 import com.redefantasy.core.shared.CoreProvider
 import com.redefantasy.core.shared.applications.ApplicationType
+import com.redefantasy.core.shared.applications.status.ApplicationStatus
 import com.redefantasy.core.shared.users.storage.table.UsersTable
 import com.redefantasy.core.spigot.misc.scoreboard.bukkit.GroupScoreboard
 import com.redefantasy.lobby.LobbyPlugin
@@ -129,12 +130,13 @@ object ScoreboardManager {
                             ApplicationType.SERVER_SPAWN
                         )
 
-                        println(bukkitSpawnApplication)
-
                         val onlineUsers = CoreProvider.Cache.Redis.USERS_STATUS.provide().fetchUsersByServer(server)
 
                         val statusString: String = when {
-                            bukkitSpawnApplication === null -> "§cOff."
+                            bukkitSpawnApplication === null || CoreProvider.Cache.Redis.APPLICATIONS_STATUS.provide().fetchApplicationStatusByApplication(
+                                bukkitSpawnApplication,
+                                ApplicationStatus::class
+                            ) === null -> "§cOff."
                             CoreProvider.Cache.Local.MAINTENANCE.provide().fetch(bukkitSpawnApplication) == true -> {
                                 "§cMan."
                             }
