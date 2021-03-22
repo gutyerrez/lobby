@@ -27,7 +27,9 @@ class LobbyPlugin : CustomPlugin(false) {
     }
 
     init {
+
         instance = this
+
     }
 
     private var onlineSince = 0L
