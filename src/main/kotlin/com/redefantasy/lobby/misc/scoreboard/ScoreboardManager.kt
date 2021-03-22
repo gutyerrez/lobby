@@ -57,7 +57,7 @@ object ScoreboardManager {
                 if (lobbyUser !== null && player !== null) this.UPDATE_SCOREBOARD.accept(lobbyUser)
             },
             0,
-            20 * 5
+            20
         )
     }
 
@@ -138,6 +138,8 @@ object ScoreboardManager {
                             }
                             else -> "§a${onlineUsers.size}"
                         }
+
+                        println(CoreProvider.Cache.Local.MAINTENANCE.provide().fetch(bukkitSpawnApplication!!))
 
                         scoreboard.set(
                             i, "§f ${server.getFancyDisplayName()}: $statusString"
