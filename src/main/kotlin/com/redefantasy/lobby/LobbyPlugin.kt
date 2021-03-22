@@ -1,7 +1,6 @@
 package com.redefantasy.lobby
 
 import com.redefantasy.core.shared.CoreProvider
-import com.redefantasy.core.shared.applications.ApplicationType
 import com.redefantasy.core.shared.applications.status.ApplicationStatus
 import com.redefantasy.core.shared.applications.status.task.ApplicationStatusTask
 import com.redefantasy.core.shared.misc.preferences.PreferenceRegistry
@@ -14,7 +13,6 @@ import com.redefantasy.lobby.misc.button.preferences.button.PreferencesHotBarBut
 import com.redefantasy.lobby.misc.button.server.selector.button.ServerSelectorHotBarButton
 import org.bukkit.Bukkit
 import org.bukkit.entity.Item
-import java.net.InetSocketAddress
 import java.util.concurrent.TimeUnit
 
 /**
@@ -98,12 +96,9 @@ class LobbyPlugin : CustomPlugin(false) {
             object : ApplicationStatusTask(
                 ApplicationStatus(
                     CoreProvider.application.name,
-                    ApplicationType.LOBBY,
-                    null,
-                    InetSocketAddress(
-                        this.server.ip,
-                        this.server.port
-                    ),
+                    CoreProvider.application.applicationType,
+                    CoreProvider.application.server,
+                    CoreProvider.application.address,
                     this.onlineSince
                 )
             ) {
