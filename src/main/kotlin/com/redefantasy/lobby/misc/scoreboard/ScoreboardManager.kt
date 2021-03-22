@@ -129,6 +129,8 @@ object ScoreboardManager {
                             ApplicationType.SERVER_SPAWN
                         )
 
+                        println(bukkitSpawnApplication)
+
                         val onlineUsers = CoreProvider.Cache.Redis.USERS_STATUS.provide().fetchUsersByServer(server)
 
                         val statusString: String = when {
@@ -138,8 +140,6 @@ object ScoreboardManager {
                             }
                             else -> "§a${onlineUsers.size}"
                         }
-
-                        println(CoreProvider.Cache.Local.MAINTENANCE.provide().fetch(bukkitSpawnApplication!!))
 
                         scoreboard.set(
                             i, "§f ${server.getFancyDisplayName()}: $statusString"
