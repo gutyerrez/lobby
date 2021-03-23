@@ -18,7 +18,8 @@ object HotBarManager {
         buttons.forEach {
             val bus = EventBus.builder()
                 .logNoSubscriberMessages(false)
-                .throwSubscriberException(true)
+                .logSubscriberExceptions(true)
+                .throwSubscriberException(false)
                 .build()
 
             bus.register(it)

@@ -136,14 +136,7 @@ object ScoreboardManager {
                             bukkitSpawnApplication === null || CoreProvider.Cache.Redis.APPLICATIONS_STATUS.provide().fetchApplicationStatusByApplication(
                                 bukkitSpawnApplication,
                                 ApplicationStatus::class
-                            ) === null -> {
-                                println(CoreProvider.Cache.Redis.APPLICATIONS_STATUS.provide().fetchApplicationStatusByApplication(
-                                    bukkitSpawnApplication!!,
-                                    ApplicationStatus::class
-                                ))
-
-                                "§cOff."
-                            }
+                            ) === null -> "§cOff."
                             CoreProvider.Cache.Local.MAINTENANCE.provide().fetch(bukkitSpawnApplication) == true -> {
                                 "§cMan."
                             }
