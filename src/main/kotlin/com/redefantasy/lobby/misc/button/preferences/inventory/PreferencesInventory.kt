@@ -72,7 +72,7 @@ class PreferencesInventory(private val player: Player) : CustomInventory(
             slot,
             ItemBuilder(Material.STAINED_GLASS_PANE)
                 .name(preference.getIcon().displayName)
-                .data(if (preference.preferenceState === PreferenceState.ENABLED) 5 else 14)
+                .durability(if (preference.preferenceState === PreferenceState.ENABLED) 5 else 14)
                 .lore(
                     arrayOf(
                         "§7Estado: ${preference.preferenceState.getColor()}${
