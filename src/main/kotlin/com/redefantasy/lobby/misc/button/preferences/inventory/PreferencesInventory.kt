@@ -8,8 +8,12 @@ import com.redefantasy.core.shared.misc.preferences.PreferenceRegistry
 import com.redefantasy.core.shared.misc.preferences.PreferenceState
 import com.redefantasy.core.shared.users.preferences.storage.dto.UpdateUserPreferencesDTO
 import com.redefantasy.core.spigot.inventory.CustomInventory
+import com.redefantasy.core.spigot.inventory.ICustomInventory
 import com.redefantasy.core.spigot.misc.preferences.toItemStack
+import com.redefantasy.core.spigot.misc.utils.ItemBuilder
+import org.bukkit.Material
 import org.bukkit.entity.Player
+import org.bukkit.event.inventory.InventoryClickEvent
 import java.util.concurrent.TimeUnit
 
 /**
@@ -25,7 +29,7 @@ class PreferencesInventory(private val player: Player) : CustomInventory(
     )
 
     private val PREFERENCES_BUTTON_SLOTS = arrayOf(
-        10, 11, 12 ,13, 14, 15, 16
+        10, 11, 12, 13, 14, 15, 16
     )
 
     init {
@@ -33,10 +37,15 @@ class PreferencesInventory(private val player: Player) : CustomInventory(
         val preferences = user.getPreferences()
 
         preferences.forEachIndexed { index, preference ->
-            val slot = this.PREFERENCES_ICON_SLOTS[index]
+            val iconSlot = this.PREFERENCES_ICON_SLOTS[index]
+            val buttonSlot = this.PREFERENCES_BUTTON_SLOTS[index]
 
-            this.setPreferenceItem(
-                slot,
+            this.setPreferenceIcon(
+                iconSlot,
+                preference
+            )
+            this.setPreferenceButton(
+                buttonSlot,
                 preference
             )
         }
@@ -44,14 +53,46 @@ class PreferencesInventory(private val player: Player) : CustomInventory(
         this.player.openInventory(this)
     }
 
-    private fun setPreferenceItem(
+    private fun setPreferenceIcon(
         slot: Int,
         preference: Preference
     ) {
         this.setItem(
             slot,
-            preference.getIcon().toItemStack()
-        ) { event ->
+            preference.getIcon().toItemStack(),
+            this.preferenceClickConsumer(preference)
+        )
+    }
+
+    private fun setPreferenceButton(
+        slot: Int,
+        preference: Preference
+    ) {
+        this.setItem(
+            slot,
+            ItemBuilder(Material.STAINED_GLASS_PANE)
+                .name(preference.getIcon().displayName)
+                .data(if (preference.preferenceState === PreferenceState.ENABLED) 5 else 14)
+                .lore(
+                    arrayOf(
+                        "Estado: ${preference.preferenceState.getColor()}${
+                            if (preference.preferenceState === PreferenceState.ENABLED)
+                                "Ligado"
+                            else "Desligado"
+                        }"
+                    )
+                )
+                .build(),
+            this.preferenceClickConsumer(preference)
+        )
+    }
+
+    private fun preferenceClickConsumer(
+        preference: Preference
+    ) = object : ICustomInventory.ConsumerClickListener {
+        override fun accept(
+            event: InventoryClickEvent
+        ) {
             val player = event.whoClicked as Player
             val user = CoreProvider.Cache.Local.USERS.provide().fetchById(player.uniqueId)!!
 
@@ -60,7 +101,7 @@ class PreferencesInventory(private val player: Player) : CustomInventory(
             if (preferences.size != PreferenceRegistry.fetchAll().size)
                 preferences.copyFrom(PreferenceRegistry.fetchAll())
 
-            if (CoreConstants.COOLDOWNS.inCooldown(user, this.name)) return@setItem
+            if (CoreConstants.COOLDOWNS.inCooldown(user, preference.name)) return
 
             val switchPreferenceState = when (preference.preferenceState) {
                 PreferenceState.ENABLED -> PreferenceState.DISABLED
@@ -76,7 +117,7 @@ class PreferencesInventory(private val player: Player) : CustomInventory(
                 )
             )
 
-            CoreConstants.COOLDOWNS.start(user, this.name, TimeUnit.SECONDS.toMillis(3))
+            CoreConstants.COOLDOWNS.start(user, preference.name, TimeUnit.SECONDS.toMillis(3))
         }
     }
 

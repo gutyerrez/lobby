@@ -4,9 +4,9 @@ import com.redefantasy.core.shared.CoreProvider
 import com.redefantasy.core.shared.applications.status.ApplicationStatus
 import com.redefantasy.core.shared.applications.status.task.ApplicationStatusTask
 import com.redefantasy.core.shared.misc.preferences.PreferenceRegistry
+import com.redefantasy.core.shared.misc.preferences.data.TellPreference
 import com.redefantasy.core.shared.scheduler.AsyncScheduler
 import com.redefantasy.core.spigot.misc.plugin.CustomPlugin
-import com.redefantasy.core.spigot.misc.preferences.tell.TellPreference
 import com.redefantasy.lobby.listeners.GeneralListener
 import com.redefantasy.lobby.misc.button.HotBarManager
 import com.redefantasy.lobby.misc.button.preferences.button.PreferencesHotBarButton
