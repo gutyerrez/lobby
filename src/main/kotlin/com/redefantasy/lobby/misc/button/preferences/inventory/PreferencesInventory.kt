@@ -75,7 +75,7 @@ class PreferencesInventory(private val player: Player) : CustomInventory(
                 .data(if (preference.preferenceState === PreferenceState.ENABLED) 5 else 14)
                 .lore(
                     arrayOf(
-                        "Estado: ${preference.preferenceState.getColor()}${
+                        "§7Estado: ${preference.preferenceState.getColor()}${
                             if (preference.preferenceState === PreferenceState.ENABLED)
                                 "Ligado"
                             else "Desligado"
@@ -122,9 +122,27 @@ class PreferencesInventory(private val player: Player) : CustomInventory(
             val slot = event.slot
 
             if (this@PreferencesInventory.PREFERENCES_ICON_SLOTS.contains(slot)) {
-                this@PreferencesInventory.setPreferenceIcon(slot, preference)
+                val index = this@PreferencesInventory.PREFERENCES_ICON_SLOTS.indexOf(slot)
+
+                this@PreferencesInventory.setPreferenceIcon(
+                    this@PreferencesInventory.PREFERENCES_ICON_SLOTS[index],
+                    preference
+                )
+                this@PreferencesInventory.setPreferenceButton(
+                    this@PreferencesInventory.PREFERENCES_BUTTON_SLOTS[index],
+                    preference
+                )
             } else if (this@PreferencesInventory.PREFERENCES_BUTTON_SLOTS.contains(slot)) {
-                this@PreferencesInventory.setPreferenceButton(slot, preference)
+                val index = this@PreferencesInventory.PREFERENCES_BUTTON_SLOTS.indexOf(slot)
+
+                this@PreferencesInventory.setPreferenceIcon(
+                    this@PreferencesInventory.PREFERENCES_ICON_SLOTS[index],
+                    preference
+                )
+                this@PreferencesInventory.setPreferenceButton(
+                    this@PreferencesInventory.PREFERENCES_BUTTON_SLOTS[index],
+                    preference
+                )
             }
         }
     }
