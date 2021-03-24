@@ -1,13 +1,16 @@
 package com.redefantasy.lobby.misc.button.preferences.inventory
 
+import com.redefantasy.core.shared.CoreConstants
 import com.redefantasy.core.shared.CoreProvider
+import com.redefantasy.core.shared.misc.kotlin.copyFrom
+import com.redefantasy.core.shared.misc.preferences.Preference
 import com.redefantasy.core.shared.misc.preferences.PreferenceRegistry
-import com.redefantasy.core.shared.misc.preferences.data.Preference
+import com.redefantasy.core.shared.misc.preferences.PreferenceState
+import com.redefantasy.core.shared.users.preferences.storage.dto.UpdateUserPreferencesDTO
 import com.redefantasy.core.spigot.inventory.CustomInventory
+import com.redefantasy.core.spigot.misc.preferences.toItemStack
 import org.bukkit.entity.Player
-import org.bukkit.event.inventory.InventoryClickEvent
-import org.bukkit.inventory.ItemStack
-import java.util.function.Consumer
+import java.util.concurrent.TimeUnit
 
 /**
  * @author Gutyerrez
@@ -47,15 +50,34 @@ class PreferencesInventory(private val player: Player) : CustomInventory(
     ) {
         this.setItem(
             slot,
-            preference.getIcon() as ItemStack,
-            Consumer<InventoryClickEvent> {
-                val bus = PreferenceRegistry.BUS[preference.name]
+            preference.getIcon().toItemStack()
+        ) { event ->
+            val player = event.whoClicked as Player
+            val user = CoreProvider.Cache.Local.USERS.provide().fetchById(player.uniqueId)!!
 
-                if (bus !== null) {
-                    bus.post(it)
-                }
+            val preferences = user.getPreferences()
+
+            if (preferences.size != PreferenceRegistry.fetchAll().size)
+                preferences.copyFrom(PreferenceRegistry.fetchAll())
+
+            if (CoreConstants.COOLDOWNS.inCooldown(user, this.name)) return@setItem
+
+            val switchPreferenceState = when (preference.preferenceState) {
+                PreferenceState.ENABLED -> PreferenceState.DISABLED
+                PreferenceState.DISABLED -> PreferenceState.ENABLED
             }
-        )
+
+            preference.preferenceState = switchPreferenceState
+
+            CoreProvider.Repositories.Postgres.USERS_PREFERENCES_REPOSITORY.provide().update(
+                UpdateUserPreferencesDTO(
+                    user.id,
+                    preferences
+                )
+            )
+
+            CoreConstants.COOLDOWNS.start(user, this.name, TimeUnit.SECONDS.toMillis(3))
+        }
     }
 
 }
