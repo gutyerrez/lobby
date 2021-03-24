@@ -3,6 +3,7 @@ package com.redefantasy.lobby
 import com.redefantasy.core.shared.CoreProvider
 import com.redefantasy.core.shared.applications.status.ApplicationStatus
 import com.redefantasy.core.shared.applications.status.task.ApplicationStatusTask
+import com.redefantasy.core.shared.echo.packets.listener.UserPreferencesUpdatedEchoPacketListener
 import com.redefantasy.core.shared.misc.preferences.PreferenceRegistry
 import com.redefantasy.core.shared.misc.preferences.data.TellPreference
 import com.redefantasy.core.shared.scheduler.AsyncScheduler
@@ -61,6 +62,12 @@ class LobbyPlugin : CustomPlugin(false) {
         PreferenceRegistry.register(
             TellPreference()
         )
+
+        /**
+         * ECHO
+         */
+
+        CoreProvider.Databases.Redis.ECHO.provide().registerListener(UserPreferencesUpdatedEchoPacketListener())
 
         /**
          * World settings

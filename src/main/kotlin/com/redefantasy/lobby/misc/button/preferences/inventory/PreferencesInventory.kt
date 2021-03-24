@@ -2,6 +2,7 @@ package com.redefantasy.lobby.misc.button.preferences.inventory
 
 import com.redefantasy.core.shared.CoreConstants
 import com.redefantasy.core.shared.CoreProvider
+import com.redefantasy.core.shared.echo.packets.UserPreferencesUpdatedPacket
 import com.redefantasy.core.shared.misc.kotlin.copyFrom
 import com.redefantasy.core.shared.misc.preferences.Preference
 import com.redefantasy.core.shared.misc.preferences.PreferenceRegistry
@@ -116,6 +117,13 @@ class PreferencesInventory(private val player: Player) : CustomInventory(
                     preferences
                 )
             )
+
+            val packet = UserPreferencesUpdatedPacket(
+                user.id,
+                preferences
+            )
+
+            CoreProvider.Databases.Redis.ECHO.provide().publishToAll(packet)
 
             CoreConstants.COOLDOWNS.start(user, preference.name, TimeUnit.SECONDS.toMillis(3))
 
