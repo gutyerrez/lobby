@@ -118,6 +118,14 @@ class PreferencesInventory(private val player: Player) : CustomInventory(
             )
 
             CoreConstants.COOLDOWNS.start(user, preference.name, TimeUnit.SECONDS.toMillis(3))
+
+            val slot = event.slot
+
+            if (this@PreferencesInventory.PREFERENCES_ICON_SLOTS.contains(slot)) {
+                this@PreferencesInventory.setPreferenceIcon(slot, preference)
+            } else if (this@PreferencesInventory.PREFERENCES_BUTTON_SLOTS.contains(slot)) {
+                this@PreferencesInventory.setPreferenceButton(slot, preference)
+            }
         }
     }
 
