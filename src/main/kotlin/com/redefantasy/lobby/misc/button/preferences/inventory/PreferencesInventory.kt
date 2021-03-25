@@ -3,8 +3,6 @@ package com.redefantasy.lobby.misc.button.preferences.inventory
 import com.redefantasy.core.shared.CoreConstants
 import com.redefantasy.core.shared.CoreProvider
 import com.redefantasy.core.shared.echo.packets.UserPreferencesUpdatedPacket
-import com.redefantasy.core.shared.misc.kotlin.copyFrom
-import com.redefantasy.core.shared.misc.preferences.PreferenceRegistry
 import com.redefantasy.core.shared.misc.preferences.PreferenceState
 import com.redefantasy.core.shared.misc.preferences.data.Preference
 import com.redefantasy.core.shared.users.preferences.storage.dto.UpdateUserPreferencesDTO
@@ -97,11 +95,6 @@ class PreferencesInventory(private val player: Player) : CustomInventory(
             val player = event.whoClicked as Player
             val user = CoreProvider.Cache.Local.USERS.provide().fetchById(player.uniqueId)!!
 
-            val preferences = user.getPreferences()
-
-            if (preferences.size != PreferenceRegistry.fetchAll().size)
-                preferences.copyFrom(PreferenceRegistry.fetchAll())
-
             if (CoreConstants.COOLDOWNS.inCooldown(user, preference.name)) return
 
             val switchPreferenceState = when (preference.preferenceState) {
@@ -114,13 +107,13 @@ class PreferencesInventory(private val player: Player) : CustomInventory(
             CoreProvider.Repositories.Postgres.USERS_PREFERENCES_REPOSITORY.provide().update(
                 UpdateUserPreferencesDTO(
                     user.id,
-                    preferences
+                    user.getPreferences()
                 )
             )
 
             val packet = UserPreferencesUpdatedPacket(
                 user.id,
-                preferences
+                user.getPreferences()
             )
 
             CoreProvider.Databases.Redis.ECHO.provide().publishToAll(packet)
