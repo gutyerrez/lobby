@@ -4,9 +4,9 @@ import com.redefantasy.core.shared.CoreConstants
 import com.redefantasy.core.shared.CoreProvider
 import com.redefantasy.core.shared.echo.packets.UserPreferencesUpdatedPacket
 import com.redefantasy.core.shared.misc.kotlin.copyFrom
-import com.redefantasy.core.shared.misc.preferences.Preference
 import com.redefantasy.core.shared.misc.preferences.PreferenceRegistry
 import com.redefantasy.core.shared.misc.preferences.PreferenceState
+import com.redefantasy.core.shared.misc.preferences.data.Preference
 import com.redefantasy.core.shared.users.preferences.storage.dto.UpdateUserPreferencesDTO
 import com.redefantasy.core.spigot.inventory.CustomInventory
 import com.redefantasy.core.spigot.inventory.ICustomInventory
