@@ -67,10 +67,14 @@ class PreferencesInventory(private val player: Player) : CustomInventory(
         slot: Int,
         preference: Preference
     ) {
+        println(preference)
+
+        println(preference.preferenceState)
+
         this.setItem(
             slot,
             ItemBuilder(Material.STAINED_GLASS_PANE)
-                .name(preference.icon?.itemMeta?.displayName ?: "Desconhecido")
+                .name(preference.name)
                 .durability(if (preference.preferenceState === PreferenceState.ENABLED) 5 else 14)
                 .lore(
                     arrayOf(
