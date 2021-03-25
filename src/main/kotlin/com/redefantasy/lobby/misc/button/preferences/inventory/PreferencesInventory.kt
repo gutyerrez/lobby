@@ -70,7 +70,7 @@ class PreferencesInventory(private val player: Player) : CustomInventory(
         this.setItem(
             slot,
             ItemBuilder(Material.STAINED_GLASS_PANE)
-                .name(preference.name)
+                .name(preference.icon?.itemMeta?.displayName ?: "§7Desconhecido")
                 .durability(if (preference.preferenceState === PreferenceState.ENABLED) 5 else 14)
                 .lore(
                     arrayOf(
@@ -153,7 +153,7 @@ class PreferencesInventory(private val player: Player) : CustomInventory(
             "user-private-messages-preference" -> ItemBuilder(
                 Material.EMPTY_MAP
             ).name(
-                "§aMensagens privadas",
+                "${this.getStateColor()}Mensagens privadas",
             ).lore(
                 arrayOf("§7Receber mensagens privadas.")
             ).build()
