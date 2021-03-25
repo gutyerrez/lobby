@@ -10,11 +10,11 @@ import com.redefantasy.core.shared.misc.preferences.data.Preference
 import com.redefantasy.core.shared.users.preferences.storage.dto.UpdateUserPreferencesDTO
 import com.redefantasy.core.spigot.inventory.CustomInventory
 import com.redefantasy.core.spigot.inventory.ICustomInventory
-import com.redefantasy.core.spigot.misc.preferences.toItemStack
 import com.redefantasy.core.spigot.misc.utils.ItemBuilder
 import org.bukkit.Material
 import org.bukkit.entity.Player
 import org.bukkit.event.inventory.InventoryClickEvent
+import org.bukkit.inventory.ItemStack
 import java.util.concurrent.TimeUnit
 
 /**
@@ -41,8 +41,6 @@ class PreferencesInventory(private val player: Player) : CustomInventory(
             val iconSlot = this.PREFERENCES_ICON_SLOTS[index]
             val buttonSlot = this.PREFERENCES_BUTTON_SLOTS[index]
 
-            println(preference.icon === null)
-
             this.setPreferenceIcon(
                 iconSlot,
                 preference
@@ -62,7 +60,7 @@ class PreferencesInventory(private val player: Player) : CustomInventory(
     ) {
         this.setItem(
             slot,
-            preference.icon?.toItemStack(),
+            preference.icon,
             this.preferenceClickConsumer(preference)
         )
     }
@@ -74,7 +72,7 @@ class PreferencesInventory(private val player: Player) : CustomInventory(
         this.setItem(
             slot,
             ItemBuilder(Material.STAINED_GLASS_PANE)
-                .name(preference.icon?.displayName ?: "Desconhecido")
+                .name(preference.icon?.itemMeta?.displayName ?: "Desconhecido")
                 .durability(if (preference.preferenceState === PreferenceState.ENABLED) 5 else 14)
                 .lore(
                     arrayOf(
@@ -101,12 +99,8 @@ class PreferencesInventory(private val player: Player) : CustomInventory(
 
             val preferences = user.getPreferences()
 
-            println(preferences.size)
-
             if (preferences.size != PreferenceRegistry.fetchAll().size)
                 preferences.copyFrom(PreferenceRegistry.fetchAll())
-
-            println("Depois: ${preferences.size}")
 
             if (CoreConstants.COOLDOWNS.inCooldown(user, preference.name)) return
 
@@ -160,5 +154,17 @@ class PreferencesInventory(private val player: Player) : CustomInventory(
             }
         }
     }
+
+    private val Preference.icon: ItemStack?
+        get() = when (this.name) {
+            "user-private-messages-preference" -> ItemBuilder(
+                Material.EMPTY_MAP
+            ).name(
+                "${this.getStateColor()}Mensagens privadas",
+            ).lore(
+                arrayOf("§7Receber mensagens privadas.")
+            ).build()
+            else -> null
+        }
 
 }
