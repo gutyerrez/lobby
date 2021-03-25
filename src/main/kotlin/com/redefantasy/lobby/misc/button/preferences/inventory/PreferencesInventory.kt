@@ -41,14 +41,16 @@ class PreferencesInventory(private val player: Player) : CustomInventory(
             val iconSlot = this.PREFERENCES_ICON_SLOTS[index]
             val buttonSlot = this.PREFERENCES_BUTTON_SLOTS[index]
 
-            this.setPreferenceIcon(
-                iconSlot,
-                preference
-            )
-            this.setPreferenceButton(
-                buttonSlot,
-                preference
-            )
+            if (preference.icon !== null) {
+                this.setPreferenceIcon(
+                    iconSlot,
+                    preference
+                )
+                this.setPreferenceButton(
+                    buttonSlot,
+                    preference
+                )
+            }
         }
 
         this.player.openInventory(this)
@@ -60,7 +62,7 @@ class PreferencesInventory(private val player: Player) : CustomInventory(
     ) {
         this.setItem(
             slot,
-            preference.getIcon().toItemStack(),
+            preference.icon?.toItemStack(),
             this.preferenceClickConsumer(preference)
         )
     }
@@ -72,7 +74,7 @@ class PreferencesInventory(private val player: Player) : CustomInventory(
         this.setItem(
             slot,
             ItemBuilder(Material.STAINED_GLASS_PANE)
-                .name(preference.getIcon().displayName)
+                .name(preference.icon?.displayName ?: "Desconhecido")
                 .durability(if (preference.preferenceState === PreferenceState.ENABLED) 5 else 14)
                 .lore(
                     arrayOf(
