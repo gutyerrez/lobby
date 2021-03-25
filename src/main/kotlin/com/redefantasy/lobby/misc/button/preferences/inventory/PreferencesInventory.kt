@@ -67,10 +67,6 @@ class PreferencesInventory(private val player: Player) : CustomInventory(
         slot: Int,
         preference: Preference
     ) {
-        println(preference)
-
-        println(preference.preferenceState)
-
         this.setItem(
             slot,
             ItemBuilder(Material.STAINED_GLASS_PANE)
