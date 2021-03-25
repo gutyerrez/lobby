@@ -101,12 +101,12 @@ class PreferencesInventory(private val player: Player) : CustomInventory(
 
             val preferences = user.getPreferences()
 
-            println(preferences)
+            println(preferences.size)
 
             if (preferences.size != PreferenceRegistry.fetchAll().size)
                 preferences.copyFrom(PreferenceRegistry.fetchAll())
 
-            println("Depois: $preferences")
+            println("Depois: ${preferences.size}")
 
             if (CoreConstants.COOLDOWNS.inCooldown(user, preference.name)) return
 
