@@ -153,7 +153,7 @@ class PreferencesInventory(private val player: Player) : CustomInventory(
             "user-private-messages-preference" -> ItemBuilder(
                 Material.EMPTY_MAP
             ).name(
-                "${this.getStateColor()}Mensagens privadas",
+                "§aMensagens privadas",
             ).lore(
                 arrayOf("§7Receber mensagens privadas.")
             ).build()
