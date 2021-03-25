@@ -41,16 +41,16 @@ class PreferencesInventory(private val player: Player) : CustomInventory(
             val iconSlot = this.PREFERENCES_ICON_SLOTS[index]
             val buttonSlot = this.PREFERENCES_BUTTON_SLOTS[index]
 
-            if (preference.icon !== null) {
-                this.setPreferenceIcon(
-                    iconSlot,
-                    preference
-                )
-                this.setPreferenceButton(
-                    buttonSlot,
-                    preference
-                )
-            }
+            println(preference.icon === null)
+
+            this.setPreferenceIcon(
+                iconSlot,
+                preference
+            )
+            this.setPreferenceButton(
+                buttonSlot,
+                preference
+            )
         }
 
         this.player.openInventory(this)
