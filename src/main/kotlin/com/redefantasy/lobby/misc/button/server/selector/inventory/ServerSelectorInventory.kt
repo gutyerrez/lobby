@@ -33,7 +33,7 @@ class ServerSelectorInventory : CustomInventory(
     private fun construct() {
         val servers = CoreProvider.Cache.Local.SERVERS.provide().fetchAll()
 
-        val slots = this.SLOTS[if (servers.size > this.SLOTS.size) this.SLOTS.lastIndex else servers.size - 1]
+        val slots = this.SLOTS[if (servers.size >= this.SLOTS.size) this.SLOTS.lastIndex else servers.size - 1]
 
         servers.forEachIndexed { index, server ->
             val slot = slots[index]
