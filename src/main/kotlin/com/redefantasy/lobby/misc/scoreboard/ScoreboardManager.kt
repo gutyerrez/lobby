@@ -132,6 +132,10 @@ object ScoreboardManager {
                             ApplicationType.SERVER_SPAWN
                         )
 
+                        val temp = CoreProvider.Cache.Local.APPLICATIONS.provide().fetchByName("factions-phoenix-spawn")
+
+                        println("Temp $temp")
+
                         val onlineUsers = CoreProvider.Cache.Redis.USERS_STATUS.provide().fetchUsersByServer(server)
 
                         println(bukkitSpawnApplication === null)
