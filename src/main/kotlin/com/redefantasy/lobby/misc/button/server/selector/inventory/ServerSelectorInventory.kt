@@ -15,10 +15,7 @@ import java.util.concurrent.TimeUnit
 /**
  * @author Gutyerrez
  */
-class ServerSelectorInventory : CustomInventory(
-    "Selecione o servidor",
-    3 * 9
-) {
+class ServerSelectorInventory : CustomInventory {
 
     private val SLOTS = arrayOf(
         arrayOf(13),
@@ -26,11 +23,10 @@ class ServerSelectorInventory : CustomInventory(
         arrayOf(10, 13, 16)
     )
 
-    init {
-        this.construct()
-    }
-
-    private fun construct() {
+    constructor() : super(
+        "Selecione o servidor",
+        3 * 9
+    ) {
         val servers = CoreProvider.Cache.Local.SERVERS.provide().fetchAll()
 
         val slots = this.SLOTS[if (servers.size >= this.SLOTS.size) this.SLOTS.lastIndex else servers.size - 1]
@@ -38,10 +34,11 @@ class ServerSelectorInventory : CustomInventory(
         servers.forEachIndexed { index, server ->
             val slot = slots[index]
 
-            val bukkitSpawnApplication = CoreProvider.Cache.Local.APPLICATIONS.provide().fetchByServerAndApplicationType(
-                server,
-                ApplicationType.SERVER_SPAWN
-            )
+            val bukkitSpawnApplication =
+                CoreProvider.Cache.Local.APPLICATIONS.provide().fetchByServerAndApplicationType(
+                    server,
+                    ApplicationType.SERVER_SPAWN
+                )
 
             this.setItem(
                 slot,
@@ -65,10 +62,11 @@ class ServerSelectorInventory : CustomInventory(
 
                     if (CoreConstants.COOLDOWNS.inCooldown(user, "connect-to-server")) return@setItem
 
-                    val bukkitSpawnApplicationStatus = CoreProvider.Cache.Redis.APPLICATIONS_STATUS.provide().fetchApplicationStatusByApplication(
-                        bukkitSpawnApplication,
-                        ApplicationStatus::class
-                    )
+                    val bukkitSpawnApplicationStatus =
+                        CoreProvider.Cache.Redis.APPLICATIONS_STATUS.provide().fetchApplicationStatusByApplication(
+                            bukkitSpawnApplication,
+                            ApplicationStatus::class
+                        )
 
                     if (bukkitSpawnApplicationStatus === null) {
                         player.sendMessage(
