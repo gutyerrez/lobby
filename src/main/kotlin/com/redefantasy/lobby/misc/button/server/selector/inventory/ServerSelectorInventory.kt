@@ -20,74 +20,88 @@ class ServerSelectorInventory : CustomInventory(
     3 * 9
 ) {
 
+    private val SLOTS = arrayOf(
+        arrayOf(13),
+        arrayOf(11, 15),
+        arrayOf(10, 13, 16)
+    )
+
     init {
         this.construct()
     }
 
     private fun construct() {
-        val factionsOmegaBukkitSpawnApplication = CoreProvider.Cache.Local.APPLICATIONS.provide().fetchByServerAndApplicationType(
-            CoreProvider.Cache.Local.SERVERS.provide().fetchByName("FACTIONS_OMEGA")!!,
-            ApplicationType.SERVER_SPAWN
-        )
+        val servers = CoreProvider.Cache.Local.SERVERS.provide().fetchAll()
 
-        this.setItem(
-            13,
-            ItemBuilder(Material.TNT)
-                .name("§bFactions Ômega")
-                .lore(
-                    arrayOf(
-                        "",
-                        "§7  Convoque sua facção, consrtua sua base,",
-                        "§7  defenda-se de invasões adversárias",
-                        "§7  e realize suas próprias invasões.",
-                        "",
-                        "§aClique para jogar!"
+        val slots = this.SLOTS[if (servers.size > this.SLOTS.size) this.SLOTS.lastIndex else servers.size]
+
+        servers.forEachIndexed { index, server ->
+            val slot = slots[index]
+
+            val bukkitSpawnApplication = CoreProvider.Cache.Local.APPLICATIONS.provide().fetchByServerAndApplicationType(
+                server,
+                ApplicationType.SERVER_SPAWN
+            )
+
+            this.setItem(
+                slot,
+                ItemBuilder(Material.TNT)
+                    .name("§b${server.displayName}")
+                    .lore(
+                        arrayOf(
+                            "",
+                            "§7  Convoque sua facção, construa sua base,",
+                            "§7  defenda-se de invasões adversárias",
+                            "§7  e realize suas próprias invasões.",
+                            "",
+                            "§aClique para jogar!"
+                        )
                     )
-                )
-                .build()
-        ) { it ->
-            if (factionsOmegaBukkitSpawnApplication !== null) {
-                val player = it.whoClicked as Player
-                val user = CoreProvider.Cache.Local.USERS.provide().fetchById(player.uniqueId)!!
+                    .build()
+            ) { it ->
+                if (bukkitSpawnApplication !== null) {
+                    val player = it.whoClicked as Player
+                    val user = CoreProvider.Cache.Local.USERS.provide().fetchById(player.uniqueId)!!
 
-                if (CoreConstants.COOLDOWNS.inCooldown(user, "connect-to-server")) return@setItem
+                    if (CoreConstants.COOLDOWNS.inCooldown(user, "connect-to-server")) return@setItem
 
-                val factionsOmegaBukkitSpawnApplicationStatus = CoreProvider.Cache.Redis.APPLICATIONS_STATUS.provide().fetchApplicationStatusByApplication(
-                    factionsOmegaBukkitSpawnApplication,
-                    ApplicationStatus::class
-                )
-
-                if (factionsOmegaBukkitSpawnApplicationStatus === null) {
-                    player.sendMessage(
-                        TextComponent("§cO servidor está offline.")
+                    val bukkitSpawnApplicationStatus = CoreProvider.Cache.Redis.APPLICATIONS_STATUS.provide().fetchApplicationStatusByApplication(
+                        bukkitSpawnApplication,
+                        ApplicationStatus::class
                     )
-                    return@setItem
+
+                    if (bukkitSpawnApplicationStatus === null) {
+                        player.sendMessage(
+                            TextComponent("§cO servidor está offline.")
+                        )
+                        return@setItem
+                    }
+
+                    if (CoreProvider.Cache.Local.MAINTENANCE.provide().fetch(bukkitSpawnApplication) == true) {
+                        player.sendMessage(
+                            TextComponent("§cEste servidor encontra-se em manutenção.")
+                        )
+                        return@setItem
+                    }
+
+                    val packet = ConnectUserToApplicationPacket(
+                        user.id,
+                        bukkitSpawnApplication
+                    )
+
+                    CoreProvider.Databases.Redis.ECHO.provide().publishToApplications(
+                        packet,
+                        CoreProvider.Cache.Local.APPLICATIONS.provide().fetchByApplicationType(
+                            ApplicationType.PROXY
+                        )
+                    )
+
+                    CoreConstants.COOLDOWNS.start(
+                        user,
+                        "connect-to-server",
+                        TimeUnit.SECONDS.toMillis(5)
+                    )
                 }
-
-                if (CoreProvider.Cache.Local.MAINTENANCE.provide().fetch(factionsOmegaBukkitSpawnApplication) == true) {
-                    player.sendMessage(
-                        TextComponent("§cEste servidor encontra-se em manutenção.")
-                    )
-                    return@setItem
-                }
-
-                val packet = ConnectUserToApplicationPacket(
-                    user.id,
-                    factionsOmegaBukkitSpawnApplication
-                )
-
-                CoreProvider.Databases.Redis.ECHO.provide().publishToApplications(
-                    packet,
-                    CoreProvider.Cache.Local.APPLICATIONS.provide().fetchByApplicationType(
-                        ApplicationType.PROXY
-                    )
-                )
-
-                CoreConstants.COOLDOWNS.start(
-                    user,
-                    "connect-to-server",
-                    TimeUnit.SECONDS.toMillis(5)
-                )
             }
         }
     }
