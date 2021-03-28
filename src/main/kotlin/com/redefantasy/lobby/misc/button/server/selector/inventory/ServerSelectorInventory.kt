@@ -15,7 +15,10 @@ import java.util.concurrent.TimeUnit
 /**
  * @author Gutyerrez
  */
-class ServerSelectorInventory : CustomInventory {
+class ServerSelectorInventory() : CustomInventory(
+    "Selecione o servidor",
+    3 * 9
+) {
 
     private val SLOTS = arrayOf(
         arrayOf(13),
@@ -23,12 +26,8 @@ class ServerSelectorInventory : CustomInventory {
         arrayOf(10, 13, 16)
     )
 
-    constructor() : super(
-        "Selecione o servidor",
-        3 * 9
-    ) {
+    init {
         val servers = CoreProvider.Cache.Local.SERVERS.provide().fetchAll()
-
         val slots = this.SLOTS[if (servers.size >= this.SLOTS.size) this.SLOTS.lastIndex else servers.size - 1]
 
         servers.forEachIndexed { index, server ->
