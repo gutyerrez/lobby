@@ -125,12 +125,16 @@ object ScoreboardManager {
                     var i = 11
 
                     CoreProvider.Cache.Local.SERVERS.provide().fetchAll().forEach { server ->
+                        println(server)
+
                         val bukkitSpawnApplication = CoreProvider.Cache.Local.APPLICATIONS.provide().fetchByServerAndApplicationType(
                             server,
                             ApplicationType.SERVER_SPAWN
                         )
 
                         val onlineUsers = CoreProvider.Cache.Redis.USERS_STATUS.provide().fetchUsersByServer(server)
+
+                        println(bukkitSpawnApplication === null)
 
                         val statusString: String = when {
                             bukkitSpawnApplication === null || CoreProvider.Cache.Redis.APPLICATIONS_STATUS.provide().fetchApplicationStatusByApplication(
