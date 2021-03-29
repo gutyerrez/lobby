@@ -20,17 +20,13 @@ class QueueRedisCache : RedisCache {
         targetApplication: Application
     ): UUID? {
         return CoreProvider.Databases.Redis.REDIS_MAIN.provide().resource.use {
-            val pipeline = it.pipelined()
             val key = this.key.apply(targetApplication)
 
-            val uuid = pipeline.zrange(
+            return@use it.zrange(
                 key,
                 0,
                 1
-            ).get().stream().map { stringified -> UUID.fromString(stringified) }.findFirst().orElse(null)
-            pipeline.sync()
-
-            return@use uuid
+            ).stream().map { stringified -> UUID.fromString(stringified) }.findFirst().orElse(null)
         }
     }
 
@@ -60,16 +56,12 @@ class QueueRedisCache : RedisCache {
         targetApplication: Application
     ): Int {
         return CoreProvider.Databases.Redis.REDIS_MAIN.provide().resource.use {
-            val pipeline = it.pipelined()
             val key = this.key.apply(targetApplication)
 
-            val position = pipeline.zrank(
+            return@use it.zrank(
                 key,
                 user.getUniqueId().toString()
-            ).get().toInt()
-            pipeline.sync()
-
-            return@use position
+            ).toInt()
         }
     }
 
