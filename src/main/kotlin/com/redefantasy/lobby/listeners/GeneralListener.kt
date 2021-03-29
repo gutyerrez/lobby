@@ -63,12 +63,16 @@ class GeneralListener : Listener {
         Bukkit.getOnlinePlayers().forEach { _player ->
             val _user = CoreProvider.Cache.Local.USERS.provide().fetchById(_player.uniqueId)!!
 
-            if (!_user.hasGroup(Group.MANAGER)) player.hidePlayer(_player)
+            if (!user.hasGroup(Group.MANAGER) && _user.getPreferences().find { it == PLAYER_VISIBILITY }?.preferenceState === PreferenceState.DISABLED) {
+                _player.hidePlayer(player)
+            }
 
-            if (user.getPreferences().find { it == PLAYER_VISIBILITY }?.preferenceState === PreferenceState.DISABLED) {
-                if (!user.hasGroup(Group.MANAGER) && _user.getPreferences().find { it == PLAYER_VISIBILITY }?.preferenceState === PreferenceState.DISABLED) {
-                    _player.hidePlayer(player)
-                }
+            if (
+                user.getPreferences().find { it == PLAYER_VISIBILITY }?.preferenceState === PreferenceState.DISABLED && !_user.hasGroup(
+                    Group.MANAGER
+                )
+            ) {
+                player.hidePlayer(_player)
             }
         }
     }
