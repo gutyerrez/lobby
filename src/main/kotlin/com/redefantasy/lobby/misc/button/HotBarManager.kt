@@ -1,5 +1,10 @@
 package com.redefantasy.lobby.misc.button
 
+import com.redefantasy.core.shared.CoreProvider
+import com.redefantasy.core.shared.misc.preferences.PLAYER_VISIBILITY
+import com.redefantasy.core.shared.misc.preferences.PreferenceState
+import com.redefantasy.lobby.misc.button.player.visibility.button.PlayerVisibilityOffHotBarButton
+import com.redefantasy.lobby.misc.button.player.visibility.button.PlayerVisibilityOnHotBarButton
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 import org.greenrobot.eventbus.EventBus
@@ -37,16 +42,26 @@ object HotBarManager {
     fun getEventBus(hotBarButton: HotBarButton) = this.BUS[hotBarButton]
 
     fun giveToPlayer(player: Player) {
+        val user = CoreProvider.Cache.Local.USERS.provide().fetchById(player.uniqueId)!!
+
         player.inventory.clear()
-
         player.inventory.heldItemSlot = 4
-
         player.inventory.armorContents = null
 
-        this.BUTTONS.forEach {
+        this.BUTTONS.forEach { hotBarButton ->
+            if (
+                hotBarButton is PlayerVisibilityOnHotBarButton && user.getPreferences().find { it == PLAYER_VISIBILITY }?.preferenceState === PreferenceState.DISABLED
+            ) {
+                return@forEach
+            } else if (
+                hotBarButton is PlayerVisibilityOffHotBarButton && user.getPreferences().find { it == PLAYER_VISIBILITY }?.preferenceState === PreferenceState.ENABLED
+            ) {
+                return@forEach
+            }
+
             player.inventory.setItem(
-                it.slot,
-                it.icon
+                hotBarButton.slot,
+                hotBarButton.icon
             )
         }
     }
