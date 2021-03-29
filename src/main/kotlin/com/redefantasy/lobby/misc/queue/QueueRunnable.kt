@@ -71,6 +71,10 @@ class QueueRunnable : Runnable {
                         packet,
                         ApplicationType.PROXY
                     )
+                    LobbyProvider.Cache.Redis.QUEUE.provide().remove(
+                        bukkitApplicationSpawn,
+                        user
+                    )
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
