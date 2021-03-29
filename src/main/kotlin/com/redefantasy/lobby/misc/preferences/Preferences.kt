@@ -20,6 +20,8 @@ fun Preference.post(user: User) = when (this.name) {
 
             if (!user.hasGroup(Group.MANAGER) && _user.getPreferences().find { it == PLAYER_VISIBILITY }?.preferenceState === PreferenceState.DISABLED) {
                 _player.hidePlayer(player)
+            } else if (_user.getPreferences().find { it == PLAYER_VISIBILITY }?.preferenceState === PreferenceState.ENABLED) {
+                _player.showPlayer(player)
             }
 
             if (
@@ -28,6 +30,8 @@ fun Preference.post(user: User) = when (this.name) {
                 )
             ) {
                 player.hidePlayer(_player)
+            } else if (user.getPreferences().find { it == PLAYER_VISIBILITY }?.preferenceState === PreferenceState.ENABLED) {
+                player.showPlayer(_player)
             }
         }
     }
