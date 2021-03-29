@@ -14,58 +14,63 @@ class QueueRunnable : Runnable {
         println("Executar runnable")
 
         CoreProvider.Cache.Local.SERVERS.provide().fetchAll().forEach {
-            println(it)
+            try {
+                println(it)
 
-            val bukkitApplicationSpawn = CoreProvider.Cache.Local.APPLICATIONS.provide().fetchByServerAndApplicationType(
-                it,
-                ApplicationType.SERVER_SPAWN
-            )
+                val bukkitApplicationSpawn =
+                    CoreProvider.Cache.Local.APPLICATIONS.provide().fetchByServerAndApplicationType(
+                        it,
+                        ApplicationType.SERVER_SPAWN
+                    )
 
-            if (bukkitApplicationSpawn === null) return@forEach
+                if (bukkitApplicationSpawn === null) return@forEach
 
-            println(bukkitApplicationSpawn)
+                println(bukkitApplicationSpawn)
 
-            val userId = LobbyProvider.Cache.Redis.QUEUE.provide().poll(
-                bukkitApplicationSpawn
-            )
-
-            if (userId === null) return@forEach
-
-            println(userId)
-
-            val user = CoreProvider.Cache.Local.USERS.provide().fetchById(userId)!!
-
-            if (!user.isOnline()) {
-                println("Offline")
-
-                LobbyProvider.Cache.Redis.QUEUE.provide().remove(
-                    bukkitApplicationSpawn,
-                    user
-                )
-            } else {
-                println("Online")
-
-                val maxPlayers = CoreProvider.Cache.Local.APPLICATIONS.provide().fetchByServer(
-                    it
-                ).stream().mapToInt { application -> application.slots ?: 0 }.findFirst().asInt
-
-                val onlinePlayers = CoreProvider.Cache.Redis.USERS_STATUS.provide().fetchUsersByServer(it).size
-
-                if (maxPlayers >= onlinePlayers) return@forEach
-
-                println("Não tá lotado")
-
-                val packet = ConnectUserToApplicationPacket(
-                    user.id,
+                val userId = LobbyProvider.Cache.Redis.QUEUE.provide().poll(
                     bukkitApplicationSpawn
                 )
 
-                println("Manda o packet!")
+                if (userId === null) return@forEach
 
-                CoreProvider.Databases.Redis.ECHO.provide().publishToApplicationType(
-                    packet,
-                    ApplicationType.PROXY
-                )
+                println(userId)
+
+                val user = CoreProvider.Cache.Local.USERS.provide().fetchById(userId)!!
+
+                if (!user.isOnline()) {
+                    println("Offline")
+
+                    LobbyProvider.Cache.Redis.QUEUE.provide().remove(
+                        bukkitApplicationSpawn,
+                        user
+                    )
+                } else {
+                    println("Online")
+
+                    val maxPlayers = CoreProvider.Cache.Local.APPLICATIONS.provide().fetchByServer(
+                        it
+                    ).stream().mapToInt { application -> application.slots ?: 0 }.findFirst().asInt
+
+                    val onlinePlayers = CoreProvider.Cache.Redis.USERS_STATUS.provide().fetchUsersByServer(it).size
+
+                    if (maxPlayers >= onlinePlayers) return@forEach
+
+                    println("Não tá lotado")
+
+                    val packet = ConnectUserToApplicationPacket(
+                        user.id,
+                        bukkitApplicationSpawn
+                    )
+
+                    println("Manda o packet!")
+
+                    CoreProvider.Databases.Redis.ECHO.provide().publishToApplicationType(
+                        packet,
+                        ApplicationType.PROXY
+                    )
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
             }
         }
     }
