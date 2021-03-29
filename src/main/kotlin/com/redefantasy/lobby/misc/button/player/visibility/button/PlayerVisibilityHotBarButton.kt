@@ -35,6 +35,8 @@ class PlayerVisibilityOnHotBarButton : HotBarButton(
 
         val user = CoreProvider.Cache.Local.USERS.provide().fetchById(player.uniqueId)!!
 
+        println("pei")
+
         user.getPreferences().find { it == PLAYER_VISIBILITY }?.post(user)
     }
 
@@ -62,6 +64,8 @@ class PlayerVisibilityOffHotBarButton : HotBarButton(
         val player = event.player
 
         val user = CoreProvider.Cache.Local.USERS.provide().fetchById(player.uniqueId)!!
+
+        println("pei")
 
         user.getPreferences().find { it == PLAYER_VISIBILITY }?.post(user)
     }
