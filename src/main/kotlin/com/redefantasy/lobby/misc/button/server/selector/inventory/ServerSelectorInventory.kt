@@ -4,6 +4,7 @@ import com.redefantasy.core.shared.CoreConstants
 import com.redefantasy.core.shared.CoreProvider
 import com.redefantasy.core.shared.applications.ApplicationType
 import com.redefantasy.core.shared.applications.status.ApplicationStatus
+import com.redefantasy.core.shared.groups.Group
 import com.redefantasy.core.spigot.inventory.CustomInventory
 import com.redefantasy.core.spigot.misc.utils.ItemBuilder
 import com.redefantasy.lobby.LobbyProvider
@@ -76,7 +77,7 @@ class ServerSelectorInventory() : CustomInventory(
                         return@setItem
                     }
 
-                    if (CoreProvider.Cache.Local.MAINTENANCE.provide().fetch(bukkitSpawnApplication) == true) {
+                    if (CoreProvider.Cache.Local.MAINTENANCE.provide().fetch(bukkitSpawnApplication) == true && !user.hasGroup(Group.MANAGER)) {
                         player.sendMessage(
                             TextComponent("§cEste servidor encontra-se em manutenção.")
                         )
