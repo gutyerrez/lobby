@@ -4,9 +4,11 @@ import com.redefantasy.core.shared.CoreConstants
 import com.redefantasy.core.shared.CoreProvider
 import com.redefantasy.core.shared.applications.ApplicationType
 import com.redefantasy.core.shared.applications.status.ApplicationStatus
-import com.redefantasy.core.shared.echo.packets.ConnectUserToApplicationPacket
 import com.redefantasy.core.spigot.inventory.CustomInventory
 import com.redefantasy.core.spigot.misc.utils.ItemBuilder
+import com.redefantasy.lobby.LobbyProvider
+import net.md_5.bungee.api.chat.ClickEvent
+import net.md_5.bungee.api.chat.ComponentBuilder
 import net.md_5.bungee.api.chat.TextComponent
 import org.bukkit.Material
 import org.bukkit.entity.Player
@@ -81,16 +83,23 @@ class ServerSelectorInventory() : CustomInventory(
                         return@setItem
                     }
 
-                    val packet = ConnectUserToApplicationPacket(
-                        user.id,
-                        bukkitSpawnApplication
-                    )
+                    val position = LobbyProvider.Cache.Redis.QUEUE.provide().create(user, bukkitSpawnApplication)
 
-                    CoreProvider.Databases.Redis.ECHO.provide().publishToApplications(
-                        packet,
-                        CoreProvider.Cache.Local.APPLICATIONS.provide().fetchByApplicationType(
-                            ApplicationType.PROXY
-                        )
+                    player.sendMessage(
+                        ComponentBuilder("\n")
+                            .append("§3 * §fVocê entrou na posição §3#$position §fda fila do ${server.displayName}.")
+                            .append("\n")
+                            .append("§3 * §fCaso queira sair clique ")
+                            .append("§c§lAQUI")
+                            .event(
+                                ClickEvent(
+                                    ClickEvent.Action.RUN_COMMAND,
+                                    "/queue_3#@5 leave ${server.name.value}"
+                                )
+                            )
+                            .append("§f.")
+                            .append("\n\n")
+                            .create()
                     )
 
                     CoreConstants.COOLDOWNS.start(

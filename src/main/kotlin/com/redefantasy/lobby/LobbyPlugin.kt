@@ -9,12 +9,14 @@ import com.redefantasy.core.shared.misc.preferences.LOBBY_COMMAND_PROTECTION
 import com.redefantasy.core.shared.misc.preferences.PreferenceRegistry
 import com.redefantasy.core.shared.scheduler.AsyncScheduler
 import com.redefantasy.core.spigot.misc.plugin.CustomPlugin
+import com.redefantasy.lobby.echo.packets.listeners.UserGroupsUpdatedEchoPacketListener
 import com.redefantasy.lobby.listeners.GeneralListener
 import com.redefantasy.lobby.misc.button.HotBarManager
 import com.redefantasy.lobby.misc.button.player.visibility.button.PlayerVisibilityOffHotBarButton
 import com.redefantasy.lobby.misc.button.player.visibility.button.PlayerVisibilityOnHotBarButton
 import com.redefantasy.lobby.misc.button.preferences.button.PreferencesHotBarButton
 import com.redefantasy.lobby.misc.button.server.selector.button.ServerSelectorHotBarButton
+import com.redefantasy.lobby.misc.queue.QueueRunnable
 import org.bukkit.Bukkit
 import org.bukkit.entity.Item
 import java.util.concurrent.TimeUnit
@@ -74,6 +76,18 @@ class LobbyPlugin : CustomPlugin(false) {
          */
 
         CoreProvider.Databases.Redis.ECHO.provide().registerListener(UserPreferencesUpdatedEchoPacketListener())
+        CoreProvider.Databases.Redis.ECHO.provide().registerListener(UserGroupsUpdatedEchoPacketListener())
+
+        /**
+         * Queue
+         */
+
+        AsyncScheduler.scheduleAsyncRepeatingTask(
+            QueueRunnable(),
+            0,
+            1,
+            TimeUnit.SECONDS
+        )
 
         /**
          * World settings

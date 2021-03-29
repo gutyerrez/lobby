@@ -80,7 +80,8 @@ object ScoreboardManager {
         this.update(
             player,
             Slot.ONLINE_PLAYERS,
-            Slot.SERVER_LIST
+            Slot.SERVER_LIST,
+            Slot.TAB_LIST
         )
 
         val bukkitApplicationName = CoreProvider.application.displayName.split(" ")[1]
@@ -89,20 +90,6 @@ object ScoreboardManager {
         scoreboard.set(2, "§f Saguão: §7#$bukkitApplicationName")
         scoreboard.set(1, "§3")
         scoreboard.set(0, "§e  loja.redefantasy.com")
-
-        Bukkit.getOnlinePlayers().forEach {
-            val targetUser = LobbyProvider.Cache.Local.LOBBY_USERS.provide().fetchById(
-                EntityID(
-                    it.uniqueId,
-                    UsersTable
-                )
-            )!!
-
-            val groupBoard = targetUser.scoreboard as GroupScoreboard
-
-            groupBoard.registerUser(user)
-            scoreboard.registerUser(targetUser)
-        }
 
         this.WITH_SCORE_BOARD[player.uniqueId] = System.currentTimeMillis()
 
@@ -150,13 +137,29 @@ object ScoreboardManager {
                         if (i >= 4) i--
                     }
                 }
+                Slot.TAB_LIST -> {
+                    Bukkit.getOnlinePlayers().forEach { player ->
+                        val targetUser = LobbyProvider.Cache.Local.LOBBY_USERS.provide().fetchById(
+                            EntityID(
+                                player.uniqueId,
+                                UsersTable
+                            )
+                        )!!
+
+                        val scoreboard = scoreboard as GroupScoreboard
+                        val groupBoard = targetUser.scoreboard as GroupScoreboard
+
+                        groupBoard.registerUser(user)
+                        scoreboard.registerUser(targetUser)
+                    }
+                }
             }
         }
     }
 
     enum class Slot {
 
-        ONLINE_PLAYERS, SERVER_LIST
+        ONLINE_PLAYERS, SERVER_LIST, TAB_LIST;
 
     }
 

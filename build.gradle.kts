@@ -61,6 +61,9 @@ dependencies {
     compileOnly("org.jetbrains.exposed:exposed-jdbc:0.29.1")
     compileOnly("org.jetbrains.exposed:exposed-jodatime:0.29.1")
 
+    // redis
+    implementation("redis.clients:jedis:3.3.0")
+
     // eventbus
     compileOnly("org.greenrobot:eventbus:3.2.0")
 
