@@ -53,6 +53,9 @@ class QueueRunnable : Runnable {
 
                     val onlinePlayers = CoreProvider.Cache.Redis.USERS_STATUS.provide().fetchUsersByServer(it).size
 
+                    println(maxPlayers)
+                    println(onlinePlayers)
+
                     if (maxPlayers >= onlinePlayers) return@forEach
 
                     println("Não tá lotado")
