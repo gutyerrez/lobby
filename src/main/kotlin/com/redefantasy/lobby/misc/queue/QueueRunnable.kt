@@ -56,7 +56,7 @@ class QueueRunnable : Runnable {
                     println(maxPlayers)
                     println(onlinePlayers)
 
-                    if (maxPlayers >= onlinePlayers) return@forEach
+                    if (onlinePlayers >= maxPlayers) return@forEach
 
                     println("Não tá lotado")
 
