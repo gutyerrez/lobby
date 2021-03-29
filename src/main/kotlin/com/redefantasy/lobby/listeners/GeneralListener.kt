@@ -50,7 +50,9 @@ class GeneralListener : Listener {
             LobbyUser(user)
         )
 
-        if (user.hasGroup(Group.HERO) && user.getPreferences().find { it == FLY_IN_LOBBY }?.preferenceState === PreferenceState.ENABLED) {
+        if (user.hasGroup(Group.HERO) && user.getPreferences()
+                .find { it == FLY_IN_LOBBY }?.preferenceState === PreferenceState.ENABLED
+        ) {
             player.allowFlight = true
             player.isFlying = true
         }
@@ -58,12 +60,12 @@ class GeneralListener : Listener {
         ScoreboardManager.construct(player)
         HotBarManager.giveToPlayer(player)
 
-        if (user.getPreferences().find { it == PLAYER_VISIBILITY }?.preferenceState === PreferenceState.DISABLED) {
-            Bukkit.getOnlinePlayers().forEach { _player ->
-                val _user = CoreProvider.Cache.Local.USERS.provide().fetchById(_player.uniqueId)!!
+        Bukkit.getOnlinePlayers().forEach { _player ->
+            val _user = CoreProvider.Cache.Local.USERS.provide().fetchById(_player.uniqueId)!!
 
-                if (!_user.hasGroup(Group.MANAGER)) player.hidePlayer(_player)
+            if (!_user.hasGroup(Group.MANAGER)) player.hidePlayer(_player)
 
+            if (user.getPreferences().find { it == PLAYER_VISIBILITY }?.preferenceState === PreferenceState.DISABLED) {
                 if (!user.hasGroup(Group.MANAGER) && _user.getPreferences().find { it == PLAYER_VISIBILITY }?.preferenceState === PreferenceState.DISABLED) {
                     _player.hidePlayer(player)
                 }
