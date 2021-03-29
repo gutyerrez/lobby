@@ -11,73 +11,49 @@ import com.redefantasy.lobby.LobbyProvider
 class QueueRunnable : Runnable {
 
     override fun run() {
-        println("Executar runnable")
-
         CoreProvider.Cache.Local.SERVERS.provide().fetchAll().forEach {
-            try {
-                println(it)
+            val bukkitApplicationSpawn = CoreProvider.Cache.Local.APPLICATIONS.provide().fetchByServerAndApplicationType(
+                it,
+                ApplicationType.SERVER_SPAWN
+            )
 
-                val bukkitApplicationSpawn =
-                    CoreProvider.Cache.Local.APPLICATIONS.provide().fetchByServerAndApplicationType(
-                        it,
-                        ApplicationType.SERVER_SPAWN
-                    )
+            if (bukkitApplicationSpawn === null) return@forEach
 
-                if (bukkitApplicationSpawn === null) return@forEach
+            val userId = LobbyProvider.Cache.Redis.QUEUE.provide().poll(
+                bukkitApplicationSpawn
+            )
 
-                println(bukkitApplicationSpawn)
+            if (userId === null) return@forEach
 
-                val userId = LobbyProvider.Cache.Redis.QUEUE.provide().poll(
+            val user = CoreProvider.Cache.Local.USERS.provide().fetchById(userId)!!
+
+            if (!user.isOnline()) {
+                LobbyProvider.Cache.Redis.QUEUE.provide().remove(
+                    bukkitApplicationSpawn,
+                    user
+                )
+            } else {
+                val maxPlayers = CoreProvider.Cache.Local.APPLICATIONS.provide().fetchByServer(
+                    it
+                ).stream().mapToInt { application -> application.slots ?: 0 }.findFirst().asInt
+
+                val onlinePlayers = CoreProvider.Cache.Redis.USERS_STATUS.provide().fetchUsersByServer(it).size
+
+                if (onlinePlayers >= maxPlayers) return@forEach
+
+                val packet = ConnectUserToApplicationPacket(
+                    user.id,
                     bukkitApplicationSpawn
                 )
 
-                if (userId === null) return@forEach
-
-                println(userId)
-
-                val user = CoreProvider.Cache.Local.USERS.provide().fetchById(userId)!!
-
-                if (!user.isOnline()) {
-                    println("Offline")
-
-                    LobbyProvider.Cache.Redis.QUEUE.provide().remove(
-                        bukkitApplicationSpawn,
-                        user
-                    )
-                } else {
-                    println("Online")
-
-                    val maxPlayers = CoreProvider.Cache.Local.APPLICATIONS.provide().fetchByServer(
-                        it
-                    ).stream().mapToInt { application -> application.slots ?: 0 }.findFirst().asInt
-
-                    val onlinePlayers = CoreProvider.Cache.Redis.USERS_STATUS.provide().fetchUsersByServer(it).size
-
-                    println(maxPlayers)
-                    println(onlinePlayers)
-
-                    if (onlinePlayers >= maxPlayers) return@forEach
-
-                    println("Não tá lotado")
-
-                    val packet = ConnectUserToApplicationPacket(
-                        user.id,
-                        bukkitApplicationSpawn
-                    )
-
-                    println("Manda o packet!")
-
-                    CoreProvider.Databases.Redis.ECHO.provide().publishToApplicationType(
-                        packet,
-                        ApplicationType.PROXY
-                    )
-                    LobbyProvider.Cache.Redis.QUEUE.provide().remove(
-                        bukkitApplicationSpawn,
-                        user
-                    )
-                }
-            } catch (e: Exception) {
-                e.printStackTrace()
+                CoreProvider.Databases.Redis.ECHO.provide().publishToApplicationType(
+                    packet,
+                    ApplicationType.PROXY
+                )
+                LobbyProvider.Cache.Redis.QUEUE.provide().remove(
+                    bukkitApplicationSpawn,
+                    user
+                )
             }
         }
     }
