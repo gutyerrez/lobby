@@ -3,7 +3,6 @@ package com.redefantasy.lobby.user.data
 import com.redefantasy.core.shared.users.data.User
 import com.redefantasy.core.spigot.misc.scoreboard.bukkit.BaseScoreboard
 import org.bukkit.Bukkit
-import org.bukkit.entity.Player
 
 /**
  * @author Gutyerrez
@@ -26,6 +25,6 @@ data class LobbyUser(val user: User) : User(
 
     lateinit var scoreboard: BaseScoreboard
 
-    val player: Player = Bukkit.getPlayer(this.id.value)
+    val player = Bukkit.getPlayer(this.id.value)
 
 }
