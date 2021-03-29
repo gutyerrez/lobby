@@ -8,6 +8,7 @@ import com.redefantasy.core.shared.misc.preferences.PreferenceState
 import com.redefantasy.core.spigot.misc.utils.Title
 import com.redefantasy.lobby.LobbyProvider
 import com.redefantasy.lobby.misc.button.HotBarManager
+import com.redefantasy.lobby.misc.preferences.post
 import com.redefantasy.lobby.misc.scoreboard.ScoreboardManager
 import com.redefantasy.lobby.user.data.LobbyUser
 import net.md_5.bungee.api.chat.ComponentBuilder
@@ -60,21 +61,7 @@ class GeneralListener : Listener {
         ScoreboardManager.construct(player)
         HotBarManager.giveToPlayer(player)
 
-        Bukkit.getOnlinePlayers().forEach { _player ->
-            val _user = CoreProvider.Cache.Local.USERS.provide().fetchById(_player.uniqueId)!!
-
-            if (!user.hasGroup(Group.MANAGER) && _user.getPreferences().find { it == PLAYER_VISIBILITY }?.preferenceState === PreferenceState.DISABLED) {
-                _player.hidePlayer(player)
-            }
-
-            if (
-                user.getPreferences().find { it == PLAYER_VISIBILITY }?.preferenceState === PreferenceState.DISABLED && !_user.hasGroup(
-                    Group.MANAGER
-                )
-            ) {
-                player.hidePlayer(_player)
-            }
-        }
+        user.getPreferences().find { it == PLAYER_VISIBILITY }?.post(user)
     }
 
     @EventHandler

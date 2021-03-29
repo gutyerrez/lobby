@@ -9,7 +9,7 @@ import com.redefantasy.core.shared.users.preferences.storage.dto.UpdateUserPrefe
 import com.redefantasy.core.spigot.inventory.CustomInventory
 import com.redefantasy.core.spigot.inventory.ICustomInventory
 import com.redefantasy.core.spigot.misc.utils.ItemBuilder
-import org.bukkit.Bukkit
+import com.redefantasy.lobby.misc.preferences.post
 import org.bukkit.Material
 import org.bukkit.entity.Player
 import org.bukkit.event.inventory.InventoryClickEvent
@@ -113,15 +113,7 @@ class PreferencesInventory(private val player: Player) : CustomInventory(
             )
 
             when (preference.name) {
-                "player-visibility-preference" -> {
-                    Bukkit.getOnlinePlayers().forEach {
-                        if (switchPreferenceState === PreferenceState.ENABLED) {
-                            player.showPlayer(it)
-                        } else {
-                            player.hidePlayer(it)
-                        }
-                    }
-                }
+                "player-visibility-preference" -> preference.post(user)
                 "fly-in-lobby-preference" -> {
                     player.allowFlight = switchPreferenceState === PreferenceState.ENABLED
                     player.isFlying = switchPreferenceState === PreferenceState.ENABLED
