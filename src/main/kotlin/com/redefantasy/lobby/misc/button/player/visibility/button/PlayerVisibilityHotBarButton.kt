@@ -37,7 +37,11 @@ class PlayerVisibilityOnHotBarButton : HotBarButton(
 
         println("pei")
 
-        user.getPreferences().find { it == PLAYER_VISIBILITY }?.post(user)
+        val preference = user.getPreferences().find { it == PLAYER_VISIBILITY }
+
+        println(preference)
+
+        preference?.post(user)
     }
 
 }
@@ -67,7 +71,11 @@ class PlayerVisibilityOffHotBarButton : HotBarButton(
 
         println("pei")
 
-        user.getPreferences().find { it == PLAYER_VISIBILITY }?.post(user)
+        val preference = user.getPreferences().find { it == PLAYER_VISIBILITY }
+
+        println(preference)
+
+        preference?.post(user)
     }
 
 }
