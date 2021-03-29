@@ -51,7 +51,7 @@ class GeneralListener : Listener {
             LobbyUser(user)
         )
 
-        if (user.hasGroup(Group.HERO) && user.getPreferences()
+        if (user.hasGroup(Group.VIP) && user.getPreferences()
                 .find { it == FLY_IN_LOBBY }?.preferenceState === PreferenceState.ENABLED
         ) {
             player.allowFlight = true
