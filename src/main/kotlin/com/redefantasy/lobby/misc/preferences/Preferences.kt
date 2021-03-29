@@ -6,6 +6,9 @@ import com.redefantasy.core.shared.misc.preferences.PLAYER_VISIBILITY
 import com.redefantasy.core.shared.misc.preferences.PreferenceState
 import com.redefantasy.core.shared.misc.preferences.data.Preference
 import com.redefantasy.core.shared.users.data.User
+import com.redefantasy.lobby.misc.button.HotBarManager
+import com.redefantasy.lobby.misc.button.player.visibility.button.PlayerVisibilityOffHotBarButton
+import com.redefantasy.lobby.misc.button.player.visibility.button.PlayerVisibilityOnHotBarButton
 import org.bukkit.Bukkit
 
 /**
@@ -34,6 +37,15 @@ fun Preference.post(user: User) = when (this.name) {
                 player.showPlayer(_player)
             }
         }
+
+        HotBarManager.giveHotBarButtonToPlayer(
+            if (this.preferenceState === PreferenceState.ENABLED) {
+                PlayerVisibilityOnHotBarButton()
+            } else {
+                PlayerVisibilityOffHotBarButton()
+            },
+            player
+        )
     }
     else -> TODO("not implemented-yet")
 }

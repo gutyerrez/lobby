@@ -66,4 +66,14 @@ object HotBarManager {
         }
     }
 
+    fun giveHotBarButtonToPlayer(
+        hotBarButton: HotBarButton,
+        player: Player
+    ) {
+        player.inventory.setItem(
+            hotBarButton.slot,
+            hotBarButton.icon
+        )
+    }
+
 }

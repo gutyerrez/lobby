@@ -15,7 +15,7 @@ import org.greenrobot.eventbus.Subscribe
 class PlayerVisibilityOnHotBarButton : HotBarButton(
     ItemBuilder(Material.INK_SACK)
         .name(
-            "Jogadores: §aON"
+            "§fJogadores: §aON"
         ).durability(
             10
         ).lore(
@@ -43,7 +43,7 @@ class PlayerVisibilityOnHotBarButton : HotBarButton(
 class PlayerVisibilityOffHotBarButton : HotBarButton(
     ItemBuilder(Material.INK_SACK)
         .name(
-            "Jogadores: §cOFF"
+            "§fJogadores: §cOFF"
         ).durability(
             8
         ).lore(
