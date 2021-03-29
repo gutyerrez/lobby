@@ -9,6 +9,7 @@ import com.redefantasy.core.shared.users.preferences.storage.dto.UpdateUserPrefe
 import com.redefantasy.core.spigot.inventory.CustomInventory
 import com.redefantasy.core.spigot.inventory.ICustomInventory
 import com.redefantasy.core.spigot.misc.utils.ItemBuilder
+import org.bukkit.Bukkit
 import org.bukkit.Material
 import org.bukkit.entity.Player
 import org.bukkit.event.inventory.InventoryClickEvent
@@ -111,6 +112,22 @@ class PreferencesInventory(private val player: Player) : CustomInventory(
                 )
             )
 
+            when (preference.name) {
+                "player-visibility-preference" -> {
+                    Bukkit.getOnlinePlayers().forEach {
+                        if (switchPreferenceState === PreferenceState.ENABLED) {
+                            player.showPlayer(it)
+                        } else {
+                            player.hidePlayer(it)
+                        }
+                    }
+                }
+                "fly-in-lobby-preference" -> {
+                    player.allowFlight = switchPreferenceState === PreferenceState.ENABLED
+                    player.isFlying = switchPreferenceState === PreferenceState.ENABLED
+                }
+            }
+
             val packet = UserPreferencesUpdatedPacket(
                 user.id,
                 user.getPreferences()
@@ -150,13 +167,45 @@ class PreferencesInventory(private val player: Player) : CustomInventory(
 
     private val Preference.icon: ItemStack?
         get() = when (this.name) {
-            "user-private-messages-preference" -> ItemBuilder(
-                Material.EMPTY_MAP
-            ).name(
-                "${this.getStateColor()}Mensagens privadas",
-            ).lore(
-                arrayOf("§7Receber mensagens privadas.")
-            ).build()
+            "user-private-messages-preference" -> {
+                ItemBuilder(
+                    Material.EMPTY_MAP
+                ).name(
+                    "${this.getStateColor()}Mensagens privadas",
+                ).lore(
+                    arrayOf("§7Receber mensagens privadas.")
+                ).build()
+            }
+            "player-visibility-preference" -> {
+                ItemBuilder(
+                    Material.WATCH
+                ).name(
+                    "${this.getStateColor()}Visibilidade"
+                ).lore(
+                    arrayOf("§7Ver outros usuários nos saguões.")
+                ).build()
+            }
+            "fly-in-lobby-preference" -> {
+                ItemBuilder(
+                    Material.FEATHER
+                ).name(
+                    "${this.getStateColor()}Voar no saguão"
+                ).lore(
+                    arrayOf("§7Habilitar automaticamente o voo nos saguões.")
+                ).build()
+            }
+            "lobby-command-protection-preference" -> {
+                ItemBuilder(
+                    Material.NETHER_STAR
+                ).name(
+                    "${this.getStateColor()}Proteção no /lobby"
+                ).lore(
+                    arrayOf(
+                        "§7Requisitar o comando",
+                        "§7/lobby 2 vezes."
+                    )
+                ).build()
+            }
             else -> null
         }
 

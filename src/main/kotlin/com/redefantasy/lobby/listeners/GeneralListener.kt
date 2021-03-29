@@ -2,6 +2,9 @@ package com.redefantasy.lobby.listeners
 
 import com.redefantasy.core.shared.CoreProvider
 import com.redefantasy.core.shared.groups.Group
+import com.redefantasy.core.shared.misc.preferences.FLY_IN_LOBBY
+import com.redefantasy.core.shared.misc.preferences.PLAYER_VISIBILITY
+import com.redefantasy.core.shared.misc.preferences.PreferenceState
 import com.redefantasy.core.spigot.misc.utils.Title
 import com.redefantasy.lobby.LobbyProvider
 import com.redefantasy.lobby.misc.button.HotBarManager
@@ -47,13 +50,25 @@ class GeneralListener : Listener {
             LobbyUser(user)
         )
 
-        if (user.hasGroup(Group.HERO)) {
+        if (user.hasGroup(Group.HERO) && user.getPreferences().find { it == FLY_IN_LOBBY }?.preferenceState === PreferenceState.ENABLED) {
             player.allowFlight = true
             player.isFlying = true
         }
 
         ScoreboardManager.construct(player)
         HotBarManager.giveToPlayer(player)
+
+        if (user.getPreferences().find { it == PLAYER_VISIBILITY }?.preferenceState === PreferenceState.DISABLED) {
+            Bukkit.getOnlinePlayers().forEach { _player ->
+                val _user = CoreProvider.Cache.Local.USERS.provide().fetchById(_player.uniqueId)!!
+
+                if (!_user.hasGroup(Group.MANAGER)) player.hidePlayer(_player)
+
+                if (!user.hasGroup(Group.MANAGER) && _user.getPreferences().find { it == PLAYER_VISIBILITY }?.preferenceState === PreferenceState.DISABLED) {
+                    _player.hidePlayer(player)
+                }
+            }
+        }
     }
 
     @EventHandler

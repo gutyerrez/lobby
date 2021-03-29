@@ -4,6 +4,9 @@ import com.redefantasy.core.shared.CoreProvider
 import com.redefantasy.core.shared.applications.status.ApplicationStatus
 import com.redefantasy.core.shared.applications.status.task.ApplicationStatusTask
 import com.redefantasy.core.shared.echo.packets.listener.UserPreferencesUpdatedEchoPacketListener
+import com.redefantasy.core.shared.misc.preferences.FLY_IN_LOBBY
+import com.redefantasy.core.shared.misc.preferences.LOBBY_COMMAND_PROTECTION
+import com.redefantasy.core.shared.misc.preferences.PreferenceRegistry
 import com.redefantasy.core.shared.scheduler.AsyncScheduler
 import com.redefantasy.core.spigot.misc.plugin.CustomPlugin
 import com.redefantasy.lobby.listeners.GeneralListener
@@ -43,6 +46,15 @@ class LobbyPlugin : CustomPlugin(false) {
         val pluginManager = Bukkit.getServer().pluginManager
 
         pluginManager.registerEvents(GeneralListener(), this)
+
+        /**
+         * Preferences
+         */
+
+        PreferenceRegistry.register(
+            FLY_IN_LOBBY,
+            LOBBY_COMMAND_PROTECTION
+        )
 
         /**
          * Hot Bar Buttons
@@ -90,6 +102,10 @@ class LobbyPlugin : CustomPlugin(false) {
                 }
             }
         }
+
+        /**
+         * Application status
+         */
 
         AsyncScheduler.scheduleAsyncRepeatingTask(
             object : ApplicationStatusTask(
