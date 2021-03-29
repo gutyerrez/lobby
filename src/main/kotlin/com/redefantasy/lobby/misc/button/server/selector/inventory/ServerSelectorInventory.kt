@@ -99,7 +99,7 @@ class ServerSelectorInventory() : CustomInventory(
                                 )
                             )
                             .append("§f.")
-                            .append("\n\n")
+                            .append("\n")
                             .create()
                     )
 

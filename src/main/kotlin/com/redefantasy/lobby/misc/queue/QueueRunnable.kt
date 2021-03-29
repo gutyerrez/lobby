@@ -11,7 +11,11 @@ import com.redefantasy.lobby.LobbyProvider
 class QueueRunnable : Runnable {
 
     override fun run() {
+        println("Executar runnable")
+
         CoreProvider.Cache.Local.SERVERS.provide().fetchAll().forEach {
+            println(it)
+
             val bukkitApplicationSpawn = CoreProvider.Cache.Local.APPLICATIONS.provide().fetchByServerAndApplicationType(
                 it,
                 ApplicationType.SERVER_SPAWN
@@ -19,20 +23,28 @@ class QueueRunnable : Runnable {
 
             if (bukkitApplicationSpawn === null) return@forEach
 
+            println(bukkitApplicationSpawn)
+
             val userId = LobbyProvider.Cache.Redis.QUEUE.provide().poll(
                 bukkitApplicationSpawn
             )
 
             if (userId === null) return@forEach
 
+            println(userId)
+
             val user = CoreProvider.Cache.Local.USERS.provide().fetchById(userId)!!
 
             if (!user.isOnline()) {
+                println("Offline")
+
                 LobbyProvider.Cache.Redis.QUEUE.provide().remove(
                     bukkitApplicationSpawn,
                     user
                 )
             } else {
+                println("Online")
+
                 val maxPlayers = CoreProvider.Cache.Local.APPLICATIONS.provide().fetchByServer(
                     it
                 ).stream().mapToInt { application -> application.slots ?: 0 }.findFirst().asInt
@@ -41,10 +53,14 @@ class QueueRunnable : Runnable {
 
                 if (maxPlayers >= onlinePlayers) return@forEach
 
+                println("Não tá lotado")
+
                 val packet = ConnectUserToApplicationPacket(
                     user.id,
                     bukkitApplicationSpawn
                 )
+
+                println("Manda o packet!")
 
                 CoreProvider.Databases.Redis.ECHO.provide().publishToApplicationType(
                     packet,
