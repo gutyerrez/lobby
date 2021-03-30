@@ -1,6 +1,5 @@
 package com.redefantasy.lobby.listeners
 
-import com.redefantasy.core.shared.CoreConstants
 import com.redefantasy.core.shared.CoreProvider
 import com.redefantasy.core.shared.groups.Group
 import com.redefantasy.core.shared.misc.preferences.FLY_IN_LOBBY
@@ -262,7 +261,9 @@ class GeneralListener : Listener {
     fun on(
         event: EntitySpawnEvent
     ) {
-        println("spawnou na localização: ${CoreConstants.GSON.toJson(event.location)}")
+        println("spawnou!")
+
+        println("Está vivo: ${if (event.entity.isDead) "Não" else "Sim"}!")
     }
 
 }
