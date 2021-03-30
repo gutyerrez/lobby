@@ -27,7 +27,6 @@ import org.bukkit.Location
 import org.bukkit.command.CommandSender
 import org.bukkit.craftbukkit.v1_8_R3.CraftWorld
 import org.bukkit.entity.Giant
-import org.bukkit.entity.Item
 import org.bukkit.entity.Player
 import org.bukkit.event.entity.CreatureSpawnEvent
 import java.util.concurrent.TimeUnit
@@ -104,32 +103,21 @@ class LobbyPlugin : CustomPlugin(false) {
          * World settings
          */
         Bukkit.getServer().worlds.forEach {
+            it.isAutoSave = false
+
             it.setStorm(false)
 
             it.isThundering = false
             it.weatherDuration = 0
 
-//            it.ambientSpawnLimit = 0
-//            it.animalSpawnLimit = 0
-//            it.monsterSpawnLimit = 0
-
-            it.setTicksPerAnimalSpawns(99999)
-            it.setTicksPerMonsterSpawns(99999)
-
             it.setGameRuleValue("randomTickSpeed", "-999")
             it.setGameRuleValue("mobGriefing", "false")
-//            it.setGameRuleValue("doMobSpawning", "false")
+            it.setGameRuleValue("doMobSpawning", "false")
             it.setGameRuleValue("doMobLoot", "false")
             it.setGameRuleValue("doFireTick", "false")
             it.setGameRuleValue("doDaylightCycle", "false")
 
             it.time = 1200
-
-            it.livingEntities.forEach { livingEntity ->
-                if (livingEntity is Item) {
-                    livingEntity.remove()
-                }
-            }
         }
 
         /**
