@@ -165,7 +165,7 @@ class LobbyPlugin : CustomPlugin(false) {
                     val npcLocation = Location(
                         Bukkit.getWorld("world"),
                         0.5,
-                        92.0,
+                        91.5,
                         -73.5
                     )
 
@@ -189,7 +189,7 @@ class LobbyPlugin : CustomPlugin(false) {
                         true
                     )
                     npc.removeWhenFarAway = false
-                    npc.equipment.itemInHand = ItemBuilder(Material.BOOK_AND_QUILL)
+                    npc.equipment.itemInHand = ItemBuilder(Material.BLAZE_POWDER)
                         .enchant(Enchantment.DURABILITY, 1)
                         .build()
                     npc.teleport(npcLocation.clone().add(1.9, -8.5, -3.5))
