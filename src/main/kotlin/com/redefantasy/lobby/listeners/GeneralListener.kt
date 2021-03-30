@@ -184,9 +184,11 @@ class GeneralListener : Listener {
                     Action.LEFT_CLICK_BLOCK,
                     Action.PHYSICAL
                 ),
-                event.clickedBlock
+                event.action
             )
         ) {
+            println("dale")
+
             if (item !== null && item.type !== Material.AIR) {
                 val hotBarButton = HotBarManager.getHotBarButton(item)
 
@@ -194,8 +196,6 @@ class GeneralListener : Listener {
                     HotBarManager.getEventBus(hotBarButton)?.post(event)
                 }
             } else {
-                println("dale")
-
                 LobbyConstants.SERVER_CUBOID.apply(event)
             }
         }
