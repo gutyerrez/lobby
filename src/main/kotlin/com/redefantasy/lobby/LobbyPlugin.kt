@@ -12,7 +12,6 @@ import com.redefantasy.core.shared.users.data.User
 import com.redefantasy.core.spigot.command.CustomCommand
 import com.redefantasy.core.spigot.command.registry.CommandRegistry
 import com.redefantasy.core.spigot.misc.plugin.CustomPlugin
-import com.redefantasy.core.spigot.misc.utils.ItemBuilder
 import com.redefantasy.lobby.echo.packets.listeners.UserGroupsUpdatedEchoPacketListener
 import com.redefantasy.lobby.listeners.GeneralListener
 import com.redefantasy.lobby.misc.button.HotBarManager
@@ -20,12 +19,10 @@ import com.redefantasy.lobby.misc.button.player.visibility.button.PlayerVisibili
 import com.redefantasy.lobby.misc.button.player.visibility.button.PlayerVisibilityOnHotBarButton
 import com.redefantasy.lobby.misc.button.preferences.button.PreferencesHotBarButton
 import com.redefantasy.lobby.misc.button.server.selector.button.ServerSelectorHotBarButton
-import com.redefantasy.lobby.misc.npc.entity.CustomZombie
 import com.redefantasy.lobby.misc.queue.QueueRunnable
+import net.minecraft.server.v1_8_R3.EntityGiantZombie
 import org.bukkit.Bukkit
-import org.bukkit.GameMode
 import org.bukkit.Location
-import org.bukkit.Material
 import org.bukkit.command.CommandSender
 import org.bukkit.craftbukkit.v1_8_R3.CraftWorld
 import org.bukkit.entity.Giant
@@ -178,7 +175,7 @@ class LobbyPlugin : CustomPlugin(false) {
 
                     val worldServer = (npcLocation.world as CraftWorld).handle
 
-                    val customZombie = CustomZombie(worldServer)
+                    val customZombie = EntityGiantZombie(worldServer)
 
                     customZombie.setLocation(npcLocation.x, npcLocation.y, npcLocation.z, npcLocation.yaw, npcLocation.pitch)
                     customZombie.setPositionRotation(npcLocation.x, npcLocation.y, npcLocation.z, npcLocation.yaw, npcLocation.pitch)
@@ -195,19 +192,6 @@ class LobbyPlugin : CustomPlugin(false) {
                     commandSender as Player
 
                     commandSender.sendMessage("Spawnou!")
-
-                    commandSender.gameMode = GameMode.CREATIVE
-                    commandSender.inventory.addItem(
-                        ItemBuilder(Material.MONSTER_EGG)
-                        .durability(54)
-                        .build()
-                    )
-
-                    Bukkit.getScheduler().runTaskLater(this@LobbyPlugin, {
-                        commandSender.sendMessage("Está vivo: ${if (npc.isDead) "Não" else "Sim"}")
-
-                        commandSender.teleport(npc.location)
-                    }, 160)
                     return true
                 }
             }

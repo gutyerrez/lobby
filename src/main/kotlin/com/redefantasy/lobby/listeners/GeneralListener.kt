@@ -89,10 +89,7 @@ class GeneralListener : Listener {
     fun on(
         event: EntityDamageEvent
     ) {
-        if (event.entity !is Player) {
-            println("Vixi!")
-            return
-        }
+        if (event.entity !is Player) return
 
         event.isCancelled = true
 
@@ -103,8 +100,6 @@ class GeneralListener : Listener {
 
             player.teleport(world.spawnLocation)
         }
-
-        println("opa")
     }
 
     @EventHandler
