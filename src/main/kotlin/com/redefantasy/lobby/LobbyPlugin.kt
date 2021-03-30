@@ -8,6 +8,8 @@ import com.redefantasy.core.shared.misc.preferences.FLY_IN_LOBBY
 import com.redefantasy.core.shared.misc.preferences.LOBBY_COMMAND_PROTECTION
 import com.redefantasy.core.shared.misc.preferences.PreferenceRegistry
 import com.redefantasy.core.shared.scheduler.AsyncScheduler
+import com.redefantasy.core.shared.servers.data.Server
+import com.redefantasy.core.spigot.misc.hologram.Hologram
 import com.redefantasy.core.spigot.misc.plugin.CustomPlugin
 import com.redefantasy.core.spigot.misc.utils.ItemBuilder
 import com.redefantasy.lobby.echo.packets.listeners.UserGroupsUpdatedEchoPacketListener
@@ -46,6 +48,8 @@ class LobbyPlugin : CustomPlugin(false) {
         instance = this
 
     }
+
+    private val HOLOGRAMS = mutableMapOf<Server, Hologram>()
 
     private var onlineSince = 0L
 
@@ -193,9 +197,42 @@ class LobbyPlugin : CustomPlugin(false) {
                         .enchant(Enchantment.DURABILITY, 1)
                         .build()
                     npc.teleport(npcLocation.clone().add(1.9, -8.5, -3.5))
+
+                    val hologram = Hologram(
+                        listOf(
+                            "§a${it.displayName}",
+                            "?",
+                            "§aClique para entrar!"
+                        ),
+                        Hologram.HologramPosition.DOWN
+                    )
+                    hologram.spawn(
+                        npcLocation.clone().add(0.0, 3.5, 0.0)
+                    )
+
+                    HOLOGRAMS[it] = hologram
                 }
             }
         }
+
+        /**
+         * Holograms
+         */
+
+        Bukkit.getScheduler().runTaskTimer(
+            this,
+            {
+                HOLOGRAMS.forEach { server, hologram ->
+                    val maxPlayers = CoreProvider.Cache.Local.APPLICATIONS.provide().fetchByServer(server).stream()
+                        .mapToInt { it.slots ?: 0 }
+                    val onlineUsersCount = CoreProvider.Cache.Redis.USERS_STATUS.provide().fetchUsersByServer(server).size
+
+                    hologram.line(1, "§b$onlineUsersCount jogando!")
+                }
+            },
+            20L,
+            20L * 5
+        )
 
         LobbyConstants.SERVERS_WORLD_CUBOIDS.values.forEach {
             it.getBlocks { block ->
