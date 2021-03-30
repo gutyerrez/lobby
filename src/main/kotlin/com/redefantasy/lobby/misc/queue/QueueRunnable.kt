@@ -3,6 +3,7 @@ package com.redefantasy.lobby.misc.queue
 import com.redefantasy.core.shared.CoreProvider
 import com.redefantasy.core.shared.applications.ApplicationType
 import com.redefantasy.core.shared.echo.packets.ConnectUserToApplicationPacket
+import com.redefantasy.core.shared.groups.Group
 import com.redefantasy.lobby.LobbyProvider
 
 /**
@@ -39,7 +40,7 @@ class QueueRunnable : Runnable {
 
                 val onlinePlayers = CoreProvider.Cache.Redis.USERS_STATUS.provide().fetchUsersByServer(it).size
 
-                if (onlinePlayers >= maxPlayers) return@forEach
+                if (onlinePlayers >= maxPlayers && !user.hasGroup(Group.VIP)) return@forEach
 
                 val packet = ConnectUserToApplicationPacket(
                     user.id,
@@ -50,6 +51,7 @@ class QueueRunnable : Runnable {
                     packet,
                     ApplicationType.PROXY
                 )
+                
                 LobbyProvider.Cache.Redis.QUEUE.provide().remove(
                     bukkitApplicationSpawn,
                     user

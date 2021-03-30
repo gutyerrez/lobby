@@ -84,11 +84,17 @@ class ServerSelectorInventory() : CustomInventory(
                         return@setItem
                     }
 
+                    val currentPosition = LobbyProvider.Cache.Redis.QUEUE.provide().fetchByUserId(
+                        user, bukkitSpawnApplication
+                    )
+
+                    println("Current Position: $currentPosition")
+
                     val position = LobbyProvider.Cache.Redis.QUEUE.provide().create(user, bukkitSpawnApplication)
 
                     player.sendMessage(
                         ComponentBuilder("\n")
-                            .append("§3 * §fVocê entrou na posição §3#$position §fda fila do ${server.displayName}.")
+                            .append("§3 * §fVocê entrou na posição §3#${position + 1} §fda fila do ${server.displayName}.")
                             .append("\n")
                             .append("§3 * §fCaso queira sair clique ")
                             .append("§c§lAQUI")
