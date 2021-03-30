@@ -173,7 +173,9 @@ class LobbyPlugin : CustomPlugin(false) {
         customZombie.setLocation(npcLocation.x, npcLocation.y, npcLocation.z, npcLocation.yaw, npcLocation.pitch)
         customZombie.setPositionRotation(npcLocation.x, npcLocation.y, npcLocation.z, npcLocation.yaw, npcLocation.pitch)
 
-        worldServer.addEntity(customZombie, CreatureSpawnEvent.SpawnReason.CUSTOM)
+        if (!worldServer.addEntity(customZombie, CreatureSpawnEvent.SpawnReason.CUSTOM)) {
+            println("Não consegui adicionar a entidade")
+        }
 
         val npc = customZombie.bukkitEntity as Giant
 
