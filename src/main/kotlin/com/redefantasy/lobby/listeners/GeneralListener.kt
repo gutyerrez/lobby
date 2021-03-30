@@ -6,6 +6,7 @@ import com.redefantasy.core.shared.misc.preferences.FLY_IN_LOBBY
 import com.redefantasy.core.shared.misc.preferences.PLAYER_VISIBILITY
 import com.redefantasy.core.shared.misc.preferences.PreferenceState
 import com.redefantasy.core.spigot.misc.utils.Title
+import com.redefantasy.lobby.LobbyPlugin
 import com.redefantasy.lobby.LobbyProvider
 import com.redefantasy.lobby.misc.button.HotBarManager
 import com.redefantasy.lobby.misc.preferences.post
@@ -143,6 +144,8 @@ class GeneralListener : Listener {
                     .create()
             )
         }
+
+        if (event.message == "spawn") LobbyPlugin.spawn()
     }
 
     @EventHandler
@@ -264,6 +267,10 @@ class GeneralListener : Listener {
         println("spawnou!")
 
         println("Está vivo: ${if (event.entity.isDead) "Não" else "Sim"}!")
+
+        val location = event.location
+
+        println("Localização x: ${location.x} Y: ${location.y} Z: ${location.z}")
     }
 
 }

@@ -35,6 +35,31 @@ class LobbyPlugin : CustomPlugin(false) {
 
         lateinit var instance: CustomPlugin
 
+        fun spawn() {
+            val npcLocation = Location(
+                Bukkit.getWorlds()[0],
+                0.5,
+                94.5,
+                73.5
+            )
+
+            val worldServer = (npcLocation.world as CraftWorld).handle
+
+            val customZombie = CustomZombie(worldServer)
+
+            customZombie.setLocation(npcLocation.x, npcLocation.y, npcLocation.z, npcLocation.yaw, npcLocation.pitch)
+            customZombie.setPositionRotation(npcLocation.x, npcLocation.y, npcLocation.z, npcLocation.yaw, npcLocation.pitch)
+
+            if (!worldServer.addEntity(customZombie, CreatureSpawnEvent.SpawnReason.CUSTOM)) {
+                println("Não consegui adicionar a entidade")
+            }
+
+            val npc = customZombie.bukkitEntity as Giant
+
+            npc.removeWhenFarAway = false
+            npc.teleport(npcLocation.clone().add(1.9, -8.5, -3.5))
+        }
+
     }
 
     init {
@@ -154,33 +179,6 @@ class LobbyPlugin : CustomPlugin(false) {
             1,
             TimeUnit.SECONDS
         )
-
-        /**
-         * Spawn NPCs
-         */
-
-        val npcLocation = Location(
-            Bukkit.getWorlds()[0],
-            0.5,
-            94.5,
-            73.5
-        )
-
-        val worldServer = (npcLocation.world as CraftWorld).handle
-
-        val customZombie = CustomZombie(worldServer)
-
-        customZombie.setLocation(npcLocation.x, npcLocation.y, npcLocation.z, npcLocation.yaw, npcLocation.pitch)
-        customZombie.setPositionRotation(npcLocation.x, npcLocation.y, npcLocation.z, npcLocation.yaw, npcLocation.pitch)
-
-        if (!worldServer.addEntity(customZombie, CreatureSpawnEvent.SpawnReason.CUSTOM)) {
-            println("Não consegui adicionar a entidade")
-        }
-
-        val npc = customZombie.bukkitEntity as Giant
-
-        npc.removeWhenFarAway = false
-        npc.teleport(npcLocation.clone().add(1.9, -8.5, -3.5))
     }
 
 }
