@@ -9,6 +9,7 @@ import com.redefantasy.core.spigot.inventory.CustomInventory
 import com.redefantasy.core.spigot.misc.utils.ItemBuilder
 import org.bukkit.Material
 import org.bukkit.enchantments.Enchantment
+import org.bukkit.inventory.ItemFlag
 import java.util.function.Consumer
 
 /**
@@ -49,14 +50,19 @@ class LobbySelectorInventory(user: User) : CustomInventory(
                             }
                             user.getConnectedBukkitApplication() == application -> {
                                 arrayOf(
+                                    "§7Jogadores: ${applicationStatus.onlinePlayers}/${application.slots}",
                                     "§eVocê já está aqui"
                                 )
                             }
                             else -> arrayOf(
                                 "§7Jogadores: ${applicationStatus.onlinePlayers}/${application.slots}",
-                                "§aeClique para entrar!"
+                                "§eClique para entrar!"
                             )
                         }
+                    ).flags(
+                        arrayOf(
+                            ItemFlag.HIDE_ENCHANTS
+                        )
                     )
 
                 if (user.getConnectedBukkitApplication() == application)
