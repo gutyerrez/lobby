@@ -109,9 +109,9 @@ class LobbyPlugin : CustomPlugin(false) {
             it.isThundering = false
             it.weatherDuration = 0
 
-            it.ambientSpawnLimit = 0
-            it.animalSpawnLimit = 0
-            it.monsterSpawnLimit = 0
+//            it.ambientSpawnLimit = 0
+//            it.animalSpawnLimit = 0
+//            it.monsterSpawnLimit = 0
 
             it.setTicksPerAnimalSpawns(99999)
             it.setTicksPerMonsterSpawns(99999)
