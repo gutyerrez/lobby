@@ -1,6 +1,8 @@
 package com.redefantasy.lobby
 
+import com.redefantasy.core.shared.CoreProvider
 import com.redefantasy.core.spigot.world.WorldCuboid
+import com.redefantasy.lobby.misc.utils.ServerConnectorUtils
 import org.bukkit.event.player.PlayerInteractEvent
 import java.util.function.Function
 
@@ -9,12 +11,13 @@ import java.util.function.Function
  */
 object LobbyConstants {
 
-    val SERVERS_NPC_CUBOIDS = mapOf(
+    val SERVERS_WORLD_CUBOIDS = mapOf(
         Pair(
-            "FACTIONS_PHOENIX", WorldCuboid(
+            CoreProvider.Cache.Local.SERVERS.provide().fetchByName("FACTIONS_PHOENIX")!!,
+            WorldCuboid(
                 -2,
                 91,
-                -71,
+                -73,
                 2,
                 95,
                 -75
@@ -29,16 +32,21 @@ object LobbyConstants {
 
             println(clickedBlock)
 
-            val cuboid = this.SERVERS_NPC_CUBOIDS.values.stream().filter { worldCuboid ->
-                worldCuboid.contains(
+            val entry = SERVERS_WORLD_CUBOIDS.entries.stream().filter { entry ->
+                entry.value.contains(
                     clickedBlock.x,
                     clickedBlock.y,
                     clickedBlock.z
                 )
             }.findFirst().orElse(null)
 
-            if (cuboid !== null) {
-                player.sendMessage("Opa!")
+            if (entry !== null) {
+                val server = entry.key
+
+                ServerConnectorUtils.connect(
+                    player,
+                    server
+                )
             }
         } catch (e: Exception) {
             e.printStackTrace()
