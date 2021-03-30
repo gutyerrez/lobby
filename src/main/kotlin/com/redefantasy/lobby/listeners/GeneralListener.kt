@@ -176,7 +176,7 @@ class GeneralListener : Listener {
 
         event.isCancelled = true
 
-        if (event.action != Action.RIGHT_CLICK_AIR && event.action != Action.RIGHT_CLICK_BLOCK) return;
+        if (event.action !== Action.RIGHT_CLICK_AIR && event.action !== Action.RIGHT_CLICK_BLOCK) return;
 
         println("dale")
 
