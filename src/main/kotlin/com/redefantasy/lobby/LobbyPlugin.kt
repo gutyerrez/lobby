@@ -8,9 +8,6 @@ import com.redefantasy.core.shared.misc.preferences.FLY_IN_LOBBY
 import com.redefantasy.core.shared.misc.preferences.LOBBY_COMMAND_PROTECTION
 import com.redefantasy.core.shared.misc.preferences.PreferenceRegistry
 import com.redefantasy.core.shared.scheduler.AsyncScheduler
-import com.redefantasy.core.shared.users.data.User
-import com.redefantasy.core.spigot.command.CustomCommand
-import com.redefantasy.core.spigot.command.registry.CommandRegistry
 import com.redefantasy.core.spigot.misc.plugin.CustomPlugin
 import com.redefantasy.core.spigot.misc.utils.ItemBuilder
 import com.redefantasy.lobby.echo.packets.listeners.UserGroupsUpdatedEchoPacketListener
@@ -25,10 +22,8 @@ import net.minecraft.server.v1_8_R3.EntityGiantZombie
 import org.bukkit.Bukkit
 import org.bukkit.Location
 import org.bukkit.Material
-import org.bukkit.command.CommandSender
 import org.bukkit.craftbukkit.v1_8_R3.CraftWorld
 import org.bukkit.entity.Giant
-import org.bukkit.entity.Player
 import org.bukkit.event.entity.CreatureSpawnEvent
 import org.bukkit.potion.PotionEffect
 import org.bukkit.potion.PotionEffectType
@@ -160,18 +155,14 @@ class LobbyPlugin : CustomPlugin(false) {
         )
 
         /**
-         * Temporary
+         * NPCs
          */
 
-        CommandRegistry.registerCommand(
-            object : CustomCommand("spawn") {
-                override fun onCommand(
-                    commandSender: CommandSender,
-                    user: User?,
-                    args: Array<out String>
-                ): Boolean {
+        CoreProvider.Cache.Local.SERVERS.provide().fetchAll().forEach {
+            when (it.name.value) {
+                "FACTIONS_PHOENIX" -> {
                     val npcLocation = Location(
-                        Bukkit.getWorlds()[0],
+                        Bukkit.getWorld("world"),
                         0.5,
                         92.0,
                         -73.5
@@ -201,14 +192,9 @@ class LobbyPlugin : CustomPlugin(false) {
                         .glowing(true)
                         .build()
                     npc.teleport(npcLocation.clone().add(1.9, -8.5, -3.5))
-
-                    commandSender as Player
-
-                    commandSender.sendMessage("Spawnou!")
-                    return true
                 }
             }
-        )
+        }
     }
 
 }
