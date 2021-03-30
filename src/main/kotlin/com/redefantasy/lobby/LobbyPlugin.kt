@@ -30,6 +30,8 @@ import org.bukkit.craftbukkit.v1_8_R3.CraftWorld
 import org.bukkit.entity.Giant
 import org.bukkit.entity.Player
 import org.bukkit.event.entity.CreatureSpawnEvent
+import org.bukkit.potion.PotionEffect
+import org.bukkit.potion.PotionEffectType
 import java.util.concurrent.TimeUnit
 
 /**
@@ -186,6 +188,14 @@ class LobbyPlugin : CustomPlugin(false) {
 
                     val npc = customZombie.bukkitEntity as Giant
 
+                    npc.addPotionEffect(
+                        PotionEffect(
+                            PotionEffectType.INVISIBILITY,
+                            Int.MAX_VALUE,
+                            1
+                        ),
+                        true
+                    )
                     npc.removeWhenFarAway = false
                     npc.equipment.itemInHand = ItemBuilder(Material.BLAZE_POWDER)
                         .glowing(true)
