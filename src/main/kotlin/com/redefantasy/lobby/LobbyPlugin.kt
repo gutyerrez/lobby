@@ -264,7 +264,7 @@ class LobbyPlugin : CustomPlugin(false) {
                 Bukkit.getWorld("world"),
                 -3.5,
                 90.0,
-                -38.0
+                -39.0
             ),
             BlockFace.SOUTH
         )
