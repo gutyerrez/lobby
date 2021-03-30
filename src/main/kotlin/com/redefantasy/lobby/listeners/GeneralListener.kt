@@ -172,12 +172,13 @@ class GeneralListener : Listener {
     ) {
         val player = event.player
         val item = player.itemInHand
+        val clickedBlock = event.clickedBlock
 
         event.isCancelled = true
 
-        if (item !== null && item.type !== Material.AIR) {
-            if (item.type === Material.BARRIER) return LobbyConstants.SERVER_CUBOID.apply(event)
+        if (clickedBlock.type === Material.BARRIER) return LobbyConstants.SERVER_CUBOID.apply(event)
 
+        if (item !== null && item.type !== Material.AIR) {
             val hotBarButton = HotBarManager.getHotBarButton(item)
 
             if (hotBarButton !== null) {

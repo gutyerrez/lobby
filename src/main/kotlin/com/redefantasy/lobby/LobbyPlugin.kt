@@ -198,9 +198,7 @@ class LobbyPlugin : CustomPlugin(false) {
         }
 
         LobbyConstants.SERVERS_NPC_CUBOIDS.values.forEach {
-            it.getWalls { block ->
-                println("yep")
-
+            it.getBlocks { block ->
                 if (block.type === Material.AIR) {
                     block.type = Material.BARRIER
                 }

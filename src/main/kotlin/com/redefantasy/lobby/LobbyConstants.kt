@@ -12,9 +12,9 @@ object LobbyConstants {
     val SERVERS_NPC_CUBOIDS = mapOf(
         Pair(
             "FACTIONS_PHOENIX", WorldCuboid(
-                -1,
+                -2,
                 91,
-                -72,
+                -71,
                 2,
                 95,
                 -75
