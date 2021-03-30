@@ -1,7 +1,6 @@
 package com.redefantasy.lobby
 
 import com.redefantasy.core.spigot.world.WorldCuboid
-import org.bukkit.Material
 import org.bukkit.event.player.PlayerInteractEvent
 import java.util.function.Function
 
@@ -10,7 +9,7 @@ import java.util.function.Function
  */
 object LobbyConstants {
 
-    private val SERVERS_NPC_CUBOIDS = mapOf(
+    val SERVERS_NPC_CUBOIDS = mapOf(
         Pair(
             "FACTIONS_PHOENIX", WorldCuboid(
                 -1,
@@ -43,16 +42,6 @@ object LobbyConstants {
             }
         } catch (e: Exception) {
             e.printStackTrace()
-        }
-    }
-
-    init {
-        this.SERVERS_NPC_CUBOIDS.values.forEach {
-            it.getWalls { block ->
-                if (block.type === Material.AIR) {
-                    block.type = Material.BARRIER
-                }
-            }
         }
     }
 
