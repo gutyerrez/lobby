@@ -12,6 +12,7 @@ import com.redefantasy.core.shared.users.data.User
 import com.redefantasy.core.spigot.command.CustomCommand
 import com.redefantasy.core.spigot.command.registry.CommandRegistry
 import com.redefantasy.core.spigot.misc.plugin.CustomPlugin
+import com.redefantasy.core.spigot.misc.utils.ItemBuilder
 import com.redefantasy.lobby.echo.packets.listeners.UserGroupsUpdatedEchoPacketListener
 import com.redefantasy.lobby.listeners.GeneralListener
 import com.redefantasy.lobby.misc.button.HotBarManager
@@ -24,6 +25,7 @@ import com.redefantasy.lobby.misc.queue.QueueRunnable
 import org.bukkit.Bukkit
 import org.bukkit.GameMode
 import org.bukkit.Location
+import org.bukkit.Material
 import org.bukkit.command.CommandSender
 import org.bukkit.craftbukkit.v1_8_R3.CraftWorld
 import org.bukkit.entity.Giant
@@ -195,6 +197,11 @@ class LobbyPlugin : CustomPlugin(false) {
                     commandSender.sendMessage("Spawnou!")
 
                     commandSender.gameMode = GameMode.CREATIVE
+                    commandSender.inventory.addItem(
+                        ItemBuilder(Material.MONSTER_EGG)
+                        .durability(54)
+                        .build()
+                    )
 
                     Bukkit.getScheduler().runTaskLater(this@LobbyPlugin, {
                         commandSender.sendMessage("Está vivo: ${if (npc.isDead) "Não" else "Sim"}")
