@@ -3,6 +3,7 @@ package com.redefantasy.lobby.misc.button.lobby.selector.button
 import com.redefantasy.core.shared.CoreProvider
 import com.redefantasy.core.spigot.misc.utils.ItemBuilder
 import com.redefantasy.lobby.misc.button.HotBarButton
+import com.redefantasy.lobby.misc.button.lobby.selector.inventory.LobbySelectorInventory
 import org.bukkit.Material
 import org.bukkit.event.player.PlayerInteractEvent
 import org.greenrobot.eventbus.Subscribe
@@ -30,7 +31,9 @@ class LobbySelectorHotBarButton : HotBarButton(
         val player = event.player
         val user = CoreProvider.Cache.Local.USERS.provide().fetchById(player.uniqueId)!!
 
-
+        player.openInventory(
+            LobbySelectorInventory(user)
+        )
     }
 
 }

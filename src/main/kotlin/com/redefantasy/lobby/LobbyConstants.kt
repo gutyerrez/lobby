@@ -1,7 +1,6 @@
 package com.redefantasy.lobby
 
 import com.redefantasy.core.shared.CoreProvider
-import com.redefantasy.core.shared.servers.storage.dto.FetchServerByNameDTO
 import com.redefantasy.core.spigot.world.WorldCuboid
 import com.redefantasy.lobby.misc.utils.ServerConnectorUtils
 import org.bukkit.event.player.PlayerInteractEvent
@@ -14,12 +13,7 @@ object LobbyConstants {
 
     val SERVERS_WORLD_CUBOIDS = mapOf(
         Pair(
-            CoreProvider.Cache.Local.SERVERS.provide().fetchByName("FACTIONS_PHOENIX")
-                ?: CoreProvider.Repositories.Postgres.SERVERS_REPOSITORY.provide().fetchByName(
-                    FetchServerByNameDTO(
-                        "FACTIONS_PHOENIX"
-                    )
-                ),
+            CoreProvider.Cache.Local.SERVERS.provide().fetchByName("FACTIONS_PHOENIX"),
             WorldCuboid(
                 -2,
                 91,
