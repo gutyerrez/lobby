@@ -3,8 +3,10 @@ package com.redefantasy.lobby.misc.button.preferences.inventory
 import com.redefantasy.core.shared.CoreConstants
 import com.redefantasy.core.shared.CoreProvider
 import com.redefantasy.core.shared.echo.packets.UserPreferencesUpdatedPacket
+import com.redefantasy.core.shared.groups.Group
 import com.redefantasy.core.shared.misc.preferences.PreferenceState
 import com.redefantasy.core.shared.misc.preferences.data.Preference
+import com.redefantasy.core.shared.users.data.User
 import com.redefantasy.core.shared.users.preferences.storage.dto.UpdateUserPreferencesDTO
 import com.redefantasy.core.spigot.inventory.CustomInventory
 import com.redefantasy.core.spigot.inventory.ICustomInventory
@@ -95,6 +97,8 @@ class PreferencesInventory(private val player: Player) : CustomInventory(
         ) {
             val player = event.whoClicked as Player
             val user = CoreProvider.Cache.Local.USERS.provide().fetchById(player.uniqueId)!!
+
+            if (!preference.canSwitch(user)) return
 
             if (CoreConstants.COOLDOWNS.inCooldown(user, preference.name)) return
 
@@ -200,5 +204,10 @@ class PreferencesInventory(private val player: Player) : CustomInventory(
             }
             else -> null
         }
+
+    private fun Preference.canSwitch(user: User) = when (this.name) {
+        "fly-in-lobby-preference" -> user.hasGroup(Group.VIP)
+        else -> true
+    }
 
 }
