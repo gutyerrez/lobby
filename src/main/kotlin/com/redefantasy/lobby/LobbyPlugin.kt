@@ -222,7 +222,7 @@ class LobbyPlugin : CustomPlugin(false) {
         Bukkit.getScheduler().runTaskTimer(
             this,
             {
-                HOLOGRAMS.forEach { server, hologram ->
+                HOLOGRAMS.forEach { (server, hologram) ->
                     val onlineUsersCount = CoreProvider.Cache.Redis.USERS_STATUS.provide().fetchUsersByServer(server).size
 
                     hologram.update(1, "§b$onlineUsersCount jogando!")
