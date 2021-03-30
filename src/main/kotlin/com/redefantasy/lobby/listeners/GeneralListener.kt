@@ -19,7 +19,6 @@ import org.bukkit.Material
 import org.bukkit.entity.EntityType
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
-import org.bukkit.event.EventPriority
 import org.bukkit.event.Listener
 import org.bukkit.event.block.*
 import org.bukkit.event.entity.EntityChangeBlockEvent
@@ -167,30 +166,23 @@ class GeneralListener : Listener {
         )
     }
 
-    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    @EventHandler
     fun on(
         event: PlayerInteractEvent
     ) {
         val player = event.player
         val item = player.itemInHand
-        val action = event.action
 
         event.isCancelled = true
 
-        println(action.name)
-
-        if (action.name != "RIGHT_CLICK_AIR" && action.name != "RIGHT_CLICK_BLOCK") return;
-
-        println("dale")
-
         if (item !== null && item.type !== Material.AIR) {
+            if (item.type === Material.BARRIER) return LobbyConstants.SERVER_CUBOID.apply(event)
+
             val hotBarButton = HotBarManager.getHotBarButton(item)
 
             if (hotBarButton !== null) {
                 HotBarManager.getEventBus(hotBarButton)?.post(event)
             }
-        } else {
-            LobbyConstants.SERVER_CUBOID.apply(event)
         }
     }
 
