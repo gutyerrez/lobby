@@ -118,7 +118,7 @@ class LobbyPlugin : CustomPlugin(false) {
 
             it.setGameRuleValue("randomTickSpeed", "-999")
             it.setGameRuleValue("mobGriefing", "false")
-            it.setGameRuleValue("doMobSpawning", "false")
+//            it.setGameRuleValue("doMobSpawning", "false")
             it.setGameRuleValue("doMobLoot", "false")
             it.setGameRuleValue("doFireTick", "false")
             it.setGameRuleValue("doDaylightCycle", "false")
