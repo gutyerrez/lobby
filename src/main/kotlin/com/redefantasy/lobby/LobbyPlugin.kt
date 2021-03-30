@@ -263,8 +263,8 @@ class LobbyPlugin : CustomPlugin(false) {
             Location(
                 Bukkit.getWorld("world"),
                 -3.5,
-                90.0,
-                -37.0
+                84.0,
+                -38.0
             ),
             BlockFace.SOUTH
         )
