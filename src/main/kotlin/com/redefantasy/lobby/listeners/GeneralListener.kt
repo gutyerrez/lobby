@@ -181,10 +181,6 @@ class GeneralListener : Listener {
             if (hotBarButton !== null) {
                 HotBarManager.getEventBus(hotBarButton)?.post(event)
             }
-        } else {
-            println("dale")
-
-            LobbyConstants.SERVER_CUBOID.apply(event)
         }
     }
 
@@ -222,6 +218,10 @@ class GeneralListener : Listener {
         event: PlayerInteractAtEntityEvent
     ) {
         event.isCancelled = true
+
+        println("dale")
+
+        LobbyConstants.SERVER_CUBOID.apply(event)
     }
 
     @EventHandler

@@ -1,7 +1,7 @@
 package com.redefantasy.lobby
 
 import com.redefantasy.core.spigot.world.WorldCuboid
-import org.bukkit.event.player.PlayerInteractEvent
+import org.bukkit.event.player.PlayerInteractAtEntityEvent
 import java.util.function.Function
 
 /**
@@ -22,15 +22,19 @@ object LobbyConstants {
         )
     )
 
-    val SERVER_CUBOID = Function<PlayerInteractEvent, Unit> {
+    val SERVER_CUBOID = Function<PlayerInteractAtEntityEvent, Unit> {
         try {
             val player = it.player
-            val clickedBlock = it.clickedBlock
+            val clickedPosition = it.clickedPosition
 
-            println(clickedBlock)
+            println(clickedPosition)
 
             val cuboid = this.SERVERS_NPC_CUBOIDS.values.stream().filter { worldCuboid ->
-                worldCuboid.contains(clickedBlock.location, true)
+                worldCuboid.contains(
+                    clickedPosition.blockX,
+                    clickedPosition.blockY,
+                    clickedPosition.blockZ
+                )
             }.findFirst().orElse(null)
 
             if (cuboid !== null) {
