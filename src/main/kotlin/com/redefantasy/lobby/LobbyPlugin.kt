@@ -13,7 +13,6 @@ import com.redefantasy.core.spigot.command.CustomCommand
 import com.redefantasy.core.spigot.command.registry.CommandRegistry
 import com.redefantasy.core.spigot.misc.plugin.CustomPlugin
 import com.redefantasy.lobby.echo.packets.listeners.UserGroupsUpdatedEchoPacketListener
-import com.redefantasy.lobby.listeners.GeneralListener
 import com.redefantasy.lobby.misc.button.HotBarManager
 import com.redefantasy.lobby.misc.button.player.visibility.button.PlayerVisibilityOffHotBarButton
 import com.redefantasy.lobby.misc.button.player.visibility.button.PlayerVisibilityOnHotBarButton
@@ -59,7 +58,7 @@ class LobbyPlugin : CustomPlugin(false) {
 
         val pluginManager = Bukkit.getServer().pluginManager
 
-        pluginManager.registerEvents(GeneralListener(), this)
+//        pluginManager.registerEvents(GeneralListener(), this)
 
         /**
          * Preferences
@@ -102,23 +101,23 @@ class LobbyPlugin : CustomPlugin(false) {
         /**
          * World settings
          */
-        Bukkit.getServer().worlds.forEach {
-            it.isAutoSave = false
-
-            it.setStorm(false)
-
-            it.isThundering = false
-            it.weatherDuration = 0
-
-            it.setGameRuleValue("randomTickSpeed", "-999")
-            it.setGameRuleValue("mobGriefing", "false")
-            it.setGameRuleValue("doMobSpawning", "false")
-            it.setGameRuleValue("doMobLoot", "false")
-            it.setGameRuleValue("doFireTick", "false")
-            it.setGameRuleValue("doDaylightCycle", "false")
-
-            it.time = 1200
-        }
+//        Bukkit.getServer().worlds.forEach {
+//            it.isAutoSave = false
+//
+//            it.setStorm(false)
+//
+//            it.isThundering = false
+//            it.weatherDuration = 0
+//
+//            it.setGameRuleValue("randomTickSpeed", "-999")
+//            it.setGameRuleValue("mobGriefing", "false")
+//            it.setGameRuleValue("doMobSpawning", "false")
+//            it.setGameRuleValue("doMobLoot", "false")
+//            it.setGameRuleValue("doFireTick", "false")
+//            it.setGameRuleValue("doDaylightCycle", "false")
+//
+//            it.time = 1200
+//        }
 
         /**
          * Application status
