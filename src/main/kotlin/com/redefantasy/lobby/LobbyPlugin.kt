@@ -16,6 +16,7 @@ import com.redefantasy.core.spigot.misc.utils.ItemBuilder
 import com.redefantasy.lobby.echo.packets.listeners.UserGroupsUpdatedEchoPacketListener
 import com.redefantasy.lobby.listeners.GeneralListener
 import com.redefantasy.lobby.misc.button.HotBarManager
+import com.redefantasy.lobby.misc.button.lobby.selector.button.LobbySelectorHotBarButton
 import com.redefantasy.lobby.misc.button.player.visibility.button.PlayerVisibilityOffHotBarButton
 import com.redefantasy.lobby.misc.button.player.visibility.button.PlayerVisibilityOnHotBarButton
 import com.redefantasy.lobby.misc.button.preferences.button.PreferencesHotBarButton
@@ -81,6 +82,7 @@ class LobbyPlugin : CustomPlugin(false) {
         HotBarManager.registerHotBarButton(
             PreferencesHotBarButton(),
             ServerSelectorHotBarButton(),
+            LobbySelectorHotBarButton(),
             PlayerVisibilityOnHotBarButton(),
             PlayerVisibilityOffHotBarButton()
         )
