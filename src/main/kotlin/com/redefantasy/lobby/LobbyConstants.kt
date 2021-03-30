@@ -1,6 +1,7 @@
 package com.redefantasy.lobby
 
 import com.redefantasy.core.shared.CoreProvider
+import com.redefantasy.core.shared.servers.storage.dto.FetchServerByNameDTO
 import com.redefantasy.core.spigot.world.WorldCuboid
 import com.redefantasy.lobby.misc.utils.ServerConnectorUtils
 import org.bukkit.event.player.PlayerInteractEvent
@@ -13,7 +14,12 @@ object LobbyConstants {
 
     val SERVERS_WORLD_CUBOIDS = mapOf(
         Pair(
-            CoreProvider.Cache.Local.SERVERS.provide().fetchByName("FACTIONS_PHOENIX")!!,
+            CoreProvider.Cache.Local.SERVERS.provide().fetchByName("FACTIONS_PHOENIX")
+                ?: CoreProvider.Repositories.Postgres.SERVERS_REPOSITORY.provide().fetchByName(
+                    FetchServerByNameDTO(
+                        "FACTIONS_PHOENIX"
+                    )
+                ),
             WorldCuboid(
                 -2,
                 91,
@@ -26,30 +32,26 @@ object LobbyConstants {
     )
 
     val SERVER_CUBOID = Function<PlayerInteractEvent, Unit> {
-        try {
-            val player = it.player
-            val clickedBlock = it.clickedBlock
+        val player = it.player
+        val clickedBlock = it.clickedBlock
 
-            println(clickedBlock)
+        val entry = SERVERS_WORLD_CUBOIDS.entries.stream().filter { entry ->
+            entry.value.contains(
+                clickedBlock.x,
+                clickedBlock.y,
+                clickedBlock.z
+            )
+        }.findFirst().orElse(null)
 
-            val entry = SERVERS_WORLD_CUBOIDS.entries.stream().filter { entry ->
-                entry.value.contains(
-                    clickedBlock.x,
-                    clickedBlock.y,
-                    clickedBlock.z
-                )
-            }.findFirst().orElse(null)
+        if (entry !== null) {
+            val server = entry.key
 
-            if (entry !== null) {
-                val server = entry.key
+            if (server === null) return@Function
 
-                ServerConnectorUtils.connect(
-                    player,
-                    server
-                )
-            }
-        } catch (e: Exception) {
-            e.printStackTrace()
+            ServerConnectorUtils.connect(
+                player,
+                server
+            )
         }
     }
 
