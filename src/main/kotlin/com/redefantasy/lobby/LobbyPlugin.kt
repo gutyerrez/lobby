@@ -172,7 +172,7 @@ class LobbyPlugin : CustomPlugin(false) {
                         Bukkit.getWorlds()[0],
                         0.5,
                         94.5,
-                        73.5
+                        -73.5
                     )
 
                     val worldServer = (npcLocation.world as CraftWorld).handle
