@@ -155,6 +155,8 @@ class LobbyPlugin : CustomPlugin(false) {
                     applicationStatus.heapSize = runtime.totalMemory()
                     applicationStatus.heapMaxSize = runtime.maxMemory()
                     applicationStatus.heapFreeSize = runtime.freeMemory()
+
+                    applicationStatus.onlinePlayers = Bukkit.getOnlinePlayers().size
                 }
             },
             0,
