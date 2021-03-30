@@ -4,7 +4,9 @@ import com.redefantasy.core.shared.CoreConstants
 import com.redefantasy.core.shared.CoreProvider
 import com.redefantasy.core.shared.applications.ApplicationType
 import com.redefantasy.core.shared.applications.status.ApplicationStatus
+import com.redefantasy.core.shared.echo.packets.ConnectUserToApplicationPacket
 import com.redefantasy.core.shared.groups.Group
+import com.redefantasy.core.shared.servers.ServerType
 import com.redefantasy.core.spigot.inventory.CustomInventory
 import com.redefantasy.core.spigot.misc.utils.ItemBuilder
 import com.redefantasy.lobby.LobbyProvider
@@ -47,14 +49,23 @@ class ServerSelectorInventory() : CustomInventory(
                 ItemBuilder(Material.TNT)
                     .name("§b${server.displayName}")
                     .lore(
-                        arrayOf(
-                            "",
-                            "§7  Convoque sua facção, construa sua base,",
-                            "§7  defenda-se de invasões adversárias",
-                            "§7  e realize suas próprias invasões.",
-                            "",
-                            "§aClique para jogar!"
-                        )
+                        when (server.serverType) {
+                            ServerType.FACTIONS -> arrayOf(
+                                "",
+                                "§7  Convoque sua facção, construa sua base,  ",
+                                "§7  defenda-se de invasões adversárias",
+                                "§7  e realize suas próprias invasões.",
+                                "",
+                                "§aClique para jogar!"
+                            )
+                            ServerType.RANK_UP -> arrayOf(
+                                "",
+                                "§7  Convoque seu clã, minere, evolua,  ",
+                                "§7  e domine o universo Rank UP.",
+                                "",
+                                "§aClique para jogar!"
+                            )
+                        }
                     )
                     .build()
             ) { it ->
@@ -88,26 +99,58 @@ class ServerSelectorInventory() : CustomInventory(
                         user, bukkitSpawnApplication
                     )
 
-                    println("Current Position: $currentPosition")
+                    if (user.hasGroup(Group.VIP)) {
+                        val packet = ConnectUserToApplicationPacket(
+                            user.id,
+                            bukkitSpawnApplication
+                        )
 
-                    val position = LobbyProvider.Cache.Redis.QUEUE.provide().create(user, bukkitSpawnApplication)
+                        CoreProvider.Databases.Redis.ECHO.provide().publishToApplicationType(
+                            packet,
+                            ApplicationType.PROXY
+                        )
+                    } else {
+                        if (currentPosition === null) {
+                            val position =
+                                LobbyProvider.Cache.Redis.QUEUE.provide().create(user, bukkitSpawnApplication)
 
-                    player.sendMessage(
-                        ComponentBuilder("\n")
-                            .append("§3 * §fVocê entrou na posição §3#${position + 1} §fda fila do ${server.displayName}.")
-                            .append("\n")
-                            .append("§3 * §fCaso queira sair clique ")
-                            .append("§c§lAQUI")
-                            .event(
-                                ClickEvent(
-                                    ClickEvent.Action.RUN_COMMAND,
-                                    "/queue_3#@5 leave ${server.name.value}"
-                                )
+                            player.sendMessage(
+                                ComponentBuilder()
+                                    .append("\n")
+                                    .append("§3 * §fVocê entrou na posição §3#${position + 1} §fda fila do ${server.displayName}.")
+                                    .append("\n")
+                                    .append("§3 * §fCaso queira sair clique ")
+                                    .append("§c§lAQUI")
+                                    .event(
+                                        ClickEvent(
+                                            ClickEvent.Action.RUN_COMMAND,
+                                            "/queue_3#@5 leave ${server.name.value}"
+                                        )
+                                    )
+                                    .append("§f.")
+                                    .append("\n")
+                                    .create()
                             )
-                            .append("§f.")
-                            .append("\n")
-                            .create()
-                    )
+                        } else {
+                            player.sendMessage(
+                                ComponentBuilder()
+                                    .append("\n")
+                                    .append("§3 * §fVocê está na posição §3#${currentPosition + 1} §fda fila do ${server.displayName}.")
+                                    .append("\n")
+                                    .append("§3 * §fCaso queira sair clique ")
+                                    .append("§c§lAQUI")
+                                    .event(
+                                        ClickEvent(
+                                            ClickEvent.Action.RUN_COMMAND,
+                                            "/queue_3#@5 leave ${server.name.value}"
+                                        )
+                                    )
+                                    .append("§f.")
+                                    .append("\n")
+                                    .create()
+                            )
+                        }
+                    }
 
                     CoreConstants.COOLDOWNS.start(
                         user,
