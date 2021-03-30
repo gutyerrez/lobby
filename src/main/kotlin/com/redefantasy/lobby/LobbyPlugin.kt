@@ -1,6 +1,7 @@
 package com.redefantasy.lobby
 
 import com.redefantasy.core.shared.CoreProvider
+import com.redefantasy.core.shared.applications.ApplicationType
 import com.redefantasy.core.shared.applications.status.ApplicationStatus
 import com.redefantasy.core.shared.applications.status.task.ApplicationStatusTask
 import com.redefantasy.core.shared.echo.packets.listener.UserPreferencesUpdatedEchoPacketListener
@@ -226,6 +227,20 @@ class LobbyPlugin : CustomPlugin(false) {
                     val onlineUsersCount = CoreProvider.Cache.Redis.USERS_STATUS.provide().fetchUsersByServer(server).size
 
                     hologram.update(1, "§b$onlineUsersCount jogando!")
+
+                    val bukkitSpawnApplication = CoreProvider.Cache.Local.APPLICATIONS.provide().fetchByServerAndApplicationType(
+                        server,
+                        ApplicationType.SERVER_SPAWN
+                    )
+
+                    if (bukkitSpawnApplication === null || CoreProvider.Cache.Redis.APPLICATIONS_STATUS.provide().fetchApplicationStatusByApplication(
+                            bukkitSpawnApplication,
+                            ApplicationStatus::class
+                    ) === null) {
+                        hologram.update(2, "§cOffline")
+                    } else if (CoreProvider.Cache.Local.MAINTENANCE.provide().fetch(bukkitSpawnApplication) == true) {
+                        hologram.update(2, "§cEm manutenção")
+                    }
                 }
             },
             20L,
