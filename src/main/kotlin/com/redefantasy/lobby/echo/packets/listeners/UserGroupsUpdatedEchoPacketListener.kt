@@ -16,7 +16,9 @@ class UserGroupsUpdatedEchoPacketListener : EchoListener {
         packet: UserGroupsUpdatedPacket
     ) {
         val userId = packet.userId!!
-        val lobbyUser = LobbyProvider.Cache.Local.LOBBY_USERS.provide().fetchById(userId)!!
+        val lobbyUser = LobbyProvider.Cache.Local.LOBBY_USERS.provide().fetchById(userId)
+
+        if (lobbyUser === null) return
 
         if (!lobbyUser.isOnline()) return
 
