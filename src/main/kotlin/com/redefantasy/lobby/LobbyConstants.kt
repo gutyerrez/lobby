@@ -26,6 +26,8 @@ object LobbyConstants {
         val player = it.player
         val clickedBlock = it.clickedBlock
 
+        println(clickedBlock)
+
         val cuboid = this.SERVERS_NPC_CUBOIDS.values.stream().filter { worldCuboid ->
             worldCuboid.contains(clickedBlock.location, true)
         }.findFirst().orElse(null)
