@@ -87,7 +87,7 @@ private fun User.switchPlayerVisibilityState() {
                     CoreConstants.COOLDOWNS.getRemainingTime(this, preference.name),
                     1
                 )}")
-                .append("§cpara fazer isto novamente.")
+                .append(" §cpara fazer isto novamente.")
                 .create()
         )
         return
