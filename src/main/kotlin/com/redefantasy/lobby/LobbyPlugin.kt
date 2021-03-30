@@ -22,6 +22,7 @@ import com.redefantasy.lobby.misc.button.server.selector.button.ServerSelectorHo
 import com.redefantasy.lobby.misc.npc.entity.CustomZombie
 import com.redefantasy.lobby.misc.queue.QueueRunnable
 import org.bukkit.Bukkit
+import org.bukkit.GameMode
 import org.bukkit.Location
 import org.bukkit.command.CommandSender
 import org.bukkit.craftbukkit.v1_8_R3.CraftWorld
@@ -198,6 +199,8 @@ class LobbyPlugin : CustomPlugin(false) {
 
                     commandSender.sendMessage("Spawnou!")
                     commandSender.teleport(npc)
+
+                    commandSender.gameMode = GameMode.CREATIVE
 
                     Bukkit.getScheduler().runTaskLater(this@LobbyPlugin, {
                         commandSender.sendMessage("Está vivo: ${if (npc.isDead) "Não" else "Sim"}")
