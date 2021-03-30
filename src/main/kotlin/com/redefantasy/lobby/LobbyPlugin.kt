@@ -10,6 +10,7 @@ import com.redefantasy.core.shared.misc.preferences.LOBBY_COMMAND_PROTECTION
 import com.redefantasy.core.shared.misc.preferences.PreferenceRegistry
 import com.redefantasy.core.shared.scheduler.AsyncScheduler
 import com.redefantasy.core.shared.servers.data.Server
+import com.redefantasy.core.spigot.misc.frame.data.Frame
 import com.redefantasy.core.spigot.misc.hologram.Hologram
 import com.redefantasy.core.spigot.misc.plugin.CustomPlugin
 import com.redefantasy.core.spigot.misc.utils.ItemBuilder
@@ -26,12 +27,14 @@ import net.minecraft.server.v1_8_R3.EntityGiantZombie
 import org.bukkit.Bukkit
 import org.bukkit.Location
 import org.bukkit.Material
+import org.bukkit.block.BlockFace
 import org.bukkit.craftbukkit.v1_8_R3.CraftWorld
 import org.bukkit.enchantments.Enchantment
 import org.bukkit.entity.Giant
 import org.bukkit.event.entity.CreatureSpawnEvent
 import org.bukkit.potion.PotionEffect
 import org.bukkit.potion.PotionEffectType
+import java.net.URL
 import java.util.concurrent.TimeUnit
 
 /**
@@ -249,6 +252,21 @@ class LobbyPlugin : CustomPlugin(false) {
             },
             20L,
             20L * 5
+        )
+
+        /**
+         * Frames
+         */
+        val frame = Frame(URL("https://i.imgur.com/4r9csnG.png"))
+
+        frame.place(
+            Location(
+                Bukkit.getWorld("world"),
+                4.5,
+                84.0,
+                -37.5
+            ),
+            BlockFace.SOUTH
         )
 
         LobbyConstants.SERVERS_WORLD_CUBOIDS.values.forEach {
