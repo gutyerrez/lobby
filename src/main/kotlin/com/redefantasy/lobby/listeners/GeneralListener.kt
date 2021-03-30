@@ -19,10 +19,7 @@ import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.block.*
-import org.bukkit.event.entity.EntityChangeBlockEvent
-import org.bukkit.event.entity.EntityCombustEvent
-import org.bukkit.event.entity.EntityDamageByEntityEvent
-import org.bukkit.event.entity.EntityDamageEvent
+import org.bukkit.event.entity.*
 import org.bukkit.event.inventory.ClickType
 import org.bukkit.event.inventory.InventoryClickEvent
 import org.bukkit.event.player.*
@@ -258,6 +255,13 @@ class GeneralListener : Listener {
         event: PlayerDropItemEvent
     ) {
         event.isCancelled = true
+    }
+
+    @EventHandler
+    fun on(
+        event: EntityDeathEvent
+    ) {
+        println("${event.entity.name} Morreu!")
     }
 
 }
