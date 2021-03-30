@@ -173,10 +173,11 @@ class GeneralListener : Listener {
     ) {
         val player = event.player
         val item = player.itemInHand
+        val action = event.action
 
         event.isCancelled = true
 
-        if (event.action !== Action.RIGHT_CLICK_AIR && event.action !== Action.RIGHT_CLICK_BLOCK) return;
+        if (action.name != "RIGHT_CLICK_AIR" && action.name != "RIGHT_CLICK_BLOCK") return;
 
         println("dale")
 
