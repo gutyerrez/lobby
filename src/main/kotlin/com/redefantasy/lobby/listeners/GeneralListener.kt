@@ -15,6 +15,7 @@ import net.md_5.bungee.api.chat.ComponentBuilder
 import org.bukkit.Bukkit
 import org.bukkit.Location
 import org.bukkit.entity.EntityType
+import org.bukkit.entity.Giant
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
@@ -261,13 +262,9 @@ class GeneralListener : Listener {
     fun on(
         event: EntitySpawnEvent
     ) {
-        println("spawnou!")
-
-        println("Está vivo: ${if (event.entity.isDead) "Não" else "Sim"}!")
-
-        val location = event.location
-
-        println("Localização x: ${location.x} Y: ${location.y} Z: ${location.z}")
+        if (event.entity !is Giant) {
+            event.isCancelled = true
+        }
     }
 
 }

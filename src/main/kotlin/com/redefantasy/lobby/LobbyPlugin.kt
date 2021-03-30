@@ -27,6 +27,7 @@ import org.bukkit.command.CommandSender
 import org.bukkit.craftbukkit.v1_8_R3.CraftWorld
 import org.bukkit.entity.Giant
 import org.bukkit.entity.Item
+import org.bukkit.entity.Player
 import org.bukkit.event.entity.CreatureSpawnEvent
 import java.util.concurrent.TimeUnit
 
@@ -193,7 +194,10 @@ class LobbyPlugin : CustomPlugin(false) {
                     npc.removeWhenFarAway = false
                     npc.teleport(npcLocation.clone().add(1.9, -8.5, -3.5))
 
+                    commandSender as Player
+
                     commandSender.sendMessage("Spawnou!")
+                    commandSender.teleport(npc)
                     return true
                 }
             }
