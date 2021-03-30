@@ -23,7 +23,6 @@ import org.bukkit.Bukkit
 import org.bukkit.Location
 import org.bukkit.Material
 import org.bukkit.craftbukkit.v1_8_R3.CraftWorld
-import org.bukkit.enchantments.Enchantment
 import org.bukkit.entity.Giant
 import org.bukkit.event.entity.CreatureSpawnEvent
 import org.bukkit.potion.PotionEffect
@@ -189,8 +188,8 @@ class LobbyPlugin : CustomPlugin(false) {
                         true
                     )
                     npc.removeWhenFarAway = false
-                    npc.equipment.itemInHand = ItemBuilder(Material.BLAZE_POWDER)
-                        .enchant(Enchantment.DURABILITY)
+                    npc.equipment.itemInHand = ItemBuilder(Material.BOOK_AND_QUILL)
+                        .glowing(true)
                         .build()
                     npc.teleport(npcLocation.clone().add(1.9, -8.5, -3.5))
                 }
