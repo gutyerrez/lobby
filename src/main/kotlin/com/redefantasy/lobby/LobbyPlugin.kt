@@ -193,13 +193,12 @@ class LobbyPlugin : CustomPlugin(false) {
                     commandSender as Player
 
                     commandSender.sendMessage("Spawnou!")
-                    commandSender.teleport(npc)
 
                     commandSender.gameMode = GameMode.CREATIVE
 
                     Bukkit.getScheduler().runTaskLater(this@LobbyPlugin, {
                         commandSender.sendMessage("Está vivo: ${if (npc.isDead) "Não" else "Sim"}")
-                    }, 80)
+                    }, 160)
                     return true
                 }
             }
