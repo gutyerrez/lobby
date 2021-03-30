@@ -26,59 +26,60 @@ class LobbySelectorInventory(user: User) : CustomInventory(
     init {
         CoreProvider.Cache.Local.APPLICATIONS.provide().fetchByApplicationType(
             ApplicationType.LOBBY
-        ).forEachIndexed { index, application ->
-            val applicationStatus =
-                CoreProvider.Cache.Redis.APPLICATIONS_STATUS.provide().fetchApplicationStatusByApplication(
-                    application,
-                    ApplicationStatus::class
-                )
+        ).sortedBy { it.name }
+            .forEachIndexed { index, application ->
+                val applicationStatus =
+                    CoreProvider.Cache.Redis.APPLICATIONS_STATUS.provide().fetchApplicationStatusByApplication(
+                        application,
+                        ApplicationStatus::class
+                    )
 
-            val itemBuilder = ItemBuilder(Material.INK_SACK)
-                .name("§e${application.displayName}")
-                .durability(
-                    if (applicationStatus === null) {
-                        8
-                    } else 10
-                ).lore(
-                    when {
-                        applicationStatus === null -> {
-                            arrayOf(
-                                "§cSaguão offline."
+                val itemBuilder = ItemBuilder(Material.INK_SACK)
+                    .name("§e${application.displayName}")
+                    .durability(
+                        if (applicationStatus === null) {
+                            8
+                        } else 10
+                    ).lore(
+                        when {
+                            applicationStatus === null -> {
+                                arrayOf(
+                                    "§cSaguão offline."
+                                )
+                            }
+                            user.getConnectedBukkitApplication() == application -> {
+                                arrayOf(
+                                    "§eVocê já está aqui"
+                                )
+                            }
+                            else -> arrayOf(
+                                "§7Jogadores: ${applicationStatus.onlinePlayers}/${application.slots}",
+                                "§aeClique para entrar!"
                             )
                         }
-                        user.getConnectedBukkitApplication() == application -> {
-                            arrayOf(
-                                "§eVocê já está aqui"
-                            )
-                        }
-                        else -> arrayOf(
-                            "§7Jogadores: ${applicationStatus.onlinePlayers}/${application.slots}",
-                            "§aeClique para entrar!"
+                    )
+
+                if (user.getConnectedBukkitApplication() == application)
+                    itemBuilder.enchant(Enchantment.DURABILITY, 1)
+
+                this.setItem(
+                    SLOTS[index],
+                    itemBuilder.build(),
+                    Consumer {
+                        if (applicationStatus === null || user.getConnectedBukkitApplication() === application) return@Consumer
+
+                        val packet = ConnectUserToApplicationPacket(
+                            user.id,
+                            application
+                        )
+
+                        CoreProvider.Databases.Redis.ECHO.provide().publishToApplicationType(
+                            packet,
+                            ApplicationType.PROXY
                         )
                     }
                 )
-
-            if (user.getConnectedBukkitApplication() == application)
-                itemBuilder.enchant(Enchantment.DURABILITY, 1)
-
-            this.setItem(
-                SLOTS[index],
-                itemBuilder.build(),
-                Consumer {
-                    if (applicationStatus === null || user.getConnectedBukkitApplication() === application) return@Consumer
-
-                    val packet = ConnectUserToApplicationPacket(
-                        user.id,
-                        application
-                    )
-
-                    CoreProvider.Databases.Redis.ECHO.provide().publishToApplicationType(
-                        packet,
-                        ApplicationType.PROXY
-                    )
-                }
-            )
-        }
+            }
     }
 
 }
