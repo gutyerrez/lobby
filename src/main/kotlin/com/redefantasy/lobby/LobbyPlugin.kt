@@ -202,6 +202,22 @@ class LobbyPlugin : CustomPlugin(false) {
                 }
             }
         )
+        CommandRegistry.registerCommand(
+            object : CustomCommand("entidades") {
+                override fun onCommand(
+                    commandSender: CommandSender,
+                    user: User?,
+                    args: Array<out String>
+                ): Boolean {
+                    commandSender as Player
+
+                    commandSender.world.entities.forEach {
+                        commandSender.sendMessage("Entidade: ${it.name}")
+                    }
+                    return true
+                }
+            }
+        )
     }
 
 }
