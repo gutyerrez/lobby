@@ -12,6 +12,7 @@ import com.redefantasy.core.shared.users.data.User
 import com.redefantasy.core.spigot.command.CustomCommand
 import com.redefantasy.core.spigot.command.registry.CommandRegistry
 import com.redefantasy.core.spigot.misc.plugin.CustomPlugin
+import com.redefantasy.core.spigot.misc.utils.ItemBuilder
 import com.redefantasy.lobby.echo.packets.listeners.UserGroupsUpdatedEchoPacketListener
 import com.redefantasy.lobby.listeners.GeneralListener
 import com.redefantasy.lobby.misc.button.HotBarManager
@@ -23,6 +24,7 @@ import com.redefantasy.lobby.misc.queue.QueueRunnable
 import net.minecraft.server.v1_8_R3.EntityGiantZombie
 import org.bukkit.Bukkit
 import org.bukkit.Location
+import org.bukkit.Material
 import org.bukkit.command.CommandSender
 import org.bukkit.craftbukkit.v1_8_R3.CraftWorld
 import org.bukkit.entity.Giant
@@ -169,7 +171,7 @@ class LobbyPlugin : CustomPlugin(false) {
                     val npcLocation = Location(
                         Bukkit.getWorlds()[0],
                         0.5,
-                        94.5,
+                        92.0,
                         -73.5
                     )
 
@@ -180,34 +182,19 @@ class LobbyPlugin : CustomPlugin(false) {
                     customZombie.setLocation(npcLocation.x, npcLocation.y, npcLocation.z, npcLocation.yaw, npcLocation.pitch)
                     customZombie.setPositionRotation(npcLocation.x, npcLocation.y, npcLocation.z, npcLocation.yaw, npcLocation.pitch)
 
-                    if (!worldServer.addEntity(customZombie, CreatureSpawnEvent.SpawnReason.CUSTOM)) {
-                        println("Não consegui adicionar a entidade")
-                    }
+                    worldServer.addEntity(customZombie, CreatureSpawnEvent.SpawnReason.CUSTOM)
 
                     val npc = customZombie.bukkitEntity as Giant
 
                     npc.removeWhenFarAway = false
+                    npc.equipment.itemInHand = ItemBuilder(Material.BLAZE_POWDER)
+                        .glowing(true)
+                        .build()
                     npc.teleport(npcLocation.clone().add(1.9, -8.5, -3.5))
 
                     commandSender as Player
 
                     commandSender.sendMessage("Spawnou!")
-                    return true
-                }
-            }
-        )
-        CommandRegistry.registerCommand(
-            object : CustomCommand("entidades") {
-                override fun onCommand(
-                    commandSender: CommandSender,
-                    user: User?,
-                    args: Array<out String>
-                ): Boolean {
-                    commandSender as Player
-
-                    commandSender.world.entities.forEach {
-                        commandSender.sendMessage("Entidade: ${it.name}")
-                    }
                     return true
                 }
             }
