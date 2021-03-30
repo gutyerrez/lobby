@@ -13,6 +13,7 @@ import com.redefantasy.lobby.misc.preferences.post
 import com.redefantasy.lobby.misc.scoreboard.ScoreboardManager
 import com.redefantasy.lobby.user.data.LobbyUser
 import net.md_5.bungee.api.chat.ComponentBuilder
+import org.apache.commons.lang3.ArrayUtils
 import org.bukkit.Bukkit
 import org.bukkit.Location
 import org.bukkit.Material
@@ -175,11 +176,27 @@ class GeneralListener : Listener {
 
         event.isCancelled = true
 
-        if (item !== null && item.type !== Material.AIR) {
-            val hotBarButton = HotBarManager.getHotBarButton(item)
+        if (ArrayUtils.contains(
+                arrayOf(
+                    Action.RIGHT_CLICK_AIR,
+                    Action.RIGHT_CLICK_BLOCK,
+                    Action.LEFT_CLICK_AIR,
+                    Action.LEFT_CLICK_BLOCK,
+                    Action.PHYSICAL
+                ),
+                event.clickedBlock
+            )
+        ) {
+            if (item !== null && item.type !== Material.AIR) {
+                val hotBarButton = HotBarManager.getHotBarButton(item)
 
-            if (hotBarButton !== null) {
-                HotBarManager.getEventBus(hotBarButton)?.post(event)
+                if (hotBarButton !== null) {
+                    HotBarManager.getEventBus(hotBarButton)?.post(event)
+                }
+            } else {
+                println("dale")
+
+                LobbyConstants.SERVER_CUBOID.apply(event)
             }
         }
     }
@@ -218,10 +235,6 @@ class GeneralListener : Listener {
         event: PlayerInteractAtEntityEvent
     ) {
         event.isCancelled = true
-
-        println("dale")
-
-        LobbyConstants.SERVER_CUBOID.apply(event)
     }
 
     @EventHandler
