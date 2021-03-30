@@ -223,11 +223,9 @@ class LobbyPlugin : CustomPlugin(false) {
             this,
             {
                 HOLOGRAMS.forEach { server, hologram ->
-                    val maxPlayers = CoreProvider.Cache.Local.APPLICATIONS.provide().fetchByServer(server).stream()
-                        .mapToInt { it.slots ?: 0 }
                     val onlineUsersCount = CoreProvider.Cache.Redis.USERS_STATUS.provide().fetchUsersByServer(server).size
 
-                    hologram.line(1, "§b$onlineUsersCount jogando!")
+                    hologram.update(1, "§b$onlineUsersCount jogando!")
                 }
             },
             20L,
