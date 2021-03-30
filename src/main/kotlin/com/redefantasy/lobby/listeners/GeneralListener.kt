@@ -6,6 +6,7 @@ import com.redefantasy.core.shared.misc.preferences.FLY_IN_LOBBY
 import com.redefantasy.core.shared.misc.preferences.PLAYER_VISIBILITY
 import com.redefantasy.core.shared.misc.preferences.PreferenceState
 import com.redefantasy.core.spigot.misc.utils.Title
+import com.redefantasy.lobby.LobbyConstants
 import com.redefantasy.lobby.LobbyProvider
 import com.redefantasy.lobby.misc.button.HotBarManager
 import com.redefantasy.lobby.misc.preferences.post
@@ -179,6 +180,8 @@ class GeneralListener : Listener {
             if (hotBarButton !== null) {
                 HotBarManager.getEventBus(hotBarButton)?.post(event)
             }
+        } else {
+            LobbyConstants.SERVER_CUBOID.apply(event)
         }
     }
 

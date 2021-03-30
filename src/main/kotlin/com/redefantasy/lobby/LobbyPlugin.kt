@@ -165,7 +165,7 @@ class LobbyPlugin : CustomPlugin(false) {
                     val npcLocation = Location(
                         Bukkit.getWorld("world"),
                         0.5,
-                        91.5,
+                        91.0,
                         -73.5
                     )
 
