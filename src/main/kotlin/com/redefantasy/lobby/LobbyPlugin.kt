@@ -9,6 +9,7 @@ import com.redefantasy.core.shared.misc.preferences.LOBBY_COMMAND_PROTECTION
 import com.redefantasy.core.shared.misc.preferences.PreferenceRegistry
 import com.redefantasy.core.shared.scheduler.AsyncScheduler
 import com.redefantasy.core.spigot.misc.plugin.CustomPlugin
+import com.redefantasy.core.spigot.misc.utils.NMS
 import com.redefantasy.lobby.echo.packets.listeners.UserGroupsUpdatedEchoPacketListener
 import com.redefantasy.lobby.listeners.GeneralListener
 import com.redefantasy.lobby.misc.button.HotBarManager
@@ -16,8 +17,12 @@ import com.redefantasy.lobby.misc.button.player.visibility.button.PlayerVisibili
 import com.redefantasy.lobby.misc.button.player.visibility.button.PlayerVisibilityOnHotBarButton
 import com.redefantasy.lobby.misc.button.preferences.button.PreferencesHotBarButton
 import com.redefantasy.lobby.misc.button.server.selector.button.ServerSelectorHotBarButton
+import com.redefantasy.lobby.misc.npc.entity.CustomZombie
 import com.redefantasy.lobby.misc.queue.QueueRunnable
+import net.minecraft.server.v1_8_R3.EntityGiantZombie
 import org.bukkit.Bukkit
+import org.bukkit.Location
+import org.bukkit.entity.Giant
 import org.bukkit.entity.Item
 import java.util.concurrent.TimeUnit
 
@@ -149,6 +154,26 @@ class LobbyPlugin : CustomPlugin(false) {
             1,
             TimeUnit.SECONDS
         )
+
+        /**
+         * Spawn NPCs
+         */
+
+        val npcLocation = Location(
+            Bukkit.getWorlds()[0],
+            0.5,
+            94.5,
+            73.5
+        )
+
+        val npc = NMS.spawnCustomEntity(
+            CustomZombie::class,
+            EntityGiantZombie::class,
+            npcLocation
+        ) as Giant
+
+        npc.removeWhenFarAway = false
+        npc.teleport(npcLocation.clone().add(1.9, -8.5, -3.5))
     }
 
 }
