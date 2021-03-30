@@ -54,9 +54,11 @@ class QueueRedisCache : RedisCache {
     fun fetchByUserId(
         user: User,
         targetApplication: Application
-    ): Int {
+    ): Int? {
         return CoreProvider.Databases.Redis.REDIS_MAIN.provide().resource.use {
             val key = this.key.apply(targetApplication)
+
+            if (!it.hexists(key, user.getUniqueId().toString())) return@use null
 
             return@use it.zrank(
                 key,
