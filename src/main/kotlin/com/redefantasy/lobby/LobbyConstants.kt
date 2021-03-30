@@ -23,17 +23,21 @@ object LobbyConstants {
     )
 
     val SERVER_CUBOID = Function<PlayerInteractEvent, Unit> {
-        val player = it.player
-        val clickedBlock = it.clickedBlock
+        try {
+            val player = it.player
+            val clickedBlock = it.clickedBlock
 
-        println(clickedBlock)
+            println(clickedBlock)
 
-        val cuboid = this.SERVERS_NPC_CUBOIDS.values.stream().filter { worldCuboid ->
-            worldCuboid.contains(clickedBlock.location, true)
-        }.findFirst().orElse(null)
+            val cuboid = this.SERVERS_NPC_CUBOIDS.values.stream().filter { worldCuboid ->
+                worldCuboid.contains(clickedBlock.location, true)
+            }.findFirst().orElse(null)
 
-        if (cuboid !== null) {
-            player.sendMessage("Opa!")
+            if (cuboid !== null) {
+                player.sendMessage("Opa!")
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
         }
     }
 

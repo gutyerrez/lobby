@@ -15,6 +15,7 @@ import com.redefantasy.lobby.user.data.LobbyUser
 import net.md_5.bungee.api.chat.ComponentBuilder
 import org.bukkit.Bukkit
 import org.bukkit.Location
+import org.bukkit.Material
 import org.bukkit.entity.EntityType
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
@@ -174,13 +175,15 @@ class GeneralListener : Listener {
 
         event.isCancelled = true
 
-        if (item !== null) {
+        if (item !== null && item.type !== Material.AIR) {
             val hotBarButton = HotBarManager.getHotBarButton(item)
 
             if (hotBarButton !== null) {
                 HotBarManager.getEventBus(hotBarButton)?.post(event)
             }
         } else {
+            println("dale")
+
             LobbyConstants.SERVER_CUBOID.apply(event)
         }
     }
