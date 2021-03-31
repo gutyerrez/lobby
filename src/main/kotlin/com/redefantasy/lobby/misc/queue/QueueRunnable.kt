@@ -13,49 +13,53 @@ class QueueRunnable : Runnable {
 
     override fun run() {
         CoreProvider.Cache.Local.SERVERS.provide().fetchAll().forEach {
-            val bukkitApplicationSpawn = CoreProvider.Cache.Local.APPLICATIONS.provide().fetchByServerAndApplicationType(
-                it,
-                ApplicationType.SERVER_SPAWN
-            )
-
-            if (bukkitApplicationSpawn === null) return@forEach
-
-            val userId = LobbyProvider.Cache.Redis.QUEUE.provide().poll(
-                bukkitApplicationSpawn
-            )
-
-            if (userId === null) return@forEach
-
-            val user = CoreProvider.Cache.Local.USERS.provide().fetchById(userId)!!
-
-            if (!user.isOnline()) {
-                LobbyProvider.Cache.Redis.QUEUE.provide().remove(
-                    bukkitApplicationSpawn,
-                    user
+            try {
+                val bukkitApplicationSpawn = CoreProvider.Cache.Local.APPLICATIONS.provide().fetchByServerAndApplicationType(
+                    it,
+                    ApplicationType.SERVER_SPAWN
                 )
-            } else {
-                val maxPlayers = CoreProvider.Cache.Local.APPLICATIONS.provide().fetchByServer(
-                    it
-                ).stream().mapToInt { application -> application.slots ?: 0 }.findFirst().asInt
 
-                val onlinePlayers = CoreProvider.Cache.Redis.USERS_STATUS.provide().fetchUsersByServer(it).size
+                if (bukkitApplicationSpawn === null) return@forEach
 
-                if (onlinePlayers >= maxPlayers && !user.hasGroup(Group.VIP)) return@forEach
-
-                val packet = ConnectUserToApplicationPacket(
-                    user.id,
+                val userId = LobbyProvider.Cache.Redis.QUEUE.provide().poll(
                     bukkitApplicationSpawn
                 )
 
-                CoreProvider.Databases.Redis.ECHO.provide().publishToApplicationType(
-                    packet,
-                    ApplicationType.PROXY
-                )
-                
-                LobbyProvider.Cache.Redis.QUEUE.provide().remove(
-                    bukkitApplicationSpawn,
-                    user
-                )
+                if (userId === null) return@forEach
+
+                val user = CoreProvider.Cache.Local.USERS.provide().fetchById(userId)!!
+
+                if (!user.isOnline()) {
+                    LobbyProvider.Cache.Redis.QUEUE.provide().remove(
+                        bukkitApplicationSpawn,
+                        user
+                    )
+                } else {
+                    val maxPlayers = CoreProvider.Cache.Local.APPLICATIONS.provide().fetchByServer(
+                        it
+                    ).stream().mapToInt { application -> application.slots ?: 0 }.findFirst().asInt
+
+                    val onlinePlayers = CoreProvider.Cache.Redis.USERS_STATUS.provide().fetchUsersByServer(it).size
+
+                    if (onlinePlayers >= maxPlayers && !user.hasGroup(Group.VIP)) return@forEach
+
+                    val packet = ConnectUserToApplicationPacket(
+                        user.id,
+                        bukkitApplicationSpawn
+                    )
+
+                    CoreProvider.Databases.Redis.ECHO.provide().publishToApplicationType(
+                        packet,
+                        ApplicationType.PROXY
+                    )
+
+                    LobbyProvider.Cache.Redis.QUEUE.provide().remove(
+                        bukkitApplicationSpawn,
+                        user
+                    )
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
             }
         }
     }
