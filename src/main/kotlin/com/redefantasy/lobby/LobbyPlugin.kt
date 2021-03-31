@@ -262,7 +262,7 @@ class LobbyPlugin : CustomPlugin(false) {
         frame.place(
             Location(
                 Bukkit.getWorld("world"),
-                -3.5,
+                -3.0,
                 84.0,
                 -37.7
             ),
