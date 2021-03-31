@@ -213,6 +213,8 @@ class GenericListener : Listener {
 
         event.isCancelled = true
 
+        println("Verificar se tem a metadata")
+
         if (entity is ItemFrame && entity.hasMetadata("ITEM_FRAME_ID")) {
             println("opa")
 
