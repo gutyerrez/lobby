@@ -215,8 +215,6 @@ class GenericListener : Listener {
         if (entity is ItemFrame) {
             val frame = FrameManager.INTERACTABLE_FRAMES[entity.uniqueId]
 
-            println("Frame: $frame")
-
             frame?.interactConsumer?.accept(player)
         }
     }
