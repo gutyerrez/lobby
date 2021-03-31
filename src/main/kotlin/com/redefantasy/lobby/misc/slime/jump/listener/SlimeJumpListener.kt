@@ -26,7 +26,12 @@ class SlimeJumpListener : Listener {
 
             val vector = slimeJump.toVector
 
-            player.velocity.add(vector)
+            val distance = player.velocity.distanceSquared(vector)
+
+            println(distance)
+
+            player.velocity.y = 1.0
+            player.velocity.multiply(distance)
         }
     }
 
