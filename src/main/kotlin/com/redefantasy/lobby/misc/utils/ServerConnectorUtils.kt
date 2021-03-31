@@ -71,20 +71,19 @@ object ServerConnectorUtils {
             )
         } else {
             if (currentPosition === null) {
-                val position =
-                    LobbyProvider.Cache.Redis.QUEUE.provide().create(user, bukkitSpawnApplication)
+                val position = LobbyProvider.Cache.Redis.QUEUE.provide().create(user, bukkitSpawnApplication)
 
                 player.sendMessage(
                     ComponentBuilder()
                         .append("\n")
-                        .append("§3 * §fVocê entrou na posição §3#${position + 1} §fda fila do ${server.displayName}.")
+                        .append("§b * §fVocê entrou na posição §b#${position} §fda fila do ${server.displayName}.")
                         .append("\n")
-                        .append("§3 * §fCaso queira sair clique ")
+                        .append("§b * §fCaso queira sair clique ")
                         .append("§c§lAQUI")
                         .event(
                             ClickEvent(
                                 ClickEvent.Action.RUN_COMMAND,
-                                "/queue_3#@5 leave ${server.name.value}"
+                                "/queue_3#@5 leave ${bukkitSpawnApplication.name}"
                             )
                         )
                         .append("§f.")
@@ -95,9 +94,9 @@ object ServerConnectorUtils {
                 player.sendMessage(
                     ComponentBuilder()
                         .append("\n")
-                        .append("§3 * §fVocê está na posição §3#${currentPosition + 1} §fda fila do ${server.displayName}.")
+                        .append("§b * §fVocê está na posição §b#${currentPosition + 1} §fda fila do ${server.displayName}.")
                         .append("\n")
-                        .append("§3 * §fCaso queira sair clique ")
+                        .append("§b * §fCaso queira sair clique ")
                         .append("§c§lAQUI")
                         .event(
                             ClickEvent(

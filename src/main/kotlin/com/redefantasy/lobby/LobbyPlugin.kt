@@ -10,6 +10,7 @@ import com.redefantasy.core.shared.misc.preferences.LOBBY_COMMAND_PROTECTION
 import com.redefantasy.core.shared.misc.preferences.PreferenceRegistry
 import com.redefantasy.core.shared.scheduler.AsyncScheduler
 import com.redefantasy.core.shared.servers.data.Server
+import com.redefantasy.core.spigot.command.registry.CommandRegistry
 import com.redefantasy.core.spigot.misc.frame.data.Frame
 import com.redefantasy.core.spigot.misc.hologram.Hologram
 import com.redefantasy.core.spigot.misc.plugin.CustomPlugin
@@ -23,6 +24,7 @@ import com.redefantasy.lobby.misc.button.player.visibility.button.PlayerVisibili
 import com.redefantasy.lobby.misc.button.preferences.button.PreferencesHotBarButton
 import com.redefantasy.lobby.misc.button.server.selector.button.ServerSelectorHotBarButton
 import com.redefantasy.lobby.misc.queue.QueueRunnable
+import com.redefantasy.lobby.misc.queue.command.QueueCommand
 import net.md_5.bungee.api.chat.ClickEvent
 import net.md_5.bungee.api.chat.ComponentBuilder
 import net.minecraft.server.v1_8_R3.EntityGiantZombie
@@ -70,7 +72,17 @@ class LobbyPlugin : CustomPlugin(false) {
 
         val pluginManager = Bukkit.getServer().pluginManager
 
+        /**
+         * Spigot listeners
+         */
+
         pluginManager.registerEvents(GenericListener(), this)
+
+        /**
+         * Commands
+         */
+
+        CommandRegistry.registerCommand(QueueCommand())
 
         /**
          * Preferences
