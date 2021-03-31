@@ -323,15 +323,15 @@ class LobbyPlugin : CustomPlugin(false) {
 
         SlimeJumpManager.register(
             SlimeJump(
-                20.0,
+                20.5,
                 77.0,
-                -7.0,
+                -7.5,
                 Vector(0.4, 1.0, -2.237)
             ),
             SlimeJump(
-                -19.0,
+                -19.5,
                 77.0,
-                -7.0,
+                -7.5,
                 Vector(-0.4, 1.0, -2.237)
             )
         )
