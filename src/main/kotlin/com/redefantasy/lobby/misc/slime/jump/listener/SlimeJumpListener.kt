@@ -27,17 +27,7 @@ class SlimeJumpListener : Listener {
 
             val vector = slimeJump.toVector
 
-            val distance = player.velocity.distance(vector).toInt()
-
-            println(distance)
-
-            val target = toLocation.toVector().subtract(player.location.toVector()).normalize()
-
-            target.multiply(vector)
-//            target.multiply(distance)
-//            target.setY(1)
-
-            player.velocity = target
+            player.velocity = vector
 
             player.playSound(player.location, Sound.FIREWORK_LAUNCH, 1f, 2f)
         }

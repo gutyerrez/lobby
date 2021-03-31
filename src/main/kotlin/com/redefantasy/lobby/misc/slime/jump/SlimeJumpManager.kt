@@ -5,6 +5,7 @@ import com.redefantasy.lobby.misc.slime.jump.data.SlimeJump
 import org.bukkit.Bukkit
 import org.bukkit.Effect
 import org.bukkit.Location
+import org.bukkit.Material
 
 
 /**
@@ -37,6 +38,16 @@ object SlimeJumpManager {
                 }
             }, 0L, 10L
         )
+
+        /**
+         * Setup block type
+         */
+
+        SLIME_JUMPS.forEach {
+            val location = it.getLocation()
+
+            location.block.type = Material.SLIME_BLOCK
+        }
     }
 
     fun register(vararg slimeJumps: SlimeJump) {
