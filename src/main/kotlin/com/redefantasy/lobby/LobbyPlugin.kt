@@ -257,10 +257,9 @@ class LobbyPlugin : CustomPlugin(false) {
         /**
          * Frames
          */
-        val front = Frame(URL("https://i.imgur.com/4r9csnG.png"))
-        val back = Frame(URL("https://i.imgur.com/4r9csnG.png"))
+        val frame = Frame(URL("https://i.imgur.com/4r9csnG.png"))
 
-        front.place(
+        frame.place(
             Location(
                 Bukkit.getWorld("world"),
                 -4.0,
@@ -270,12 +269,12 @@ class LobbyPlugin : CustomPlugin(false) {
             BlockFace.SOUTH
         )
 
-        back.place(
+        frame.place(
             Location(
                 Bukkit.getWorld("world"),
                 -4.0,
                 89.0,
-                -39.0
+                -41.0
             ),
             BlockFace.NORTH
         )
