@@ -6,7 +6,6 @@ import org.bukkit.Bukkit
 import org.bukkit.Effect
 import org.bukkit.Location
 import org.bukkit.Material
-import org.bukkit.craftbukkit.v1_8_R3.CraftWorld
 
 
 /**
@@ -52,14 +51,9 @@ object SlimeJumpManager {
 
     fun setup() {
         SLIME_JUMPS.forEach {
-            val location = it.getLocation()
-            val world = location.world as CraftWorld
+            val location = it.getLocation().clone().subtract(0.0, 0.1, 0.0)
 
-            val block = world.getBlockAt(
-                it.x.toInt(),
-                it.y.toInt(),
-                it.z.toInt()
-            )
+            val block = location.block
 
             block.type = Material.SLIME_BLOCK
         }
