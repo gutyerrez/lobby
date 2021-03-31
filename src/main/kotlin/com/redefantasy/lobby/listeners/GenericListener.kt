@@ -214,7 +214,7 @@ class GenericListener : Listener {
         println("Interagiu")
 
         if (entity is ItemFrame) {
-            entity.rotation = Rotation.NONE
+            entity.rotation = Rotation.FLIPPED
 
             println("Frame")
         }
