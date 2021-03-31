@@ -215,6 +215,9 @@ class GenericListener : Listener {
 
         println("Verificar se tem a metadata")
 
+        println("Instance: ${entity is ItemFrame}")
+        println("Metadata: ${entity.hasMetadata("ITEM_FRAME_ID")}")
+
         if (entity is ItemFrame && entity.hasMetadata("ITEM_FRAME_ID")) {
             println("opa")
 
