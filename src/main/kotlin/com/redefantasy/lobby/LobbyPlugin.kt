@@ -326,7 +326,7 @@ class LobbyPlugin : CustomPlugin(false) {
                 20.0,
                 77.0,
                 -7.0,
-                Vector(4.5, 1.0, 0.0)
+                Vector(0.3, 1.0, 2.0)
             )
         )
 
