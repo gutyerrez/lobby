@@ -25,6 +25,9 @@ import com.redefantasy.lobby.misc.button.preferences.button.PreferencesHotBarBut
 import com.redefantasy.lobby.misc.button.server.selector.button.ServerSelectorHotBarButton
 import com.redefantasy.lobby.misc.queue.QueueRunnable
 import com.redefantasy.lobby.misc.queue.command.QueueCommand
+import com.redefantasy.lobby.misc.slime.jump.SlimeJumpManager
+import com.redefantasy.lobby.misc.slime.jump.data.SlimeJump
+import com.redefantasy.lobby.misc.slime.jump.listener.SlimeJumpListener
 import net.md_5.bungee.api.chat.ClickEvent
 import net.md_5.bungee.api.chat.ComponentBuilder
 import net.minecraft.server.v1_8_R3.EntityGiantZombie
@@ -38,6 +41,7 @@ import org.bukkit.entity.Giant
 import org.bukkit.event.entity.CreatureSpawnEvent
 import org.bukkit.potion.PotionEffect
 import org.bukkit.potion.PotionEffectType
+import org.bukkit.util.Vector
 import java.net.URL
 import java.util.concurrent.TimeUnit
 import java.util.function.Consumer
@@ -77,6 +81,7 @@ class LobbyPlugin : CustomPlugin(false) {
          */
 
         pluginManager.registerEvents(GenericListener(), this)
+        pluginManager.registerEvents(SlimeJumpListener(), this)
 
         /**
          * Commands
@@ -310,6 +315,19 @@ class LobbyPlugin : CustomPlugin(false) {
                 -39.0
             ),
             BlockFace.NORTH
+        )
+
+        /**
+         * Slime Jumps
+         */
+
+        SlimeJumpManager.register(
+            SlimeJump(
+                20.0,
+                77.0,
+                -7.0,
+                Vector(24.5, 78.0, -27.5)
+            )
         )
 
         LobbyConstants.SERVERS_WORLD_CUBOIDS.values.forEach {
