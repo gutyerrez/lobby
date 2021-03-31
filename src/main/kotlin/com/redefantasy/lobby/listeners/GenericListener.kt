@@ -17,6 +17,7 @@ import org.bukkit.Bukkit
 import org.bukkit.Location
 import org.bukkit.Material
 import org.bukkit.entity.EntityType
+import org.bukkit.entity.ItemFrame
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
@@ -30,7 +31,7 @@ import org.bukkit.event.weather.WeatherChangeEvent
 /**
  * @author Gutyerrez
  */
-class GeneralListener : Listener {
+class GenericListener : Listener {
 
     @EventHandler
     fun on(
@@ -173,7 +174,9 @@ class GeneralListener : Listener {
 
         event.isCancelled = true
 
-        if (clickedBlock !== null && clickedBlock.type === Material.BARRIER) return LobbyConstants.SERVER_CUBOID.apply(event)
+        if (clickedBlock !== null && clickedBlock.type === Material.BARRIER) return LobbyConstants.SERVER_CUBOID.apply(
+            event
+        )
 
         if (item !== null && item.type !== Material.AIR) {
             val hotBarButton = HotBarManager.getHotBarButton(item)
@@ -201,6 +204,21 @@ class GeneralListener : Listener {
 
     @EventHandler
     fun on(
+        event: PlayerInteractAtEntityEvent
+    ) {
+        val entity = event.rightClicked
+
+        event.isCancelled = true
+
+        println("Interagiu")
+
+        if (entity is ItemFrame) {
+            println("Frame")
+        }
+    }
+
+    @EventHandler
+    fun on(
         event: BlockBreakEvent
     ) {
         event.isCancelled = true
@@ -216,13 +234,6 @@ class GeneralListener : Listener {
     @EventHandler
     fun on(
         event: BlockPhysicsEvent
-    ) {
-        event.isCancelled = true
-    }
-
-    @EventHandler
-    fun on(
-        event: PlayerInteractAtEntityEvent
     ) {
         event.isCancelled = true
     }

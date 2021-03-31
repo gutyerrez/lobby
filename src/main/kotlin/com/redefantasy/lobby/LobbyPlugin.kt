@@ -15,7 +15,7 @@ import com.redefantasy.core.spigot.misc.hologram.Hologram
 import com.redefantasy.core.spigot.misc.plugin.CustomPlugin
 import com.redefantasy.core.spigot.misc.utils.ItemBuilder
 import com.redefantasy.lobby.echo.packets.listeners.UserGroupsUpdatedEchoPacketListener
-import com.redefantasy.lobby.listeners.GeneralListener
+import com.redefantasy.lobby.listeners.GenericListener
 import com.redefantasy.lobby.misc.button.HotBarManager
 import com.redefantasy.lobby.misc.button.lobby.selector.button.LobbySelectorHotBarButton
 import com.redefantasy.lobby.misc.button.player.visibility.button.PlayerVisibilityOffHotBarButton
@@ -67,7 +67,7 @@ class LobbyPlugin : CustomPlugin(false) {
 
         val pluginManager = Bukkit.getServer().pluginManager
 
-        pluginManager.registerEvents(GeneralListener(), this)
+        pluginManager.registerEvents(GenericListener(), this)
 
         /**
          * Preferences
