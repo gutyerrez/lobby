@@ -214,9 +214,15 @@ class GenericListener : Listener {
         event.isCancelled = true
 
         if (entity is ItemFrame && entity.hasMetadata("ITEM_FRAME_ID")) {
+            println("opa")
+
             val id = UUID.fromString(entity.getMetadata("ITEM_FRAME_ID")[0].asString())
 
+            println(id)
+
             val frame = FrameManager.INTERACTABLE_FRAMES[id]
+
+            println("Frame: $frame")
 
             frame?.interactConsumer?.accept(player)
         }
