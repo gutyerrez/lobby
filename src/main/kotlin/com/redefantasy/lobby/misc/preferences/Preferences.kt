@@ -21,7 +21,7 @@ fun Preference.post(user: User) = when (this.name) {
         Bukkit.getOnlinePlayers().forEach { _player ->
             val _user = CoreProvider.Cache.Local.USERS.provide().fetchById(_player.uniqueId)!!
 
-            if (!user.hasGroup(Group.MANAGER) && _user.getPreferences().find { it == PLAYER_VISIBILITY }?.preferenceState === PreferenceState.DISABLED) {
+            if (!user.hasGroup(Group.HELPER) && _user.getPreferences().find { it == PLAYER_VISIBILITY }?.preferenceState === PreferenceState.DISABLED) {
                 _player.hidePlayer(player)
             } else if (_user.getPreferences().find { it == PLAYER_VISIBILITY }?.preferenceState === PreferenceState.ENABLED) {
                 _player.showPlayer(player)
@@ -29,7 +29,7 @@ fun Preference.post(user: User) = when (this.name) {
 
             if (
                 user.getPreferences().find { it == PLAYER_VISIBILITY }?.preferenceState === PreferenceState.DISABLED && !_user.hasGroup(
-                    Group.MANAGER
+                    Group.HELPER
                 )
             ) {
                 player.hidePlayer(_player)
@@ -47,5 +47,5 @@ fun Preference.post(user: User) = when (this.name) {
             player
         )
     }
-    else -> TODO("not implemented-yet")
+    else -> TODO("not yet implemented")
 }
