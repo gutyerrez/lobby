@@ -10,6 +10,9 @@ import com.redefantasy.core.shared.misc.preferences.LOBBY_COMMAND_PROTECTION
 import com.redefantasy.core.shared.misc.preferences.PreferenceRegistry
 import com.redefantasy.core.shared.scheduler.AsyncScheduler
 import com.redefantasy.core.shared.servers.data.Server
+import com.redefantasy.core.shared.users.data.User
+import com.redefantasy.core.spigot.command.CustomCommand
+import com.redefantasy.core.spigot.command.registry.CommandRegistry
 import com.redefantasy.core.spigot.misc.frame.data.Frame
 import com.redefantasy.core.spigot.misc.hologram.Hologram
 import com.redefantasy.core.spigot.misc.plugin.CustomPlugin
@@ -28,6 +31,7 @@ import org.bukkit.Bukkit
 import org.bukkit.Location
 import org.bukkit.Material
 import org.bukkit.block.BlockFace
+import org.bukkit.command.CommandSender
 import org.bukkit.craftbukkit.v1_8_R3.CraftWorld
 import org.bukkit.enchantments.Enchantment
 import org.bukkit.entity.Giant
@@ -259,14 +263,27 @@ class LobbyPlugin : CustomPlugin(false) {
          */
         val frame = Frame(URL("https://i.imgur.com/4r9csnG.png"))
 
-        frame.place(
-            Location(
-                Bukkit.getWorld("world"),
-                -4.0,
-                84.0,
-                -39.0
-            ),
-            BlockFace.SOUTH
+        CommandRegistry.registerCommand(
+            object : CustomCommand("frame") {
+
+                override fun onCommand(
+                    commandSender: CommandSender,
+                    user: User?,
+                    args: Array<out String>
+                ): Boolean? {
+                    frame.place(
+                        Location(
+                            Bukkit.getWorld("world"),
+                            -4.0,
+                            84.0,
+                            -39.0
+                        ),
+                        BlockFace.SOUTH
+                    )
+                    return true
+                }
+
+            }
         )
 
         LobbyConstants.SERVERS_WORLD_CUBOIDS.values.forEach {
