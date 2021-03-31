@@ -24,7 +24,7 @@ object SlimeJumpManager {
                         .world
                         .spigot()
                         .playEffect(
-                            it.getLocation().clone().add(0.5, 0.0, -0.0),
+                            it.getLocation(),
                             Effect.HAPPY_VILLAGER,
                             1,
                             0,
@@ -51,7 +51,7 @@ object SlimeJumpManager {
 
     fun setup() {
         SLIME_JUMPS.forEach {
-            val location = it.getLocation().clone().subtract(0.0, 1.0, 1.0)
+            val location = it.getLocation()
             val block = location.block
 
             println("Tipo: ${block.type}")

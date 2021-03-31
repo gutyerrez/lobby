@@ -329,7 +329,7 @@ class LobbyPlugin : CustomPlugin(false) {
                 Vector(0.4, 1.0, -2.237)
             ),
             SlimeJump(
-                -20.0,
+                -19.0,
                 77.0,
                 -7.0,
                 Vector(-0.4, 1.0, -2.237)
