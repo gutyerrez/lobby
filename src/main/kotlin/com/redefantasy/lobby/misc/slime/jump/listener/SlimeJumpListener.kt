@@ -25,9 +25,7 @@ class SlimeJumpListener : Listener {
         if (slimeJump !== null) {
             println("Não é nullo")
 
-            val vector = slimeJump.toVector.subtract(
-                toLocation.toVector()
-            ).normalize()
+            val vector = slimeJump.toVector
 
             player.velocity = vector
 
