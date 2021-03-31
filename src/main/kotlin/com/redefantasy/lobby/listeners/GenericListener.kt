@@ -28,7 +28,6 @@ import org.bukkit.event.inventory.ClickType
 import org.bukkit.event.inventory.InventoryClickEvent
 import org.bukkit.event.player.*
 import org.bukkit.event.weather.WeatherChangeEvent
-import java.util.*
 
 /**
  * @author Gutyerrez
@@ -213,19 +212,8 @@ class GenericListener : Listener {
 
         event.isCancelled = true
 
-        println("Verificar se tem a metadata")
-
-        println("Instance: ${entity is ItemFrame}")
-        println("Metadata: ${entity.hasMetadata("ITEM_FRAME_ID")}")
-
-        if (entity is ItemFrame && entity.hasMetadata("ITEM_FRAME_ID")) {
-            println("opa")
-
-            val id = UUID.fromString(entity.getMetadata("ITEM_FRAME_ID")[0].asString())
-
-            println(id)
-
-            val frame = FrameManager.INTERACTABLE_FRAMES[id]
+        if (entity is ItemFrame) {
+            val frame = FrameManager.INTERACTABLE_FRAMES[entity.uniqueId]
 
             println("Frame: $frame")
 
