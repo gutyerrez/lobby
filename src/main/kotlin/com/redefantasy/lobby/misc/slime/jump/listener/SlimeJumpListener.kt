@@ -1,6 +1,7 @@
 package com.redefantasy.lobby.misc.slime.jump.listener
 
 import com.redefantasy.lobby.misc.slime.jump.SlimeJumpManager
+import org.bukkit.Sound
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.player.PlayerMoveEvent
@@ -26,12 +27,18 @@ class SlimeJumpListener : Listener {
 
             val vector = slimeJump.toVector
 
-            val distance = player.velocity.distanceSquared(vector)
+            val distance = player.velocity.distance(vector)
 
             println(distance)
 
-            player.velocity.y = 1.0
-            player.velocity.multiply(distance)
+            val target = toLocation.toVector().subtract(player.location.toVector()).normalize()
+
+            target.y = 1.0
+            target.multiply(distance)
+
+            player.velocity = target
+
+            player.playSound(player.location, Sound.FIREWORK_LAUNCH, 1f, 2f)
         }
     }
 
