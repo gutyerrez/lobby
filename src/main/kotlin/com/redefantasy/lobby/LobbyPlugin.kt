@@ -326,9 +326,11 @@ class LobbyPlugin : CustomPlugin(false) {
                 20.0,
                 77.0,
                 -7.0,
-                Vector(0.3, 1.0, 2.0)
+                Vector(0.6, 1.0, -3.0)
             )
         )
+
+        SlimeJumpManager.setup()
 
         LobbyConstants.SERVERS_WORLD_CUBOIDS.values.forEach {
             it.getBlocks { block ->

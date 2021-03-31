@@ -38,19 +38,6 @@ object SlimeJumpManager {
                 }
             }, 0L, 10L
         )
-
-        /**
-         * Setup block type
-         */
-
-        SLIME_JUMPS.forEach {
-            val location = it.getLocation().clone().add(0.0, -1.0, 0.0)
-            val block = location.block
-
-            println("Tipo: ${block.type}")
-
-            block.type = Material.SLIME_BLOCK
-        }
     }
 
     fun register(vararg slimeJumps: SlimeJump) {
@@ -61,5 +48,16 @@ object SlimeJumpManager {
         .filter { it.wentOver(location) }
         .findFirst()
         .orElse(null)
+
+    fun setup() {
+        SLIME_JUMPS.forEach {
+            val location = it.getLocation().clone().add(0.0, -1.0, 0.0)
+            val block = location.block
+
+            println("Tipo: ${block.type}")
+
+            block.type = Material.SLIME_BLOCK
+        }
+    }
 
 }
