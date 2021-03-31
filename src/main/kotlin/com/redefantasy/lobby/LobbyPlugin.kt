@@ -23,6 +23,8 @@ import com.redefantasy.lobby.misc.button.player.visibility.button.PlayerVisibili
 import com.redefantasy.lobby.misc.button.preferences.button.PreferencesHotBarButton
 import com.redefantasy.lobby.misc.button.server.selector.button.ServerSelectorHotBarButton
 import com.redefantasy.lobby.misc.queue.QueueRunnable
+import net.md_5.bungee.api.chat.ClickEvent
+import net.md_5.bungee.api.chat.ComponentBuilder
 import net.minecraft.server.v1_8_R3.EntityGiantZombie
 import org.bukkit.Bukkit
 import org.bukkit.Location
@@ -36,6 +38,7 @@ import org.bukkit.potion.PotionEffect
 import org.bukkit.potion.PotionEffectType
 import java.net.URL
 import java.util.concurrent.TimeUnit
+import java.util.function.Consumer
 
 /**
  * @author Gutyerrez
@@ -258,6 +261,24 @@ class LobbyPlugin : CustomPlugin(false) {
          * Frames
          */
         val frame = Frame(URL("https://i.imgur.com/4r9csnG.png"))
+
+        frame.interactConsumer = Consumer {
+            it.sendMessage(
+                ComponentBuilder()
+                    .append("\n")
+                    .append("§e Clique ")
+                    .append("§e§lAQUI")
+                    .event(
+                        ClickEvent(
+                            ClickEvent.Action.OPEN_URL,
+                            "https://loja.redefantasy.com/"
+                        )
+                    )
+                    .append("§e para adquirir seu plano §6VIP§e!")
+                    .append("\n")
+                    .create()
+            )
+        }
 
         frame.place(
             Location(

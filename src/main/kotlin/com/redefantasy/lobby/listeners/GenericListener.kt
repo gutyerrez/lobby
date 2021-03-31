@@ -5,6 +5,7 @@ import com.redefantasy.core.shared.groups.Group
 import com.redefantasy.core.shared.misc.preferences.FLY_IN_LOBBY
 import com.redefantasy.core.shared.misc.preferences.PLAYER_VISIBILITY
 import com.redefantasy.core.shared.misc.preferences.PreferenceState
+import com.redefantasy.core.spigot.misc.frame.FrameManager
 import com.redefantasy.core.spigot.misc.utils.Title
 import com.redefantasy.lobby.LobbyConstants
 import com.redefantasy.lobby.LobbyProvider
@@ -27,6 +28,7 @@ import org.bukkit.event.inventory.ClickType
 import org.bukkit.event.inventory.InventoryClickEvent
 import org.bukkit.event.player.*
 import org.bukkit.event.weather.WeatherChangeEvent
+import java.util.*
 
 /**
  * @author Gutyerrez
@@ -206,14 +208,17 @@ class GenericListener : Listener {
     fun on(
         event: PlayerInteractEntityEvent
     ) {
+        val player = event.player
         val entity = event.rightClicked
 
         event.isCancelled = true
 
-        println("Interagiu")
+        if (entity is ItemFrame && entity.hasMetadata("ITEM_FRAME_ID")) {
+            val id = UUID.fromString(entity.getMetadata("ITEM_FRAME_ID")[0].asString())
 
-        if (entity is ItemFrame) {
-            println("Frame")
+            val frame = FrameManager.INTERACTABLE_FRAMES[id]
+
+            frame?.interactConsumer?.accept(player)
         }
     }
 
