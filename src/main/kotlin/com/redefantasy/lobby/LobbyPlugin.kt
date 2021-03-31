@@ -10,9 +10,6 @@ import com.redefantasy.core.shared.misc.preferences.LOBBY_COMMAND_PROTECTION
 import com.redefantasy.core.shared.misc.preferences.PreferenceRegistry
 import com.redefantasy.core.shared.scheduler.AsyncScheduler
 import com.redefantasy.core.shared.servers.data.Server
-import com.redefantasy.core.shared.users.data.User
-import com.redefantasy.core.spigot.command.CustomCommand
-import com.redefantasy.core.spigot.command.registry.CommandRegistry
 import com.redefantasy.core.spigot.misc.frame.data.Frame
 import com.redefantasy.core.spigot.misc.hologram.Hologram
 import com.redefantasy.core.spigot.misc.plugin.CustomPlugin
@@ -31,7 +28,6 @@ import org.bukkit.Bukkit
 import org.bukkit.Location
 import org.bukkit.Material
 import org.bukkit.block.BlockFace
-import org.bukkit.command.CommandSender
 import org.bukkit.craftbukkit.v1_8_R3.CraftWorld
 import org.bukkit.enchantments.Enchantment
 import org.bukkit.entity.Giant
@@ -261,34 +257,27 @@ class LobbyPlugin : CustomPlugin(false) {
         /**
          * Frames
          */
-        val frame = Frame(URL("https://i.imgur.com/4r9csnG.png"))
+        val front = Frame(URL("https://i.imgur.com/4r9csnG.png"))
+        val back = Frame(URL("https://i.imgur.com/4r9csnG.png"))
 
-        CommandRegistry.registerCommand(
-            object : CustomCommand("frame") {
+        front.place(
+            Location(
+                Bukkit.getWorld("world"),
+                -4.0,
+                89.0,
+                -39.0
+            ),
+            BlockFace.SOUTH
+        )
 
-                override fun onCommand(
-                    commandSender: CommandSender,
-                    user: User?,
-                    args: Array<out String>
-                ): Boolean? {
-                    val x = args[0].toDouble()
-                    val y = args[1].toDouble()
-                    val z = args[2].toDouble()
-
-                    frame.place(
-                        Location(
-                            Bukkit.getWorld("world"),
-                            x, y, z
-//                            -4.0,
-//                            89.0,
-//                            -39.0
-                        ),
-                        BlockFace.SOUTH
-                    )
-                    return true
-                }
-
-            }
+        back.place(
+            Location(
+                Bukkit.getWorld("world"),
+                4.0,
+                89.0,
+                -41.0
+            ),
+            BlockFace.NORTH
         )
 
         LobbyConstants.SERVERS_WORLD_CUBOIDS.values.forEach {
