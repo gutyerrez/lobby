@@ -51,7 +51,7 @@ object SlimeJumpManager {
 
     fun setup() {
         SLIME_JUMPS.forEach {
-            val location = it.getLocation().clone().add(0.0, -1.0, 0.0)
+            val location = it.getLocation()
             val block = location.block
 
             println("Tipo: ${block.type}")
