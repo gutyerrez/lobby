@@ -24,7 +24,7 @@ object SlimeJumpManager {
                         .world
                         .spigot()
                         .playEffect(
-                            it.getLocation(),
+                            it.getLocation().clone().subtract(0.0, 0.0, 1.0),
                             Effect.HAPPY_VILLAGER,
                             1,
                             0,
