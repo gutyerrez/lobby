@@ -18,13 +18,9 @@ class SlimeJumpListener : Listener {
         val player = event.player
         val toLocation = event.to
 
-        println("opa")
-
         val slimeJump = SlimeJumpManager.fetchByLocation(toLocation)
 
         if (slimeJump !== null) {
-            println("Não é nullo")
-
             val vector = slimeJump.toVector
 
             player.velocity = vector
