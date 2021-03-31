@@ -16,7 +16,10 @@ class SlimeJumpListener : Listener {
         event: PlayerMoveEvent
     ) {
         val player = event.player
+        val fromLocation = event.from
         val toLocation = event.to
+
+        if (toLocation.x == fromLocation.x && toLocation.y == fromLocation.y && toLocation.z == fromLocation.z) return
 
         val slimeJump = SlimeJumpManager.fetchByLocation(toLocation)
 
