@@ -26,7 +26,7 @@ class SlimeJumpListener : Listener {
 
             val vector = slimeJump.toVector
 
-            player.location.direction = vector
+            player.location.add(vector)
         }
     }
 
