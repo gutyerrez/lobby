@@ -26,7 +26,7 @@ class SlimeJumpListener : Listener {
 
             val vector = slimeJump.toVector
 
-            player.velocity = vector
+            player.velocity.add(vector)
         }
     }
 
