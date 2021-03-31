@@ -16,6 +16,7 @@ import net.md_5.bungee.api.chat.ComponentBuilder
 import org.bukkit.Bukkit
 import org.bukkit.Location
 import org.bukkit.Material
+import org.bukkit.Rotation
 import org.bukkit.entity.EntityType
 import org.bukkit.entity.ItemFrame
 import org.bukkit.entity.Player
@@ -213,6 +214,8 @@ class GenericListener : Listener {
         println("Interagiu")
 
         if (entity is ItemFrame) {
+            entity.rotation = Rotation.NONE
+
             println("Frame")
         }
     }
