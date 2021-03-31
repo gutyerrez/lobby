@@ -271,12 +271,17 @@ class LobbyPlugin : CustomPlugin(false) {
                     user: User?,
                     args: Array<out String>
                 ): Boolean? {
+                    val x = args[0].toDouble()
+                    val y = args[1].toDouble()
+                    val z = args[2].toDouble()
+
                     frame.place(
                         Location(
                             Bukkit.getWorld("world"),
-                            -4.0,
-                            89.0,
-                            -37.0
+                            x, y, z
+//                            -4.0,
+//                            89.0,
+//                            -39.0
                         ),
                         BlockFace.SOUTH
                     )
