@@ -16,7 +16,8 @@ class QueueCommand : CustomCommand("queue_3#@5") {
     override fun getCommandRestriction() = CommandRestriction.GAME
 
     override fun getArguments() = listOf(
-        Argument("leave")
+        Argument("leave"),
+        Argument("application")
     )
 
     override fun onCommand(
