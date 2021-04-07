@@ -202,6 +202,18 @@ class PreferencesInventory(private val player: Player) : CustomInventory(
                     )
                 ).build()
             }
+            "premium-account-preference" -> {
+                ItemBuilder(
+                    Material.DIAMOND
+                ).name(
+                    "${this.getStateColor()}Autênticação automática"
+                ).lore(
+                    arrayOf(
+                        "§7Definir sua conta",
+                        "§7 como original"
+                    )
+                ).build()
+            }
             else -> null
         }
 
