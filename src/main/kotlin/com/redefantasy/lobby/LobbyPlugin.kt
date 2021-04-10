@@ -14,6 +14,7 @@ import com.redefantasy.core.spigot.command.registry.CommandRegistry
 import com.redefantasy.core.spigot.misc.frame.data.Frame
 import com.redefantasy.core.spigot.misc.hologram.Hologram
 import com.redefantasy.core.spigot.misc.plugin.CustomPlugin
+import com.redefantasy.core.spigot.misc.skin.command.SkinCommand
 import com.redefantasy.core.spigot.misc.utils.ItemBuilder
 import com.redefantasy.lobby.echo.packets.listeners.UserGroupsUpdatedEchoPacketListener
 import com.redefantasy.lobby.listeners.GenericListener
@@ -88,6 +89,7 @@ class LobbyPlugin : CustomPlugin(false) {
          */
 
         CommandRegistry.registerCommand(QueueCommand())
+        CommandRegistry.registerCommand(SkinCommand())
 
         /**
          * Preferences
