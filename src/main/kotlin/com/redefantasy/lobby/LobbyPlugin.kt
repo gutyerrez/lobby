@@ -37,7 +37,6 @@ import org.bukkit.Location
 import org.bukkit.Material
 import org.bukkit.block.BlockFace
 import org.bukkit.craftbukkit.v1_8_R3.CraftWorld
-import org.bukkit.enchantments.Enchantment
 import org.bukkit.entity.Giant
 import org.bukkit.event.entity.CreatureSpawnEvent
 import org.bukkit.potion.PotionEffect
@@ -195,7 +194,7 @@ class LobbyPlugin : CustomPlugin(false) {
 
         CoreProvider.Cache.Local.SERVERS.provide().fetchAll().forEach {
             when (it.name.value) {
-                "FACTIONS_PHOENIX" -> {
+                "FACTIONS_MEDIEVAL" -> {
                     val npcLocation = Location(
                         Bukkit.getWorld("world"),
                         0.5,
@@ -223,8 +222,9 @@ class LobbyPlugin : CustomPlugin(false) {
                         true
                     )
                     npc.removeWhenFarAway = false
-                    npc.equipment.itemInHand = ItemBuilder(Material.BLAZE_POWDER)
-                        .enchant(Enchantment.DURABILITY, 1)
+                    npc.equipment.itemInHand = ItemBuilder(Material.CHAINMAIL_CHESTPLATE)
+//                        .enchant(Enchantment.DURABILITY, 1)
+                        .glowing(true)
                         .build()
                     npc.teleport(npcLocation.clone().add(1.9, -8.5, -3.5))
 
@@ -342,9 +342,7 @@ class LobbyPlugin : CustomPlugin(false) {
 
         LobbyConstants.SERVERS_WORLD_CUBOIDS.values.forEach {
             it.getBlocks { block ->
-                if (block.type === Material.AIR) {
-                    block.type = Material.BARRIER
-                }
+                block.type = Material.BARRIER
             }
         }
     }
