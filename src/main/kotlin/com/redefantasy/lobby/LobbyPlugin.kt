@@ -223,8 +223,7 @@ class LobbyPlugin : CustomPlugin(false) {
                     )
                     npc.removeWhenFarAway = false
                     npc.equipment.itemInHand = ItemBuilder(Material.CHAINMAIL_CHESTPLATE)
-//                        .enchant(Enchantment.DURABILITY, 1)
-                        .glowing(true)
+                        .enchant(Enchantment.DURABILITY, 1)
                         .build()
                     npc.teleport(npcLocation.clone().add(1.9, -8.5, -3.5))
 
