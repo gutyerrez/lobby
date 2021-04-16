@@ -13,7 +13,7 @@ object LobbyConstants {
 
     val SERVERS_WORLD_CUBOIDS = mapOf(
         Pair(
-            CoreProvider.Cache.Local.SERVERS.provide().fetchByName("FACTIONS_PHOENIX"),
+            CoreProvider.Cache.Local.SERVERS.provide().fetchByName("FACTIONS_MEDIEVAL"),
             WorldCuboid(
                 -2,
                 91,
@@ -29,8 +29,6 @@ object LobbyConstants {
         val player = it.player
         val clickedBlock = it.clickedBlock
 
-        println("a")
-
         val entry = SERVERS_WORLD_CUBOIDS.entries.stream().filter { entry ->
             entry.value.contains(
                 clickedBlock.x,
@@ -39,16 +37,10 @@ object LobbyConstants {
             )
         }.findFirst().orElse(null)
 
-        println("b")
-
         if (entry !== null) {
-            println("c")
-
             val server = entry.key
 
             if (server === null) return@Function
-
-            println("d")
 
             ServerConnectorUtils.connect(
                 player,
