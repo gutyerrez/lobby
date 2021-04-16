@@ -209,8 +209,7 @@ class PreferencesInventory(private val player: Player) : CustomInventory(
                     "${this.getStateColor()}Autênticação automática"
                 ).lore(
                     arrayOf(
-                        "§7Definir sua conta",
-                        "§7 como original"
+                        "§7Definir sua conta como original."
                     )
                 ).build()
             }
