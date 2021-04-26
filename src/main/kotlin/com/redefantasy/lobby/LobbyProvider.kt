@@ -1,6 +1,6 @@
 package com.redefantasy.lobby
 
-import com.redefantasy.core.shared.misc.servers.configuration.cache.local.ServersConfigurationLocalCache
+import com.redefantasy.core.shared.misc.server.configuration.cache.local.ServersConfigurationsLocalCache
 import com.redefantasy.core.shared.providers.cache.local.LocalCacheProvider
 import com.redefantasy.core.shared.providers.cache.redis.RedisCacheProvider
 import com.redefantasy.lobby.misc.queue.cache.redis.QueueRedisCache
@@ -28,7 +28,7 @@ object LobbyProvider {
             )
 
             val SERVER_CONFIGURATION = LocalCacheProvider(
-                ServersConfigurationLocalCache<ItemStack>()
+                ServersConfigurationsLocalCache<ItemStack>()
             )
 
         }
