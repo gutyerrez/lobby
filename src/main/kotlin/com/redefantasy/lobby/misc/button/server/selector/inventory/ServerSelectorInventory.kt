@@ -2,11 +2,9 @@ package com.redefantasy.lobby.misc.button.server.selector.inventory
 
 import com.redefantasy.core.shared.CoreProvider
 import com.redefantasy.core.shared.applications.ApplicationType
-import com.redefantasy.core.shared.servers.ServerType
 import com.redefantasy.core.spigot.inventory.CustomInventory
-import com.redefantasy.core.spigot.misc.utils.ItemBuilder
+import com.redefantasy.lobby.LobbyProvider
 import com.redefantasy.lobby.misc.utils.ServerConnectorUtils
-import org.bukkit.Material
 import org.bukkit.entity.Player
 
 /**
@@ -25,50 +23,29 @@ class ServerSelectorInventory() : CustomInventory(
 
     init {
         val servers = CoreProvider.Cache.Local.SERVERS.provide().fetchAll()
+
         val slots = this.SLOTS[if (servers.size >= this.SLOTS.size) this.SLOTS.lastIndex else servers.size - 1]
 
         servers.forEachIndexed { index, server ->
+            val serverConfiguration = LobbyProvider.Cache.Local.SERVER_CONFIGURATION.provide().fetchByServer(server) ?: return@forEachIndexed
+
             val slot = slots[index]
 
-            val bukkitSpawnApplication =
-                CoreProvider.Cache.Local.APPLICATIONS.provide().fetchByServerAndApplicationType(
-                    server,
-                    ApplicationType.SERVER_SPAWN
-                )
+	        CoreProvider.Cache.Local.APPLICATIONS.provide().fetchByServerAndApplicationType(
+                server,
+                ApplicationType.SERVER_SPAWN
+            ) ?: return@forEachIndexed
 
             this.setItem(
                 slot,
-                ItemBuilder(Material.TNT)
-                    .name("§b${server.displayName}")
-                    .lore(
-                        when (server.serverType) {
-                            ServerType.FACTIONS -> arrayOf(
-                                "",
-                                "§7  Convoque sua facção, construa sua base,  ",
-                                "§7  defenda-se de invasões adversárias",
-                                "§7  e realize suas próprias invasões.",
-                                "",
-                                "§aClique para jogar!"
-                            )
-                            ServerType.RANK_UP -> arrayOf(
-                                "",
-                                "§7  Convoque seu clã, minere, evolua,  ",
-                                "§7  e domine o universo Rank UP.",
-                                "",
-                                "§aClique para jogar!"
-                            )
-                        }
-                    )
-                    .build()
+                serverConfiguration.icon
             ) { it ->
-                if (bukkitSpawnApplication !== null) {
-                    val player = it.whoClicked as Player
+                val player = it.whoClicked as Player
 
-                    ServerConnectorUtils.connect(
-                        player,
-                        server
-                    )
-                }
+                ServerConnectorUtils.connect(
+                    player,
+                    server
+                )
             }
         }
     }

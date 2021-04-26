@@ -1,5 +1,6 @@
 package com.redefantasy.lobby
 
+import com.redefantasy.core.shared.CoreConstants
 import com.redefantasy.core.shared.CoreProvider
 import com.redefantasy.core.shared.applications.ApplicationType
 import com.redefantasy.core.shared.applications.status.ApplicationStatus
@@ -15,7 +16,6 @@ import com.redefantasy.core.spigot.misc.frame.data.Frame
 import com.redefantasy.core.spigot.misc.hologram.Hologram
 import com.redefantasy.core.spigot.misc.plugin.CustomPlugin
 import com.redefantasy.core.spigot.misc.skin.command.SkinCommand
-import com.redefantasy.core.spigot.misc.utils.ItemBuilder
 import com.redefantasy.lobby.echo.packets.listeners.UserGroupsUpdatedEchoPacketListener
 import com.redefantasy.lobby.listeners.GenericListener
 import com.redefantasy.lobby.misc.button.HotBarManager
@@ -37,7 +37,6 @@ import org.bukkit.Location
 import org.bukkit.Material
 import org.bukkit.block.BlockFace
 import org.bukkit.craftbukkit.v1_8_R3.CraftWorld
-import org.bukkit.enchantments.Enchantment
 import org.bukkit.entity.Giant
 import org.bukkit.event.entity.CreatureSpawnEvent
 import org.bukkit.potion.PotionEffect
@@ -194,55 +193,53 @@ class LobbyPlugin : CustomPlugin(false) {
          */
 
         CoreProvider.Cache.Local.SERVERS.provide().fetchAll().forEach {
-            when (it.name.value) {
-                "FACTIONS_MEDIEVAL" -> {
-                    val npcLocation = Location(
-                        Bukkit.getWorld("world"),
-                        0.5,
-                        91.5,
-                        -73.5
-                    )
+            val serverConfiguration = LobbyProvider.Cache.Local.SERVER_CONFIGURATION.provide().fetchByServer(it) ?: return@forEach
 
-                    val worldServer = (npcLocation.world as CraftWorld).handle
+            val npcLocation = Location(
+                Bukkit.getWorld("world"),
+                serverConfiguration.settings.npcLocation.x,
+                serverConfiguration.settings.npcLocation.y,
+                serverConfiguration.settings.npcLocation.z
+            )
 
-                    val customZombie = EntityGiantZombie(worldServer)
+            val worldServer = (npcLocation.world as CraftWorld).handle
 
-                    customZombie.setLocation(npcLocation.x, npcLocation.y, npcLocation.z, npcLocation.yaw, npcLocation.pitch)
-                    customZombie.setPositionRotation(npcLocation.x, npcLocation.y, npcLocation.z, npcLocation.yaw, npcLocation.pitch)
+            val customZombie = EntityGiantZombie(worldServer)
 
-                    worldServer.addEntity(customZombie, CreatureSpawnEvent.SpawnReason.CUSTOM)
+            customZombie.setLocation(npcLocation.x, npcLocation.y, npcLocation.z, npcLocation.yaw, npcLocation.pitch)
+            customZombie.setPositionRotation(npcLocation.x, npcLocation.y, npcLocation.z, npcLocation.yaw, npcLocation.pitch)
 
-                    val npc = customZombie.bukkitEntity as Giant
+            worldServer.addEntity(customZombie, CreatureSpawnEvent.SpawnReason.CUSTOM)
 
-                    npc.addPotionEffect(
-                        PotionEffect(
-                            PotionEffectType.INVISIBILITY,
-                            Int.MAX_VALUE,
-                            1
-                        ),
-                        true
-                    )
-                    npc.removeWhenFarAway = false
-                    npc.equipment.itemInHand = ItemBuilder(Material.CHAINMAIL_CHESTPLATE)
-                        .enchant(Enchantment.DURABILITY, 1)
-                        .build()
-                    npc.teleport(npcLocation.clone().add(1.9, -8.5, -3.5))
+            val npc = customZombie.bukkitEntity as Giant
 
-                    val hologram = Hologram(
-                        listOf(
-                            "§a${it.displayName}",
-                            "?",
-                            "§aClique para entrar!"
-                        ),
-                        Hologram.HologramPosition.DOWN
-                    )
-                    hologram.spawn(
-                        npcLocation.clone().add(0.0, 3.5, 0.0)
-                    )
+            npc.addPotionEffect(
+                PotionEffect(
+                    PotionEffectType.INVISIBILITY,
+                    Int.MAX_VALUE,
+                    1
+                ),
+                true
+            )
+            npc.removeWhenFarAway = false
+            npc.equipment.itemInHand = serverConfiguration.icon
 
-                    HOLOGRAMS[it] = hologram
-                }
-            }
+            npc.teleport(npcLocation.clone().add(1.9, -8.5, -3.5))
+
+            val hologram = Hologram(
+                listOf(
+                    "§a${it.displayName}",
+                    "?",
+                    "§aClique para entrar!"
+                ),
+                Hologram.HologramPosition.DOWN
+            )
+
+            hologram.spawn(
+                npcLocation.clone().add(0.0, 3.5, 0.0)
+            )
+
+            HOLOGRAMS[it] = hologram
         }
 
         /**
@@ -279,9 +276,14 @@ class LobbyPlugin : CustomPlugin(false) {
         /**
          * Frames
          */
+
         val frame = Frame(URL("https://i.imgur.com/YzXizib.png"))
 
         frame.interactConsumer = Consumer {
+            val user = CoreProvider.Cache.Local.USERS.provide().fetchById(it.uniqueId)!!
+
+            if (CoreConstants.COOLDOWNS.inCooldown(user, "frame-interact")) return@Consumer
+
             it.sendMessage(
                 ComponentBuilder()
                     .append("\n")
@@ -297,6 +299,8 @@ class LobbyPlugin : CustomPlugin(false) {
                     .append("\n")
                     .create()
             )
+
+            CoreConstants.COOLDOWNS.start(user, "frame-interact", 3)
         }
 
         frame.place(
