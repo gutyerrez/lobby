@@ -11,6 +11,7 @@ import com.redefantasy.core.shared.misc.preferences.LOBBY_COMMAND_PROTECTION
 import com.redefantasy.core.shared.misc.preferences.PreferenceRegistry
 import com.redefantasy.core.shared.scheduler.AsyncScheduler
 import com.redefantasy.core.shared.servers.data.Server
+import com.redefantasy.core.spigot.CoreSpigotProvider
 import com.redefantasy.core.spigot.command.registry.CommandRegistry
 import com.redefantasy.core.spigot.misc.frame.data.Frame
 import com.redefantasy.core.spigot.misc.hologram.Hologram
@@ -193,7 +194,7 @@ class LobbyPlugin : CustomPlugin(false) {
          */
 
         CoreProvider.Cache.Local.SERVERS.provide().fetchAll().forEach {
-            val serverConfiguration = LobbyProvider.Cache.Local.SERVER_CONFIGURATION.provide().fetchByServer(it) ?: return@forEach
+            val serverConfiguration = CoreSpigotProvider.Cache.Local.SERVER_CONFIGURATION.provide().fetchByServer(it) ?: return@forEach
 
             val npcLocation = Location(
                 Bukkit.getWorld("world"),
