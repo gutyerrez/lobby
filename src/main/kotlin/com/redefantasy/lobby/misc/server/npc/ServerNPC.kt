@@ -8,6 +8,7 @@ import com.redefantasy.lobby.misc.utils.ServerConnectorUtils
 import net.minecraft.server.v1_8_R3.EntityGiantZombie
 import org.bukkit.Bukkit
 import org.bukkit.Location
+import org.bukkit.Material
 import org.bukkit.craftbukkit.v1_8_R3.CraftWorld
 import org.bukkit.entity.Giant
 import org.bukkit.event.entity.CreatureSpawnEvent
@@ -96,6 +97,10 @@ fun Server.createWall() {
 			player,
 			this
 		)
+	}
+
+	worldCuboid.getBlocks {
+		it.type = Material.BARRIER
 	}
 }
 
