@@ -62,8 +62,8 @@ fun Server.spawnNPC(): Giant {
 
 	val npc = customZombie.bukkitEntity as Giant
 
-	npc.maxHealth = Double.MAX_VALUE
-	npc.health = Double.MAX_VALUE
+	npc.maxHealth = 2048.0
+	npc.health = 2048.0
 
 	npc.setMetadata(
 		LobbyConstants.NPC_METADATA,
@@ -122,7 +122,7 @@ fun Server.createWall() {
 fun Giant.update(
 	server: Server
 ) {
-	this.health = Double.MAX_VALUE
+	this.health = 2048.0
 
 	println(this.isDead)
 
