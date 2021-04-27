@@ -92,9 +92,7 @@ class GenericListener : Listener {
     ) {
         val entity = event.entity
 
-        if (entity !is Player || !entity.hasMetadata(LobbyConstants.NPC_METADATA)) {
-            return
-        }
+        if (entity !is Player) return
 
         event.isCancelled = true
 
