@@ -50,7 +50,7 @@ object HotBarManager {
         player.inventory.armorContents = null
 
         for (i in 0..8) {
-            player.inventory.setItem(i, ItemStack(Material.AIR))
+            player.inventory.setItem(i, ItemStack(Material.STONE))
         }
 
         this.BUTTONS.forEach { hotBarButton ->
