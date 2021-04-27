@@ -179,6 +179,11 @@ class GenericListener : Listener {
 
         event.isCancelled = true
 
+        println("-----PlayerInteract-----");
+        println("Action Type: " + event.action);
+        println("Holding: " + player.itemInHand.type);
+        println("Cancelled: " + event.isCancelled);
+
         if (clickedBlock !== null && clickedBlock.type === Material.BARRIER) {
             return LobbyConstants.SERVERS_CUBOIDS.entries.stream().filter {
                 it.key.contains(clickedBlock.location, true)

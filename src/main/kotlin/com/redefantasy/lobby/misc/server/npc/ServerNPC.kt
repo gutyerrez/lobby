@@ -124,8 +124,6 @@ fun Giant.update(
 ) {
 	this.health = 2048.0
 
-	println(this.isDead)
-
 	this.equipment.itemInHand = CoreSpigotProvider.Cache.Local.SERVER_CONFIGURATION.provide().fetchByServer(
 		server
 	)?.icon
