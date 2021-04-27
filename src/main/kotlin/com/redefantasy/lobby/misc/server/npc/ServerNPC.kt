@@ -22,9 +22,9 @@ import java.util.function.Consumer
  * @author Gutyerrez
  */
 fun Server.getNPCLocation(): Location {
-	val serverConfiguration = CoreSpigotProvider.Cache.Local.SERVER_CONFIGURATION.provide().fetchByServer(this) ?: throw NullPointerException(
-		"server configuration cannot be null"
-	)
+	val serverConfiguration = CoreSpigotProvider.Cache.Local.SERVER_CONFIGURATION.provide().fetchByServer(
+		this
+	) ?: throw NullPointerException("server configuration cannot be null")
 
 	return Location(
 		Bukkit.getWorld(
@@ -97,10 +97,10 @@ fun Server.createWall() {
 	) ?: throw NullPointerException("npc location cannot be null")
 
 	val worldCuboid = WorldCuboid(
-		serverConfiguration.settings.npcLocation.x.toInt() - 3,
+		serverConfiguration.settings.npcLocation.x.toInt() - 2,
 		serverConfiguration.settings.npcLocation.y.toInt() + 0,
 		serverConfiguration.settings.npcLocation.z.toInt() - 3,
-		serverConfiguration.settings.npcLocation.x.toInt() + 1,
+		serverConfiguration.settings.npcLocation.x.toInt() + 2,
 		serverConfiguration.settings.npcLocation.y.toInt() + 3,
 		serverConfiguration.settings.npcLocation.z.toInt() + 1
 	)
