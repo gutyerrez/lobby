@@ -4,6 +4,7 @@ import com.redefantasy.core.shared.servers.data.Server
 import com.redefantasy.core.spigot.CoreSpigotProvider
 import com.redefantasy.core.spigot.world.WorldCuboid
 import com.redefantasy.lobby.LobbyConstants
+import com.redefantasy.lobby.LobbyPlugin
 import com.redefantasy.lobby.misc.utils.ServerConnectorUtils
 import net.minecraft.server.v1_8_R3.EntityGiantZombie
 import org.bukkit.Bukkit
@@ -12,6 +13,7 @@ import org.bukkit.Material
 import org.bukkit.craftbukkit.v1_8_R3.CraftWorld
 import org.bukkit.entity.Giant
 import org.bukkit.event.entity.CreatureSpawnEvent
+import org.bukkit.metadata.FixedMetadataValue
 import org.bukkit.potion.PotionEffect
 import org.bukkit.potion.PotionEffectType
 import java.util.function.Consumer
@@ -41,6 +43,9 @@ fun Server.spawnNPC(): Giant {
 
 	val customZombie = EntityGiantZombie(worldServer)
 
+//	customZombie.maxNoDamageTicks = Int.MAX_VALUE
+//	customZombie.noDamageTicks = Int.MAX_VALUE
+
 	customZombie.setLocation(
 		this.getNPCLocation().x,
 		this.getNPCLocation().y,
@@ -59,6 +64,14 @@ fun Server.spawnNPC(): Giant {
 	worldServer.addEntity(customZombie, CreatureSpawnEvent.SpawnReason.CUSTOM)
 
 	val npc = customZombie.bukkitEntity as Giant
+
+	npc.setMetadata(
+		LobbyConstants.NPC_METADATA,
+		FixedMetadataValue(
+			LobbyPlugin.instance,
+			true
+		)
+	)
 
 	npc.addPotionEffect(
 		PotionEffect(
@@ -107,6 +120,8 @@ fun Server.createWall() {
 fun Giant.update(
 	server: Server
 ) {
+	println(this.isDead)
+
 	this.removeWhenFarAway = false
 
 	this.equipment.itemInHand = CoreSpigotProvider.Cache.Local.SERVER_CONFIGURATION.provide().fetchByServer(server)?.icon

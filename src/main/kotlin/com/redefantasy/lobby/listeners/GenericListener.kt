@@ -90,11 +90,15 @@ class GenericListener : Listener {
     fun on(
         event: EntityDamageEvent
     ) {
-        if (event.entity !is Player) return
+        val entity = event.entity
+
+        if (entity !is Player || !entity.hasMetadata(LobbyConstants.NPC_METADATA)) {
+            return
+        }
 
         event.isCancelled = true
 
-        if (event.cause === EntityDamageEvent.DamageCause.VOID && event.entity is Player) {
+        if (event.cause === EntityDamageEvent.DamageCause.VOID && entity is Player) {
             val player = event.entity
 
             val world = Bukkit.getWorld("world")

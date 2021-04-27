@@ -9,6 +9,8 @@ import java.util.function.Consumer
  */
 object LobbyConstants {
 
+	const val NPC_METADATA = "hyren-npc"
+
 	val SERVERS_CUBOIDS = mutableMapOf<WorldCuboid, Consumer<PlayerInteractEvent>>()
 
 }
