@@ -51,6 +51,8 @@ object HotBarManager {
 
         for (i in 0..8) {
             player.inventory.setItem(i, ItemStack(Material.STONE))
+
+            player.inventory.getItem(i).type = Material.AIR
         }
 
         this.BUTTONS.forEach { hotBarButton ->
