@@ -26,8 +26,6 @@ import com.redefantasy.lobby.misc.button.preferences.button.PreferencesHotBarBut
 import com.redefantasy.lobby.misc.button.server.selector.button.ServerSelectorHotBarButton
 import com.redefantasy.lobby.misc.queue.QueueRunnable
 import com.redefantasy.lobby.misc.queue.command.QueueCommand
-import com.redefantasy.lobby.misc.server.npc.getNPCLocation
-import com.redefantasy.lobby.misc.server.npc.spawnNPC
 import com.redefantasy.lobby.misc.server.npc.update
 import com.redefantasy.lobby.misc.server.utils.ServerConfigurationUtils
 import com.redefantasy.lobby.misc.slime.jump.SlimeJumpManager
@@ -37,7 +35,6 @@ import net.md_5.bungee.api.chat.ClickEvent
 import net.md_5.bungee.api.chat.ComponentBuilder
 import org.bukkit.Bukkit
 import org.bukkit.Location
-import org.bukkit.Material
 import org.bukkit.block.BlockFace
 import org.bukkit.entity.Giant
 import org.bukkit.util.Vector
@@ -193,22 +190,7 @@ class LobbyPlugin : CustomPlugin(false) {
          */
 
         CoreProvider.Cache.Local.SERVERS.provide().fetchAll().forEach {
-            NPCS[it] = it.spawnNPC()
-
-            val hologram = Hologram(
-                listOf(
-                    "§e${it.displayName}",
-                    "?",
-                    "§eClique para entrar!"
-                ),
-                Hologram.HologramPosition.DOWN
-            )
-
-            hologram.spawn(
-                it.getNPCLocation().clone().add(0.0, 3.5, 0.0)
-            )
-
-            HOLOGRAMS[it] = hologram
+            ServerConfigurationUtils.initServer(it, NPCS, HOLOGRAMS)
         }
 
         /**
@@ -224,11 +206,7 @@ class LobbyPlugin : CustomPlugin(false) {
 
                 CoreProvider.Cache.Local.SERVERS.provide().fetchAll().forEach {
                     if (!NPCS.containsKey(it) || !HOLOGRAMS.containsKey(it)) {
-                        ServerConfigurationUtils.createData(
-                            it,
-                            NPCS,
-                            HOLOGRAMS
-                        )
+                        ServerConfigurationUtils.initServer(it, NPCS, HOLOGRAMS)
                     }
                 }
 
@@ -332,12 +310,6 @@ class LobbyPlugin : CustomPlugin(false) {
         )
 
         SlimeJumpManager.setup()
-
-        LobbyConstants.SERVERS_WORLD_CUBOIDS.values.forEach {
-            it.getBlocks { block ->
-                block.type = Material.BARRIER
-            }
-        }
     }
 
 }

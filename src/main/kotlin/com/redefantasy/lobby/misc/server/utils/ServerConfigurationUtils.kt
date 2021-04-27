@@ -2,6 +2,7 @@ package com.redefantasy.lobby.misc.server.utils
 
 import com.redefantasy.core.shared.servers.data.Server
 import com.redefantasy.core.spigot.misc.hologram.Hologram
+import com.redefantasy.lobby.misc.server.npc.createWall
 import com.redefantasy.lobby.misc.server.npc.getNPCLocation
 import com.redefantasy.lobby.misc.server.npc.spawnNPC
 import org.bukkit.entity.Giant
@@ -11,11 +12,13 @@ import org.bukkit.entity.Giant
  */
 object ServerConfigurationUtils {
 
-	fun createData(
+	fun initServer(
 		server: Server,
 		npcsMap: MutableMap<Server, Giant>,
 		hologramsMap: MutableMap<Server, Hologram>
 	) {
+		server.createWall()
+
 		npcsMap[server] = server.spawnNPC()
 
 		val hologram = Hologram(

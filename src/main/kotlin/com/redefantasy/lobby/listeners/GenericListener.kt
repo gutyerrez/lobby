@@ -175,9 +175,11 @@ class GenericListener : Listener {
 
         event.isCancelled = true
 
-        if (clickedBlock !== null && clickedBlock.type === Material.BARRIER) return LobbyConstants.SERVER_CUBOID.apply(
-            event
-        )
+        if (clickedBlock !== null && clickedBlock.type === Material.BARRIER) {
+            return LobbyConstants.SERVERS_CUBOIDS.entries.stream().filter {
+                it.key.contains(clickedBlock.location, true)
+            }.findFirst().orElse(null)?.value?.accept(event) ?: Unit
+        }
 
         if (item !== null && item.type !== Material.AIR) {
             val hotBarButton = HotBarManager.getHotBarButton(item)

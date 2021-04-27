@@ -2,6 +2,9 @@ package com.redefantasy.lobby.misc.server.npc
 
 import com.redefantasy.core.shared.servers.data.Server
 import com.redefantasy.core.spigot.CoreSpigotProvider
+import com.redefantasy.core.spigot.world.WorldCuboid
+import com.redefantasy.lobby.LobbyConstants
+import com.redefantasy.lobby.misc.utils.ServerConnectorUtils
 import net.minecraft.server.v1_8_R3.EntityGiantZombie
 import org.bukkit.Bukkit
 import org.bukkit.Location
@@ -10,13 +13,14 @@ import org.bukkit.entity.Giant
 import org.bukkit.event.entity.CreatureSpawnEvent
 import org.bukkit.potion.PotionEffect
 import org.bukkit.potion.PotionEffectType
+import java.util.function.Consumer
 
 /**
  * @author Gutyerrez
  */
 fun Server.getNPCLocation(): Location {
 	val serverConfiguration = CoreSpigotProvider.Cache.Local.SERVER_CONFIGURATION.provide().fetchByServer(this) ?: throw NullPointerException(
-		"npc location cannot be null"
+		"server configuration cannot be null"
 	)
 
 	return Location(
@@ -69,6 +73,30 @@ fun Server.spawnNPC(): Giant {
 	npc.teleport(this.getNPCLocation().clone().add(1.9, -8.5, -3.5))
 
 	return npc
+}
+
+fun Server.createWall() {
+	val serverConfiguration = CoreSpigotProvider.Cache.Local.SERVER_CONFIGURATION.provide().fetchByServer(this) ?: throw NullPointerException(
+		"npc location cannot be null"
+	)
+
+	val worldCuboid = WorldCuboid(
+		serverConfiguration.settings.npcLocation.x.toInt() - 2,
+		serverConfiguration.settings.npcLocation.y.toInt(),
+		serverConfiguration.settings.npcLocation.z.toInt() - 2,
+		serverConfiguration.settings.npcLocation.x.toInt() + 2,
+		serverConfiguration.settings.npcLocation.y.toInt() + 3,
+		serverConfiguration.settings.npcLocation.z.toInt() + 2
+	)
+
+	LobbyConstants.SERVERS_CUBOIDS[worldCuboid] = Consumer {
+		val player = it.player
+
+		ServerConnectorUtils.connect(
+			player,
+			this
+		)
+	}
 }
 
 fun Giant.update(
