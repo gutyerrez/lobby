@@ -46,7 +46,7 @@ tasks {
 
 dependencies {
     // kotlin
-    implementation(kotlin("stdlib"))
+    compileOnly(kotlin("stdlib"))
 
     // paperspigot
     compileOnly("org.github.paperspigot:paperspigot:1.8.8-R0.1-SNAPSHOT")
@@ -61,7 +61,7 @@ dependencies {
     compileOnly("org.jetbrains.exposed:exposed-jodatime:0.29.1")
 
     // redis
-    implementation("redis.clients:jedis:3.3.0")
+    compileOnly("redis.clients:jedis:3.3.0")
 
     // eventbus
     compileOnly("org.greenrobot:eventbus:3.2.0")
