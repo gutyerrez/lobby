@@ -5,6 +5,7 @@ import com.redefantasy.core.shared.misc.preferences.PLAYER_VISIBILITY
 import com.redefantasy.core.shared.misc.preferences.PreferenceState
 import com.redefantasy.lobby.misc.button.player.visibility.button.PlayerVisibilityOffHotBarButton
 import com.redefantasy.lobby.misc.button.player.visibility.button.PlayerVisibilityOnHotBarButton
+import org.bukkit.Material
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 import org.greenrobot.eventbus.EventBus
@@ -47,6 +48,10 @@ object HotBarManager {
         player.inventory.clear()
         player.inventory.heldItemSlot = 4
         player.inventory.armorContents = null
+
+        for (i in 0..8) {
+            player.inventory.setItem(i, ItemStack(Material.AIR))
+        }
 
         this.BUTTONS.forEach { hotBarButton ->
             if (

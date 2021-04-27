@@ -21,6 +21,7 @@ import org.bukkit.entity.EntityType
 import org.bukkit.entity.ItemFrame
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
+import org.bukkit.event.EventPriority
 import org.bukkit.event.Listener
 import org.bukkit.event.block.*
 import org.bukkit.event.entity.*
@@ -169,20 +170,20 @@ class GenericListener : Listener {
         )
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = false)
     fun on(
         event: PlayerInteractEvent
     ) {
         val player = event.player
-        val item = player.itemInHand
-        val clickedBlock = event.clickedBlock
 
         event.isCancelled = true
 
-        println("-----PlayerInteract-----");
-        println("Action Type: " + event.action);
-        println("Holding: " + player.itemInHand.type);
-        println("Cancelled: " + event.isCancelled);
+        println("-----PlayerInteract-----")
+        println("Action Type: " + event.action)
+        println("Holding: " + player.itemInHand.type)
+
+        val item = player.itemInHand
+        val clickedBlock = event.clickedBlock
 
         if (clickedBlock !== null && clickedBlock.type === Material.BARRIER) {
             return LobbyConstants.SERVERS_CUBOIDS.entries.stream().filter {
