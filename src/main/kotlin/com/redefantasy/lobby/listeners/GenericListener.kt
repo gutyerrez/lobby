@@ -174,17 +174,7 @@ class GenericListener : Listener {
         event: PlayerInteractEvent
     ) {
         val player = event.player
-        val action = event.action
         val item = player.itemInHand
-
-        if (action == Action.RIGHT_CLICK_AIR
-            || action == Action.RIGHT_CLICK_BLOCK
-            || action == Action.LEFT_CLICK_AIR
-            || action == Action.LEFT_CLICK_BLOCK) {
-            println("asdsa")
-
-                return
-        }
 
         val clickedBlock = event.clickedBlock
 
