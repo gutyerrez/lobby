@@ -21,7 +21,6 @@ import org.bukkit.entity.EntityType
 import org.bukkit.entity.ItemFrame
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
-import org.bukkit.event.EventPriority
 import org.bukkit.event.Listener
 import org.bukkit.event.block.*
 import org.bukkit.event.entity.*
@@ -170,16 +169,19 @@ class GenericListener : Listener {
         )
     }
 
-    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = false)
+    @EventHandler
     fun on(
         event: PlayerInteractEvent
     ) {
         val player = event.player
         val action = event.action
-
-        if (action != Action.RIGHT_CLICK_AIR && action != Action.RIGHT_CLICK_BLOCK) return
-
         val item = player.itemInHand
+
+        if (action == Action.RIGHT_CLICK_AIR
+            || action == Action.RIGHT_CLICK_BLOCK
+            || action == Action.LEFT_CLICK_AIR
+            || action == Action.LEFT_CLICK_BLOCK) return
+
         val clickedBlock = event.clickedBlock
 
         event.isCancelled = true
