@@ -175,6 +175,10 @@ class GenericListener : Listener {
         event: PlayerInteractEvent
     ) {
         val player = event.player
+        val action = event.action
+
+        if (action != Action.RIGHT_CLICK_AIR && action != Action.RIGHT_CLICK_BLOCK) return
+
         val item = player.itemInHand
         val clickedBlock = event.clickedBlock
 
