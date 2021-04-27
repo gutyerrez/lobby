@@ -7,6 +7,7 @@ import com.redefantasy.core.spigot.inventory.CustomInventory
 import com.redefantasy.lobby.misc.utils.ServerConnectorUtils
 import org.bukkit.entity.Player
 import java.util.*
+import java.util.stream.Collectors
 
 /**
  * @author Gutyerrez
@@ -23,27 +24,29 @@ class ServerSelectorInventory : CustomInventory(
     )
 
     init {
-        val servers = CoreProvider.Cache.Local.SERVERS.provide().fetchAll()
+        val servers = Arrays.stream(CoreProvider.Cache.Local.SERVERS.provide().fetchAll()).filter {
+            CoreSpigotProvider.Cache.Local.SERVER_CONFIGURATION.provide().fetchByServer(it) !== null
+        }.filter {
+            CoreProvider.Cache.Local.APPLICATIONS.provide().fetchByServerAndApplicationType(
+                it,
+                ApplicationType.SERVER_SPAWN
+            ) !== null
+        }.collect(Collectors.toSet())
 
         val slots = this.SLOTS[
                 if (servers.size >= this.SLOTS.size) {
                     this.SLOTS.lastIndex
-                } else Arrays.stream(servers).filter {
-                    CoreProvider.Cache.Local.APPLICATIONS.provide().fetchByServerAndApplicationType(
-                        it,
-                        ApplicationType.SERVER_SPAWN
-                    ) !== null
-                }.count().toInt() - 1
+                } else servers.size - 1
         ]
 
         servers.forEachIndexed { index, server ->
-            val serverConfiguration = CoreSpigotProvider.Cache.Local.SERVER_CONFIGURATION.provide().fetchByServer(server) ?: return@forEachIndexed
-
             val slot = slots[index]
 
             this.setItem(
                 slot,
-                serverConfiguration.icon
+	            CoreSpigotProvider.Cache.Local.SERVER_CONFIGURATION.provide().fetchByServer(
+		            server
+	            )?.icon
             ) { it ->
                 val player = it.whoClicked as Player
 
