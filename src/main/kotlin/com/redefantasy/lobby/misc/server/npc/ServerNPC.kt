@@ -43,9 +43,6 @@ fun Server.spawnNPC(): Giant {
 
 	val customZombie = EntityGiantZombie(worldServer)
 
-//	customZombie.maxNoDamageTicks = Int.MAX_VALUE
-//	customZombie.noDamageTicks = Int.MAX_VALUE
-
 	customZombie.setLocation(
 		this.getNPCLocation().x,
 		this.getNPCLocation().y,
@@ -65,6 +62,9 @@ fun Server.spawnNPC(): Giant {
 
 	val npc = customZombie.bukkitEntity as Giant
 
+	npc.maxHealth = Double.MAX_VALUE
+	npc.health = Double.MAX_VALUE
+
 	npc.setMetadata(
 		LobbyConstants.NPC_METADATA,
 		FixedMetadataValue(
@@ -82,7 +82,9 @@ fun Server.spawnNPC(): Giant {
 		true
 	)
 	npc.removeWhenFarAway = false
-	npc.equipment.itemInHand = CoreSpigotProvider.Cache.Local.SERVER_CONFIGURATION.provide().fetchByServer(this)?.icon
+	npc.equipment.itemInHand = CoreSpigotProvider.Cache.Local.SERVER_CONFIGURATION.provide().fetchByServer(
+		this
+	)?.icon
 
 	npc.teleport(this.getNPCLocation().clone().add(1.9, -8.5, -3.5))
 
@@ -90,9 +92,9 @@ fun Server.spawnNPC(): Giant {
 }
 
 fun Server.createWall() {
-	val serverConfiguration = CoreSpigotProvider.Cache.Local.SERVER_CONFIGURATION.provide().fetchByServer(this) ?: throw NullPointerException(
-		"npc location cannot be null"
-	)
+	val serverConfiguration = CoreSpigotProvider.Cache.Local.SERVER_CONFIGURATION.provide().fetchByServer(
+		this
+	) ?: throw NullPointerException("npc location cannot be null")
 
 	val worldCuboid = WorldCuboid(
 		serverConfiguration.settings.npcLocation.x.toInt() - 3,
@@ -120,11 +122,13 @@ fun Server.createWall() {
 fun Giant.update(
 	server: Server
 ) {
+	this.health = Double.MAX_VALUE
+
 	println(this.isDead)
 
-	this.removeWhenFarAway = false
-
-	this.equipment.itemInHand = CoreSpigotProvider.Cache.Local.SERVER_CONFIGURATION.provide().fetchByServer(server)?.icon
+	this.equipment.itemInHand = CoreSpigotProvider.Cache.Local.SERVER_CONFIGURATION.provide().fetchByServer(
+		server
+	)?.icon
 
 	this.teleport(server.getNPCLocation().clone().add(1.9, -8.5, -3.5))
 }
