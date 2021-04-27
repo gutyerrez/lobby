@@ -170,20 +170,15 @@ class GenericListener : Listener {
         )
     }
 
-    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = false)
     fun on(
         event: PlayerInteractEvent
     ) {
         val player = event.player
-
-        event.isCancelled = true
-
-        println("-----PlayerInteract-----")
-        println("Action Type: " + event.action)
-        println("Holding: " + player.itemInHand.type)
-
         val item = player.itemInHand
         val clickedBlock = event.clickedBlock
+
+        event.isCancelled = true
 
         if (clickedBlock !== null && clickedBlock.type === Material.BARRIER) {
             return LobbyConstants.SERVERS_CUBOIDS.entries.stream().filter {
