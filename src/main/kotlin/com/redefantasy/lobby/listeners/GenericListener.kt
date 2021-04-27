@@ -180,7 +180,11 @@ class GenericListener : Listener {
         if (action == Action.RIGHT_CLICK_AIR
             || action == Action.RIGHT_CLICK_BLOCK
             || action == Action.LEFT_CLICK_AIR
-            || action == Action.LEFT_CLICK_BLOCK) return
+            || action == Action.LEFT_CLICK_BLOCK) {
+            println("asdsa")
+
+                return
+        }
 
         val clickedBlock = event.clickedBlock
 
