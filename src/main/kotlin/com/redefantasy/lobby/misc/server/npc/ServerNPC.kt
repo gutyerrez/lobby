@@ -82,10 +82,10 @@ fun Server.createWall() {
 	)
 
 	val worldCuboid = WorldCuboid(
-		serverConfiguration.settings.npcLocation.x.toInt() - 0,
+		serverConfiguration.settings.npcLocation.x.toInt() - 3,
 		serverConfiguration.settings.npcLocation.y.toInt() + 0,
 		serverConfiguration.settings.npcLocation.z.toInt() - 3,
-		serverConfiguration.settings.npcLocation.x.toInt() + 3,
+		serverConfiguration.settings.npcLocation.x.toInt() + 1,
 		serverConfiguration.settings.npcLocation.y.toInt() + 3,
 		serverConfiguration.settings.npcLocation.z.toInt() + 1
 	)
