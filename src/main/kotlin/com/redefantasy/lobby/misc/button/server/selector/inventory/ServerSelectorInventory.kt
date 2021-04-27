@@ -6,6 +6,7 @@ import com.redefantasy.core.spigot.CoreSpigotProvider
 import com.redefantasy.core.spigot.inventory.CustomInventory
 import com.redefantasy.lobby.misc.utils.ServerConnectorUtils
 import org.bukkit.entity.Player
+import java.util.*
 
 /**
  * @author Gutyerrez
@@ -24,17 +25,21 @@ class ServerSelectorInventory : CustomInventory(
     init {
         val servers = CoreProvider.Cache.Local.SERVERS.provide().fetchAll()
 
-        val slots = this.SLOTS[if (servers.size >= this.SLOTS.size) this.SLOTS.lastIndex else servers.size - 1]
+        val slots = this.SLOTS[
+                if (servers.size >= this.SLOTS.size) {
+                    this.SLOTS.lastIndex
+                } else Arrays.stream(servers).filter {
+                    CoreProvider.Cache.Local.APPLICATIONS.provide().fetchByServerAndApplicationType(
+                        it,
+                        ApplicationType.SERVER_SPAWN
+                    ) !== null
+                }.count().toInt() - 1
+        ]
 
         servers.forEachIndexed { index, server ->
             val serverConfiguration = CoreSpigotProvider.Cache.Local.SERVER_CONFIGURATION.provide().fetchByServer(server) ?: return@forEachIndexed
 
             val slot = slots[index]
-
-	        CoreProvider.Cache.Local.APPLICATIONS.provide().fetchByServerAndApplicationType(
-                server,
-                ApplicationType.SERVER_SPAWN
-            ) ?: return@forEachIndexed
 
             this.setItem(
                 slot,
