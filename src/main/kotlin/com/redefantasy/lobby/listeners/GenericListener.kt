@@ -20,7 +20,6 @@ import org.bukkit.Material
 import org.bukkit.entity.EntityType
 import org.bukkit.entity.ItemFrame
 import org.bukkit.entity.Player
-import org.bukkit.event.Event
 import org.bukkit.event.EventHandler
 import org.bukkit.event.EventPriority
 import org.bukkit.event.Listener
@@ -171,14 +170,11 @@ class GenericListener : Listener {
         )
     }
 
-    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = false)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     fun on(
         event: PlayerInteractEvent
     ) {
         val player = event.player
-
-        event.setUseInteractedBlock(Event.Result.ALLOW)
-        event.setUseItemInHand(Event.Result.ALLOW)
 
         event.isCancelled = true
 
