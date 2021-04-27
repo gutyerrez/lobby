@@ -11,7 +11,6 @@ import com.redefantasy.core.shared.misc.preferences.LOBBY_COMMAND_PROTECTION
 import com.redefantasy.core.shared.misc.preferences.PreferenceRegistry
 import com.redefantasy.core.shared.scheduler.AsyncScheduler
 import com.redefantasy.core.shared.servers.data.Server
-import com.redefantasy.core.spigot.CoreSpigotProvider
 import com.redefantasy.core.spigot.command.registry.CommandRegistry
 import com.redefantasy.core.spigot.misc.frame.data.Frame
 import com.redefantasy.core.spigot.misc.hologram.Hologram
@@ -27,21 +26,20 @@ import com.redefantasy.lobby.misc.button.preferences.button.PreferencesHotBarBut
 import com.redefantasy.lobby.misc.button.server.selector.button.ServerSelectorHotBarButton
 import com.redefantasy.lobby.misc.queue.QueueRunnable
 import com.redefantasy.lobby.misc.queue.command.QueueCommand
+import com.redefantasy.lobby.misc.server.npc.getNPCLocation
+import com.redefantasy.lobby.misc.server.npc.spawnNPC
+import com.redefantasy.lobby.misc.server.npc.update
+import com.redefantasy.lobby.misc.server.utils.ServerConfigurationUtils
 import com.redefantasy.lobby.misc.slime.jump.SlimeJumpManager
 import com.redefantasy.lobby.misc.slime.jump.data.SlimeJump
 import com.redefantasy.lobby.misc.slime.jump.listener.SlimeJumpListener
 import net.md_5.bungee.api.chat.ClickEvent
 import net.md_5.bungee.api.chat.ComponentBuilder
-import net.minecraft.server.v1_8_R3.EntityGiantZombie
 import org.bukkit.Bukkit
 import org.bukkit.Location
 import org.bukkit.Material
 import org.bukkit.block.BlockFace
-import org.bukkit.craftbukkit.v1_8_R3.CraftWorld
 import org.bukkit.entity.Giant
-import org.bukkit.event.entity.CreatureSpawnEvent
-import org.bukkit.potion.PotionEffect
-import org.bukkit.potion.PotionEffectType
 import org.bukkit.util.Vector
 import java.net.URL
 import java.util.concurrent.TimeUnit
@@ -64,6 +62,7 @@ class LobbyPlugin : CustomPlugin(false) {
 
     }
 
+    private val NPCS = mutableMapOf<Server, Giant>()
     private val HOLOGRAMS = mutableMapOf<Server, Hologram>()
 
     private var onlineSince = 0L
@@ -194,50 +193,19 @@ class LobbyPlugin : CustomPlugin(false) {
          */
 
         CoreProvider.Cache.Local.SERVERS.provide().fetchAll().forEach {
-            val serverConfiguration = CoreSpigotProvider.Cache.Local.SERVER_CONFIGURATION.provide().fetchByServer(it) ?: return@forEach
-
-            val npcLocation = Location(
-                Bukkit.getWorld("world"),
-                serverConfiguration.settings.npcLocation.x,
-                serverConfiguration.settings.npcLocation.y,
-                serverConfiguration.settings.npcLocation.z
-            )
-
-            val worldServer = (npcLocation.world as CraftWorld).handle
-
-            val customZombie = EntityGiantZombie(worldServer)
-
-            customZombie.setLocation(npcLocation.x, npcLocation.y, npcLocation.z, npcLocation.yaw, npcLocation.pitch)
-            customZombie.setPositionRotation(npcLocation.x, npcLocation.y, npcLocation.z, npcLocation.yaw, npcLocation.pitch)
-
-            worldServer.addEntity(customZombie, CreatureSpawnEvent.SpawnReason.CUSTOM)
-
-            val npc = customZombie.bukkitEntity as Giant
-
-            npc.addPotionEffect(
-                PotionEffect(
-                    PotionEffectType.INVISIBILITY,
-                    Int.MAX_VALUE,
-                    1
-                ),
-                true
-            )
-            npc.removeWhenFarAway = false
-            npc.equipment.itemInHand = serverConfiguration.icon
-
-            npc.teleport(npcLocation.clone().add(1.9, -8.5, -3.5))
+            NPCS[it] = it.spawnNPC()
 
             val hologram = Hologram(
                 listOf(
-                    "§a${it.displayName}",
+                    "§e${it.displayName}",
                     "?",
-                    "§aClique para entrar!"
+                    "§eClique para entrar!"
                 ),
                 Hologram.HologramPosition.DOWN
             )
 
             hologram.spawn(
-                npcLocation.clone().add(0.0, 3.5, 0.0)
+                it.getNPCLocation().clone().add(0.0, 3.5, 0.0)
             )
 
             HOLOGRAMS[it] = hologram
@@ -250,10 +218,24 @@ class LobbyPlugin : CustomPlugin(false) {
         Bukkit.getScheduler().runTaskTimer(
             this,
             {
+                /**
+                 * Revalidating NPCS and HOLOGRAMS
+                 */
+
+                CoreProvider.Cache.Local.SERVERS.provide().fetchAll().forEach {
+                    if (!NPCS.containsKey(it) || !HOLOGRAMS.containsKey(it)) {
+                        ServerConfigurationUtils.createData(
+                            it,
+                            NPCS,
+                            HOLOGRAMS
+                        )
+                    }
+                }
+
                 HOLOGRAMS.forEach { (server, hologram) ->
                     val onlineUsersCount = CoreProvider.Cache.Redis.USERS_STATUS.provide().fetchUsersByServer(server).size
 
-                    hologram.update(1, "§b$onlineUsersCount jogando!")
+                    hologram.update(1, "§e$onlineUsersCount jogando!")
 
                     val bukkitSpawnApplication = CoreProvider.Cache.Local.APPLICATIONS.provide().fetchByServerAndApplicationType(
                         server,
@@ -269,6 +251,8 @@ class LobbyPlugin : CustomPlugin(false) {
                         hologram.update(2, "§cEm manutenção")
                     }
                 }
+
+                NPCS.forEach { (server, npc) -> npc.update(server) }
             },
             20L,
             20L * 5
@@ -301,7 +285,11 @@ class LobbyPlugin : CustomPlugin(false) {
                     .create()
             )
 
-            CoreConstants.COOLDOWNS.start(user, "frame-interact", 3)
+            CoreConstants.COOLDOWNS.start(
+                user,
+                "frame-interact",
+                TimeUnit.SECONDS.toMillis(3)
+            )
         }
 
         frame.place(
