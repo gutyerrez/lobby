@@ -1,9 +1,7 @@
-name: Build
-
 on: [ 'push' ]
 
 jobs:
-  build:
+  lobby:
     runs-on: self-hosted
 
     steps:
