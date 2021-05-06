@@ -2,16 +2,39 @@ on: [ 'push' ]
 
 jobs:
   lobby:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
+
+    env:
+      MAVEN_USERNAME: ${{ secrets.MAVEN_USERNAME }}
+      MAVEN_PASSWORD: ${{ secrets.MAVEN_PASSWORD }}
 
     steps:
-    - uses: actions/checkout@v2
-    - name: Set up JDK 8
-      uses: actions/setup-java@v2
-      with:
-        java-version: '8'
-        distribution: 'adopt'
-    - name: Grant execute permission for gradlew
-      run: chmod +x gradlew
-    - name: Shadow archive
-      run: ./gradlew shadowJar
+      - uses: actions/checkout@v2
+      - name: Set up JDK 8
+        uses: actions/setup-java@v2
+        with:
+          java-version: '8'
+          distribution: 'adopt'
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+      - name: Clean project
+        run: ./gradlew clean
+      - name: Build project
+        run: ./gradlew shadowJar
+      - name: Deploy project to remote servers
+        uses: hyrendev/scp-action@0.1-ALPHA
+        with:
+          remote: /home/cloud/output/
+          files: |
+            [
+              "build/libs/lobby.jar"
+            ]
+          servers: |
+            [
+              {
+                "host": "${{ secrets.DEDICATED_1_HOST_ADDRESS }}",
+                "port": "${{ secrets.DEDICATED_PORT }}",
+                "user": "${{ secrets.DEDICATED_USER }}",
+                "private_key": "${{ secrets.DEDICATED_SSH_KEY }}"
+              }
+            ]

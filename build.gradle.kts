@@ -10,9 +10,14 @@ version = "0.1-ALPHA"
 repositories {
     mavenCentral()
 
-    mavenLocal()
-
     jcenter()
+
+    maven("https://maven.pkg.github.com/hyrendev/nexus/") {
+        credentials {
+            username = System.getenv("MAVEN_USERNAME")
+            password = System.getenv("MAVEN_PASSWORD")
+        }
+    }
 }
 
 tasks {
@@ -23,24 +28,7 @@ tasks {
     }
 
     shadowJar {
-        val fileName = "${project.name}.jar"
-
         archiveFileName.set("${project.name}.jar")
-
-        doLast {
-            try {
-                val file = file("build/libs/$fileName")
-
-                val toDelete = file("/home/cloud/output/$fileName")
-
-                if (toDelete.exists()) toDelete.delete()
-
-                file.copyTo(file("/home/cloud/output/$fileName"))
-                file.delete()
-            } catch (ex: java.io.FileNotFoundException) {
-                ex.printStackTrace()
-            }
-        }
     }
 }
 
