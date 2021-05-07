@@ -1,5 +1,5 @@
 name: Lobby
-main: com.redefantasy.lobby.LobbyPlugin
+main: net.hyren.lobby.LobbyPlugin
 version: 0.1-ALPHA
 author: Gutyerrez
 depend:
