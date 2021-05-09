@@ -98,6 +98,8 @@ fun Server.spawnNPC(): Giant {
 }
 
 fun Server.spawnHologram(): Hologram {
+	println(getNPCLocation().toString())
+
 	val hologram = Hologram(
 		listOf(
 			"§e${displayName}",

@@ -17,7 +17,10 @@ import net.md_5.bungee.api.chat.ComponentBuilder
 import org.bukkit.Bukkit
 import org.bukkit.Location
 import org.bukkit.Material
-import org.bukkit.entity.*
+import org.bukkit.entity.EntityType
+import org.bukkit.entity.Giant
+import org.bukkit.entity.ItemFrame
+import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.block.*
@@ -198,19 +201,6 @@ class GenericListener : Listener {
             if (hotBarButton !== null) {
                 HotBarManager.getEventBus(hotBarButton)?.post(event)
             }
-        }
-    }
-
-    @EventHandler
-    fun on(
-        event: EntityDeathEvent
-    ) {
-        val entity = event.entity
-
-        if (entity is ArmorStand) {
-            println("morreu")
-        } else {
-            println("Morreu: ${entity.type}")
         }
     }
 
