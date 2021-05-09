@@ -2,6 +2,7 @@ package net.hyren.lobby.misc.server.npc
 
 import net.hyren.core.shared.servers.data.Server
 import net.hyren.core.spigot.CoreSpigotProvider
+import net.hyren.core.spigot.misc.hologram.Hologram
 import net.hyren.core.spigot.world.WorldCuboid
 import net.hyren.lobby.LobbyConstants
 import net.hyren.lobby.LobbyPlugin
@@ -91,9 +92,26 @@ fun Server.spawnNPC(): Giant {
 		this
 	)?.icon
 
-	npc.teleport(this.getNPCLocation().clone().add(1.9, -8.5, -3.5))
+	npc.teleport(getNPCLocation().clone().add(1.9, -8.5, -3.5))
 
 	return npc
+}
+
+fun Server.spawnHologram(): Hologram {
+	val hologram = Hologram(
+		listOf(
+			"§e${displayName}",
+			"?",
+			"§eClique para entrar!"
+		),
+		Hologram.HologramPosition.DOWN
+	)
+
+	hologram.spawn(getNPCLocation().clone().add(0.0, 3.5, 0.0))
+
+	println("Spawned hologram!")
+
+	return hologram
 }
 
 fun Server.createWall() {
