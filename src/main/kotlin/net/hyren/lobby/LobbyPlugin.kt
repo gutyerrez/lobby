@@ -16,6 +16,7 @@ import net.hyren.core.spigot.misc.frame.data.Frame
 import net.hyren.core.spigot.misc.hologram.Hologram
 import net.hyren.core.spigot.misc.plugin.CustomPlugin
 import net.hyren.core.spigot.misc.skin.command.SkinCommand
+import net.hyren.core.spigot.world.generator.VoidChunkGenerator
 import net.hyren.lobby.echo.packets.listeners.UserGroupsUpdatedEchoPacketListener
 import net.hyren.lobby.listeners.GenericListener
 import net.hyren.lobby.misc.button.HotBarManager
@@ -311,5 +312,10 @@ class LobbyPlugin : CustomPlugin(false) {
 
         SlimeJumpManager.setup()
     }
+
+    override fun getDefaultWorldGenerator(
+        worldName: String,
+        id: String
+    ) = VoidChunkGenerator()
 
 }
