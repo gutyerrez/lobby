@@ -208,7 +208,7 @@ class GenericListener : Listener {
         val entity = event.entity
 
         if (entity is ArmorStand) {
-            console.log("morreu")
+            println("morreu")
         } else {
             println("Morreu: ${entity.type}")
         }
