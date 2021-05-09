@@ -1,6 +1,7 @@
 package net.hyren.lobby.misc.scoreboard
 
 import com.google.common.collect.Queues
+import net.hyren.core.shared.CoreConstants
 import net.hyren.core.shared.CoreProvider
 import net.hyren.core.shared.applications.ApplicationType
 import net.hyren.core.shared.applications.status.ApplicationStatus
@@ -72,7 +73,9 @@ object ScoreboardManager {
 
         user.scoreboard = scoreboard
 
-        scoreboard.setTitle("§6§lREDE FANTASY")
+        scoreboard.setTitle(
+            CoreConstants.Info.COLORED_SERVER_NAME
+        )
         scoreboard.set(15, "§0")
         scoreboard.set(13, "§f Grupo: $fancyGroupName")
         scoreboard.set(12, "§1")
@@ -89,7 +92,7 @@ object ScoreboardManager {
         scoreboard.set(3, "§2")
         scoreboard.set(2, "§f Saguão: §7#$bukkitApplicationName")
         scoreboard.set(1, "§3")
-        scoreboard.set(0, "§e  loja.redefantasy.com")
+        scoreboard.set(0, "§e  ${CoreConstants.Info.SHOP_URL}")
 
         this.WITH_SCORE_BOARD[player.uniqueId] = System.currentTimeMillis()
 
@@ -146,7 +149,8 @@ object ScoreboardManager {
                             )
                         )!!
 
-                        val scoreboard = scoreboard as GroupScoreboard
+                        scoreboard as GroupScoreboard
+
                         val groupBoard = targetUser.scoreboard as GroupScoreboard
 
                         groupBoard.registerUser(user)

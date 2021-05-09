@@ -92,13 +92,8 @@ class GenericListener : Listener {
         event: EntityDamageEvent
     ) {
         when (val entity = event.entity) {
-            is Giant -> {
-                if (entity.hasMetadata(LobbyConstants.NPC_METADATA)) {
-                    println("NPC")
-
-                    event.isCancelled = true
-                }
-            }
+            is ItemFrame -> event.isCancelled = true
+            is Giant -> event.isCancelled = entity.hasMetadata(LobbyConstants.NPC_METADATA)
             is Player -> {
                 event.isCancelled = true
 
@@ -116,13 +111,8 @@ class GenericListener : Listener {
         event: EntityDamageByEntityEvent
     ) {
         when (val entity = event.entity) {
-            is Giant -> {
-                if (entity.hasMetadata(LobbyConstants.NPC_METADATA)) {
-                    println("NPC")
-
-                    event.isCancelled = true
-                }
-            }
+            is ItemFrame -> event.isCancelled = true
+            is Giant -> event.isCancelled = entity.hasMetadata(LobbyConstants.NPC_METADATA)
         }
     }
 
