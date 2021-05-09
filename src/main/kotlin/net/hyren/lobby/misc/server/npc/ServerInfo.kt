@@ -98,8 +98,6 @@ fun Server.spawnNPC(): Giant {
 }
 
 fun Server.spawnHologram(): Hologram {
-	println(getNPCLocation().toString())
-
 	val hologram = Hologram(
 		listOf(
 			"§e${displayName}",
@@ -110,8 +108,6 @@ fun Server.spawnHologram(): Hologram {
 	)
 
 	val cloned = getNPCLocation().clone().add(0.0, 3.5, 0.0)
-
-	println("Cloned: $cloned")
 
 	hologram.spawn(cloned)
 
