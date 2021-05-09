@@ -27,7 +27,7 @@ fun Server.getNPCLocation(): Location {
 		this
 	) ?: throw NullPointerException("server configuration cannot be null")
 
-	return Location(
+	val location = Location(
 		Bukkit.getWorld(
 			serverConfiguration.settings.npcLocation.worldName
 		),
@@ -37,6 +37,14 @@ fun Server.getNPCLocation(): Location {
 		serverConfiguration.settings.npcLocation.yaw,
 		serverConfiguration.settings.npcLocation.pitch
 	)
+
+	println("Loaded ¹: ${location.chunk.isLoaded}")
+
+	location.chunk.load(true)
+
+	println("Loaded ²: ${location.chunk.isLoaded}")
+
+	return location
 }
 
 fun Server.spawnNPC(): Giant {
