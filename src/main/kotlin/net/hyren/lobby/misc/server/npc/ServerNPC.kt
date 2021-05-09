@@ -109,9 +109,11 @@ fun Server.spawnHologram(): Hologram {
 		Hologram.HologramPosition.DOWN
 	)
 
-	hologram.spawn(getNPCLocation().clone().add(0.0, 3.5, 0.0))
+	val cloned = getNPCLocation().clone().add(0.0, 3.5, 0.0)
 
-	println("Spawned hologram!")
+	println("Cloned: $cloned")
+
+	hologram.spawn(cloned)
 
 	return hologram
 }
