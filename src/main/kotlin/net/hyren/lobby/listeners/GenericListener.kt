@@ -185,8 +185,6 @@ class GenericListener : Listener {
         val player = event.player
         val item = player.itemInHand
 
-        println(event.action)
-
         val clickedBlock = event.clickedBlock
 
         event.isCancelled = true
