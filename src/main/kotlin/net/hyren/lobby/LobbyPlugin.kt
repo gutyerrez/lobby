@@ -11,14 +11,11 @@ import net.hyren.core.shared.misc.preferences.LOBBY_COMMAND_PROTECTION
 import net.hyren.core.shared.misc.preferences.PreferenceRegistry
 import net.hyren.core.shared.scheduler.AsyncScheduler
 import net.hyren.core.shared.servers.data.Server
-import net.hyren.core.spigot.CoreSpigotConstants
 import net.hyren.core.spigot.command.registry.CommandRegistry
 import net.hyren.core.spigot.misc.frame.data.Frame
 import net.hyren.core.spigot.misc.hologram.Hologram
 import net.hyren.core.spigot.misc.plugin.CustomPlugin
 import net.hyren.core.spigot.misc.skin.command.SkinCommand
-import net.hyren.core.spigot.misc.utils.PacketEvent
-import net.hyren.core.spigot.misc.utils.PacketListener
 import net.hyren.core.spigot.world.generator.VoidChunkGenerator
 import net.hyren.lobby.echo.packets.listeners.UserGroupsUpdatedEchoPacketListener
 import net.hyren.lobby.listeners.GenericListener
@@ -327,21 +324,6 @@ class LobbyPlugin : CustomPlugin(false) {
         )
 
         SlimeJumpManager.setup()
-
-        // remove after
-        CoreSpigotConstants.PROTOCOL_HANDLER?.registerListener(
-            object : PacketListener() {
-
-                override fun onReceive(
-                    event: PacketEvent
-                ) {
-                    val packet = event.packet
-
-                    println(packet)
-                }
-
-            }
-        )
     }
 
     override fun getDefaultWorldGenerator(
