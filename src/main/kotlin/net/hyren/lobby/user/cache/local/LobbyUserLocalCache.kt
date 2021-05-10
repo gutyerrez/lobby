@@ -24,6 +24,8 @@ class LobbyUserLocalCache : LocalCache {
         )
     )
 
+    fun fetchAll() = this.CACHE_BY_ID.asMap().values
+
     fun put(lobbyUser: LobbyUser) {
         this.CACHE_BY_ID.put(lobbyUser.id, lobbyUser)
     }

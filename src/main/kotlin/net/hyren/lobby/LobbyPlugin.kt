@@ -27,6 +27,7 @@ import net.hyren.lobby.misc.button.preferences.button.PreferencesHotBarButton
 import net.hyren.lobby.misc.button.server.selector.button.ServerSelectorHotBarButton
 import net.hyren.lobby.misc.queue.QueueRunnable
 import net.hyren.lobby.misc.queue.command.QueueCommand
+import net.hyren.lobby.misc.scoreboard.ScoreboardManager
 import net.hyren.lobby.misc.server.info.update
 import net.hyren.lobby.misc.server.utils.ServerConfigurationUtils
 import net.hyren.lobby.misc.slime.jump.SlimeJumpManager
@@ -232,6 +233,18 @@ class LobbyPlugin : CustomPlugin(false) {
                 }
 
                 NPCS.forEach { (server, npc) -> npc.update(server) }
+
+                LobbyProvider.Cache.Local.LOBBY_USERS.provide().fetchAll().forEach {
+                    val player = Bukkit.getPlayer(it!!.getUniqueId())
+
+                    if (player !== null && !player.isDead) {
+                        ScoreboardManager.update(
+                            it.player,
+                            ScoreboardManager.Slot.ONLINE_PLAYERS,
+                            ScoreboardManager.Slot.SERVER_LIST
+                        )
+                    }
+                }
             },
             20L,
             20L * 5

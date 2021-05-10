@@ -6,7 +6,6 @@ import net.hyren.core.shared.applications.ApplicationType
 import net.hyren.core.shared.applications.status.ApplicationStatus
 import net.hyren.core.shared.users.storage.table.UsersTable
 import net.hyren.core.spigot.misc.scoreboard.bukkit.GroupScoreboard
-import net.hyren.lobby.LobbyPlugin
 import net.hyren.lobby.LobbyProvider
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
@@ -19,34 +18,6 @@ import java.util.*
 object ScoreboardManager {
 
     private val WITH_SCORE_BOARD = mutableMapOf<UUID, Long>()
-
-    init {
-        Bukkit.getScheduler().runTaskTimer(
-            LobbyPlugin.instance,
-            {
-                Bukkit.getOnlinePlayers().stream()
-                    .filter { this.WITH_SCORE_BOARD.containsKey(it.uniqueId) }
-                    .map {
-                        LobbyProvider.Cache.Local.LOBBY_USERS.provide().fetchById(
-                            it.uniqueId
-                        )
-                    }
-                    .forEach {
-                        val player = Bukkit.getPlayer(it!!.getUniqueId())
-
-                        if (player !== null && !player.isDead) {
-                            this.update(
-                                it.player,
-                                Slot.ONLINE_PLAYERS,
-                                Slot.SERVER_LIST
-                            )
-                        }
-                    }
-            },
-            0,
-            20 * 5
-        )
-    }
 
     fun construct(player: Player) {
         val user = LobbyProvider.Cache.Local.LOBBY_USERS.provide().fetchById(player.uniqueId)!!
