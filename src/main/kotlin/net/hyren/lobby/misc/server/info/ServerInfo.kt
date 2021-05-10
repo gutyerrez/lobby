@@ -1,4 +1,4 @@
-package net.hyren.lobby.misc.server.npc
+package net.hyren.lobby.misc.server.info
 
 import net.hyren.core.shared.servers.data.Server
 import net.hyren.core.spigot.CoreSpigotProvider
@@ -27,7 +27,7 @@ fun Server.getNPCLocation(): Location {
 		this
 	) ?: throw NullPointerException("server configuration cannot be null")
 
-	val location = Location(
+	return Location(
 		Bukkit.getWorld(
 			serverConfiguration.settings.npcLocation.worldName
 		),
@@ -37,14 +37,6 @@ fun Server.getNPCLocation(): Location {
 		serverConfiguration.settings.npcLocation.yaw,
 		serverConfiguration.settings.npcLocation.pitch
 	)
-
-	println("Loaded ¹: ${location.chunk.isLoaded}")
-
-	location.chunk.load(true)
-
-	println("Loaded ²: ${location.chunk.isLoaded}")
-
-	return location
 }
 
 fun Server.spawnNPC(): Giant {

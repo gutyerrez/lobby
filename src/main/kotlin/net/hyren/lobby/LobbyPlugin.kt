@@ -27,7 +27,7 @@ import net.hyren.lobby.misc.button.preferences.button.PreferencesHotBarButton
 import net.hyren.lobby.misc.button.server.selector.button.ServerSelectorHotBarButton
 import net.hyren.lobby.misc.queue.QueueRunnable
 import net.hyren.lobby.misc.queue.command.QueueCommand
-import net.hyren.lobby.misc.server.npc.update
+import net.hyren.lobby.misc.server.info.update
 import net.hyren.lobby.misc.server.utils.ServerConfigurationUtils
 import net.hyren.lobby.misc.slime.jump.SlimeJumpManager
 import net.hyren.lobby.misc.slime.jump.data.SlimeJump
