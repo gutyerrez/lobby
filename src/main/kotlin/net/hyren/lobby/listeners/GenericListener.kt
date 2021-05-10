@@ -182,8 +182,6 @@ class GenericListener : Listener {
     fun on(
         event: PlayerInteractEvent
     ) {
-        println("Click! ${event.action}")
-
         val player = event.player
         val item = player.itemInHand
 
