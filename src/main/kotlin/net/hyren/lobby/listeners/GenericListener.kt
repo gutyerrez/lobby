@@ -15,6 +15,7 @@ import net.hyren.lobby.misc.scoreboard.ScoreboardManager
 import net.hyren.lobby.user.data.LobbyUser
 import net.md_5.bungee.api.chat.ComponentBuilder
 import org.bukkit.Bukkit
+import org.bukkit.Location
 import org.bukkit.Material
 import org.bukkit.entity.EntityType
 import org.bukkit.entity.Giant
@@ -161,21 +162,21 @@ class GenericListener : Listener {
         }
     }
 
-//    @EventHandler
-//    fun on(
-//        event: PlayerInitialSpawnEvent
-//    ) {
-//        val world = Bukkit.getWorld("world")
-//
-//        event.spawnLocation = Location(
-//            world,
-//            0.5,
-//            78.0,
-//            -0.5,
-//            180F,
-//            0F
-//        )
-//    }
+    @EventHandler
+    fun on(
+        event: PlayerInitialSpawnEvent
+    ) {
+        val world = Bukkit.getWorld("world")
+
+        event.spawnLocation = Location(
+            world,
+            0.5,
+            78.0,
+            -0.5,
+            180F,
+            0F
+        )
+    }
 
     @EventHandler(ignoreCancelled = false)
     fun on(
@@ -183,8 +184,6 @@ class GenericListener : Listener {
     ) {
         val player = event.player
         val item = player.itemInHand
-
-        println("Click: ${event.action}")
 
         val clickedBlock = event.clickedBlock
 
