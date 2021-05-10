@@ -1,6 +1,5 @@
 package net.hyren.lobby.misc.scoreboard
 
-import com.google.common.collect.Queues
 import net.hyren.core.shared.CoreConstants
 import net.hyren.core.shared.CoreProvider
 import net.hyren.core.shared.applications.ApplicationType
@@ -9,13 +8,10 @@ import net.hyren.core.shared.users.storage.table.UsersTable
 import net.hyren.core.spigot.misc.scoreboard.bukkit.GroupScoreboard
 import net.hyren.lobby.LobbyPlugin
 import net.hyren.lobby.LobbyProvider
-import net.hyren.lobby.user.data.LobbyUser
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 import org.jetbrains.exposed.dao.id.EntityID
 import java.util.*
-import java.util.function.Consumer
-import java.util.stream.Collectors
 
 /**
  * @author Gutyerrez
@@ -24,42 +20,31 @@ object ScoreboardManager {
 
     private val WITH_SCORE_BOARD = mutableMapOf<UUID, Long>()
 
-    val UPDATE_SCOREBOARD = Consumer<LobbyUser> {
-        this.update(
-            it.player,
-            Slot.ONLINE_PLAYERS,
-            Slot.SERVER_LIST
-        )
-    }
-
     init {
-        val queue = Queues.newConcurrentLinkedQueue<LobbyUser>()
-
         Bukkit.getScheduler().runTaskTimer(
             LobbyPlugin.instance,
             {
-                if (queue.isEmpty() && Bukkit.getOnlinePlayers().isEmpty()) return@runTaskTimer
+                Bukkit.getOnlinePlayers().stream()
+                    .filter { this.WITH_SCORE_BOARD.containsKey(it.uniqueId) }
+                    .map {
+                        LobbyProvider.Cache.Local.LOBBY_USERS.provide().fetchById(
+                            it.uniqueId
+                        )
+                    }
+                    .forEach {
+                        val player = Bukkit.getPlayer(it!!.getUniqueId())
 
-                if (queue.isEmpty() && Bukkit.getOnlinePlayers().isNotEmpty()) {
-                    queue.addAll(
-                        Bukkit.getOnlinePlayers().stream()
-                            .filter { this.WITH_SCORE_BOARD.containsKey(it.uniqueId) }
-                            .map {
-                                LobbyProvider.Cache.Local.LOBBY_USERS.provide().fetchById(
-                                    it.uniqueId
-                                )
-                            }
-                            .collect(Collectors.toSet())
-                    )
-                }
-
-                val lobbyUser = queue.poll()
-                val player = Bukkit.getPlayer(lobbyUser.getUniqueId())
-
-                if (lobbyUser !== null && player !== null) this.UPDATE_SCOREBOARD.accept(lobbyUser)
+                        if (player !== null && !player.isDead) {
+                            this.update(
+                                it.player,
+                                Slot.ONLINE_PLAYERS,
+                                Slot.SERVER_LIST
+                            )
+                        }
+                    }
             },
             0,
-            20
+            20 * 5
         )
     }
 
