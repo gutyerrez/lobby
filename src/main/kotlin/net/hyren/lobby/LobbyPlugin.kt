@@ -229,6 +229,8 @@ class LobbyPlugin : CustomPlugin(false) {
                         hologram.update(2, "§cOffline")
                     } else if (CoreProvider.Cache.Local.MAINTENANCE.provide().fetch(bukkitSpawnApplication) == true) {
                         hologram.update(2, "§cEm manutenção")
+                    } else {
+                        hologram.remove(2)
                     }
                 }
 
