@@ -69,7 +69,7 @@ object HotBarManager {
                 println("Send packet")
 
                 player.sendPacket(packet)
-            }
+            }.run()
         }
 
         this.BUTTONS.forEach { hotBarButton ->
