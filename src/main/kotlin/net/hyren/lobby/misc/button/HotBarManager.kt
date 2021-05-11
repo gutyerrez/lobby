@@ -3,14 +3,8 @@ package net.hyren.lobby.misc.button
 import net.hyren.core.shared.CoreProvider
 import net.hyren.core.shared.misc.preferences.PLAYER_VISIBILITY
 import net.hyren.core.shared.misc.preferences.PreferenceState
-import net.hyren.core.spigot.misc.player.sendPacket
-import net.hyren.lobby.LobbyPlugin
 import net.hyren.lobby.misc.button.player.visibility.button.PlayerVisibilityOffHotBarButton
 import net.hyren.lobby.misc.button.player.visibility.button.PlayerVisibilityOnHotBarButton
-import net.minecraft.server.v1_8_R3.Blocks
-import net.minecraft.server.v1_8_R3.PacketPlayOutSetSlot
-import org.bukkit.Bukkit
-import org.bukkit.Material
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 import org.greenrobot.eventbus.EventBus
@@ -53,26 +47,6 @@ object HotBarManager {
         player.inventory.clear()
         player.inventory.heldItemSlot = 4
         player.inventory.armorContents = null
-
-        for (i in 0..8) {
-            player.inventory.setItem(i, ItemStack(Material.BARRIER))
-        }
-
-        Bukkit.getScheduler().runTaskLater(LobbyPlugin.instance, {
-            for (i in 36..44) {
-                val packet = PacketPlayOutSetSlot(
-                    0,
-                    i,
-                    net.minecraft.server.v1_8_R3.ItemStack(
-                        Blocks.AIR
-                    )
-                )
-
-                println("Send packet")
-
-                player.sendPacket(packet)
-            }
-        }, 20 * 4)
 
         this.BUTTONS.forEach { hotBarButton ->
             if (
