@@ -54,10 +54,12 @@ object HotBarManager {
         player.inventory.heldItemSlot = 4
         player.inventory.armorContents = null
 
+        for (i in 0..8) {
+            player.inventory.setItem(i, ItemStack(Material.BARRIER))
+        }
+
         Bukkit.getScheduler().runTaskLater(LobbyPlugin.instance, {
             for (i in 36..44) {
-                player.inventory.setItem(i, ItemStack(Material.BARRIER))
-
                 val packet = PacketPlayOutSetSlot(
                     0,
                     i,
