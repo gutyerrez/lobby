@@ -10,6 +10,7 @@ import net.hyren.lobby.misc.button.player.visibility.button.PlayerVisibilityOnHo
 import net.minecraft.server.v1_8_R3.Blocks
 import net.minecraft.server.v1_8_R3.PacketPlayOutSetSlot
 import org.bukkit.Bukkit
+import org.bukkit.Material
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 import org.greenrobot.eventbus.EventBus
@@ -54,16 +55,14 @@ object HotBarManager {
         player.inventory.armorContents = null
 
         Bukkit.getScheduler().runTaskLater(LobbyPlugin.instance, {
-            for (i in 0..8) {
-                if (BUTTONS.stream().anyMatch { it.slot == i }) continue
-
-//                player.inventory.setItem(i, ItemStack(Material.BARRIER))
+            for (i in 36..44) {
+                player.inventory.setItem(i, ItemStack(Material.BARRIER))
 
                 val packet = PacketPlayOutSetSlot(
                     0,
                     i,
                     net.minecraft.server.v1_8_R3.ItemStack(
-                        Blocks.BARRIER
+                        Blocks.AIR
                     )
                 )
 
