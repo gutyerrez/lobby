@@ -57,15 +57,19 @@ object HotBarManager {
 
             player.inventory.setItem(i, ItemStack(Material.BARRIER))
 
-            val packet = PacketPlayOutSetSlot(
-                0,
-                i,
-                net.minecraft.server.v1_8_R3.ItemStack(
-                    Blocks.AIR
+            Runnable {
+                val packet = PacketPlayOutSetSlot(
+                    0,
+                    i,
+                    net.minecraft.server.v1_8_R3.ItemStack(
+                        Blocks.AIR
+                    )
                 )
-            )
 
-            player.sendPacket(packet)
+                println("Send packet")
+
+                player.sendPacket(packet)
+            }
         }
 
         this.BUTTONS.forEach { hotBarButton ->
