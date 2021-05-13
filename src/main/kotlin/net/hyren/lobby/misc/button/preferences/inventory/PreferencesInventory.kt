@@ -109,7 +109,7 @@ class PreferencesInventory(private val player: Player) : CustomInventory(
 
             preference.preferenceState = switchPreferenceState
 
-            CoreProvider.Repositories.Postgres.USERS_PREFERENCES_REPOSITORY.provide().update(
+            CoreProvider.Repositories.MariaDB.USERS_PREFERENCES_REPOSITORY.provide().update(
                 UpdateUserPreferencesDTO(
                     user.id,
                     user.getPreferences()
