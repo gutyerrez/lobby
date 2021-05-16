@@ -1,6 +1,7 @@
 package net.hyren.lobby.misc.server.info
 
 import net.hyren.core.shared.servers.data.Server
+import net.hyren.core.spigot.CoreSpigotConstants
 import net.hyren.core.spigot.CoreSpigotProvider
 import net.hyren.core.spigot.misc.hologram.Hologram
 import net.hyren.core.spigot.world.WorldCuboid
@@ -8,7 +9,6 @@ import net.hyren.lobby.LobbyConstants
 import net.hyren.lobby.LobbyPlugin
 import net.hyren.lobby.misc.utils.ServerConnectorUtils
 import net.minecraft.server.v1_8_R3.EntityGiantZombie
-import org.bukkit.Bukkit
 import org.bukkit.Location
 import org.bukkit.Material
 import org.bukkit.craftbukkit.v1_8_R3.CraftWorld
@@ -27,16 +27,9 @@ fun Server.getNPCLocation(): Location {
 		this
 	) ?: throw NullPointerException("server configuration cannot be null")
 
-	return Location(
-		Bukkit.getWorld(
-			serverConfiguration.settings.npcLocation.worldName
-		),
-		serverConfiguration.settings.npcLocation.x,
-		serverConfiguration.settings.npcLocation.y,
-		serverConfiguration.settings.npcLocation.z,
-		serverConfiguration.settings.npcLocation.yaw,
-		serverConfiguration.settings.npcLocation.pitch
-	)
+	println(serverConfiguration)
+
+	return CoreSpigotConstants.BUKKIT_LOCATION_PARSER.apply(serverConfiguration.settings.npcLocation)
 }
 
 fun Server.spawnNPC(): Giant {
