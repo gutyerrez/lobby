@@ -236,17 +236,19 @@ class LobbyPlugin : CustomPlugin(false) {
 
                 NPCS.forEach { (server, npc) -> npc.update(server) }
 
-                LobbyProvider.Cache.Local.LOBBY_USERS.provide().fetchAll().forEach {
-                    val player = Bukkit.getPlayer(it!!.getUniqueId())
+                Thread {
+                    LobbyProvider.Cache.Local.LOBBY_USERS.provide().fetchAll().forEach {
+                        val player = Bukkit.getPlayer(it!!.getUniqueId())
 
-                    if (player !== null && !player.isDead) {
-                        ScoreboardManager.update(
-                            it.player,
-                            ScoreboardManager.Slot.ONLINE_PLAYERS,
-                            ScoreboardManager.Slot.SERVER_LIST
-                        )
+                        if (player !== null && !player.isDead) {
+                            ScoreboardManager.update(
+                                it.player,
+                                ScoreboardManager.Slot.ONLINE_PLAYERS,
+                                ScoreboardManager.Slot.SERVER_LIST
+                            )
+                        }
                     }
-                }
+                }.start()
             },
             20L,
             20L * 5
