@@ -27,8 +27,6 @@ fun Server.getNPCLocation(): Location {
 		this
 	) ?: throw NullPointerException("server configuration cannot be null")
 
-	println(serverConfiguration)
-
 	return CoreSpigotConstants.BUKKIT_LOCATION_PARSER.apply(serverConfiguration.settings.npcLocation)
 }
 
