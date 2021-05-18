@@ -101,7 +101,7 @@ private fun User.switchPlayerVisibilityState() {
 
     preference.preferenceState = switchPreferenceState
 
-    CoreProvider.Repositories.MariaDB.USERS_PREFERENCES_REPOSITORY.provide().update(
+    CoreProvider.Repositories.PostgreSQL.USERS_PREFERENCES_REPOSITORY.provide().update(
         UpdateUserPreferencesDTO(
             this.id,
             this.getPreferences()
