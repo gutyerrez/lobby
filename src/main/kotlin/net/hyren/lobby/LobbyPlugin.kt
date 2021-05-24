@@ -191,7 +191,7 @@ class LobbyPlugin : CustomPlugin(false) {
          * NPCs
          */
 
-        CoreProvider.Cache.Local.SERVERS.provide().fetchAll().forEach {
+        CoreProvider.Cache.Local.SERVERS.provide().fetchAll().filter { !it.isAlphaServer() }.forEach {
             ServerConfigurationUtils.initServer(it, NPCS, HOLOGRAMS)
         }
 
