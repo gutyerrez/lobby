@@ -206,16 +206,14 @@ class LobbyPlugin : CustomPlugin(false) {
                  * Revalidating NPCS and HOLOGRAMS
                  */
 
-                CoreProvider.Cache.Local.SERVERS.provide().fetchAll().forEach {
+                CoreProvider.Cache.Local.SERVERS.provide().fetchAll().filter { !it.isAlphaServer() }.forEach {
                     if (!NPCS.containsKey(it) || !HOLOGRAMS.containsKey(it)) {
                         ServerConfigurationUtils.initServer(it, NPCS, HOLOGRAMS)
                     }
                 }
 
                 HOLOGRAMS.forEach { (server, hologram) ->
-                    val onlineUsersCount = CoreProvider.Cache.Redis.USERS_STATUS.provide().fetchUsersByServer(server).size
-
-                    hologram.update(1, "§e$onlineUsersCount jogando!")
+                    hologram.update(1, "§e${CoreProvider.Cache.Redis.USERS_STATUS.provide().fetchUsersByServer(server).size} jogando!")
 
                     val bukkitSpawnApplication = CoreProvider.Cache.Local.APPLICATIONS.provide().fetchByServerAndApplicationType(
                         server,
@@ -238,14 +236,18 @@ class LobbyPlugin : CustomPlugin(false) {
 
                 Thread {
                     LobbyProvider.Cache.Local.LOBBY_USERS.provide().fetchAll().forEach {
-                        val player = Bukkit.getPlayer(it!!.getUniqueId())
+                        try {
+                            val player = Bukkit.getPlayer(it!!.getUniqueId())
 
-                        if (player != null && !player.isDead) {
-                            ScoreboardManager.update(
-                                it.player,
-                                ScoreboardManager.Slot.ONLINE_PLAYERS,
-                                ScoreboardManager.Slot.SERVER_LIST
-                            )
+                            if (player != null && !player.isDead) {
+                                ScoreboardManager.update(
+                                    it.player,
+                                    ScoreboardManager.Slot.ONLINE_PLAYERS,
+                                    ScoreboardManager.Slot.SERVER_LIST
+                                )
+                            }
+                        } catch (e: Exception) {
+                            e.printStackTrace()
                         }
                     }
                 }.start()

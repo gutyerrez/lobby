@@ -70,7 +70,7 @@ object ScoreboardManager {
                 Slot.SERVER_LIST -> {
                     var i = 11
 
-                    CoreProvider.Cache.Local.SERVERS.provide().fetchAll().forEach { server ->
+                    CoreProvider.Cache.Local.SERVERS.provide().fetchAll().filter { !it.isAlphaServer() }.forEach { server ->
                         val bukkitSpawnApplication = CoreProvider.Cache.Local.APPLICATIONS.provide().fetchByServerAndApplicationType(
                             server,
                             ApplicationType.SERVER_SPAWN
@@ -78,19 +78,19 @@ object ScoreboardManager {
 
                         val onlineUsers = CoreProvider.Cache.Redis.USERS_STATUS.provide().fetchUsersByServer(server)
 
-                        val statusString: String = when {
-                            bukkitSpawnApplication === null || CoreProvider.Cache.Redis.APPLICATIONS_STATUS.provide().fetchApplicationStatusByApplication(
-                                bukkitSpawnApplication,
-                                ApplicationStatus::class
-                            ) === null -> "§cOff."
-                            CoreProvider.Cache.Local.MAINTENANCE.provide().fetch(bukkitSpawnApplication) == true -> {
-                                "§cMan."
-                            }
-                            else -> "§a${onlineUsers.size}"
-                        }
-
                         scoreboard.set(
-                            i, "§f ${server.getFancyDisplayName()}: $statusString"
+                            i, "§f ${server.getFancyDisplayName()}: ${
+                                when {
+                                    bukkitSpawnApplication === null || CoreProvider.Cache.Redis.APPLICATIONS_STATUS.provide().fetchApplicationStatusByApplication(
+                                        bukkitSpawnApplication,
+                                        ApplicationStatus::class
+                                    ) == null -> "§cOff."
+                                    CoreProvider.Cache.Local.MAINTENANCE.provide().fetch(bukkitSpawnApplication) == true -> {
+                                        "§cMan."
+                                    }
+                                    else -> "§a${onlineUsers.size}"
+                                }
+                            }"
                         )
 
                         if (i >= 4) i--
