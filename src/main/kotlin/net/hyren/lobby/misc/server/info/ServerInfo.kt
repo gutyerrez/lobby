@@ -108,7 +108,7 @@ fun Server.spawnHologram(): Hologram {
 fun Server.createWall() {
 	val serverConfiguration = CoreSpigotProvider.Cache.Local.SERVER_CONFIGURATION.provide().fetchByServer(
 		this
-	) ?: throw NullPointerException("npc location cannot be null")
+	) ?: throw NullPointerException("npc location for server $displayName cannot be null")
 
 	val worldCuboid = WorldCuboid(
 		serverConfiguration.settings.npcLocation.x.toInt() - 3,
