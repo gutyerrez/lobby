@@ -205,8 +205,9 @@ class GenericListener : Listener {
     fun on(
         event: WeatherChangeEvent
     ) {
-        if (event.toWeatherState())
+        if (event.toWeatherState()) {
             event.isCancelled = true
+        }
     }
 
     @EventHandler
@@ -231,7 +232,14 @@ class GenericListener : Listener {
     fun on(
         event: PlayerInteractAtEntityEvent
     ) {
+        val player = event.player
+        val entity = event.rightClicked
+
         event.isCancelled = true
+
+        if (entity is ArmorStand) {
+            player.sendMessage("Armor stand yeah! --")
+        }
     }
 
     @EventHandler
