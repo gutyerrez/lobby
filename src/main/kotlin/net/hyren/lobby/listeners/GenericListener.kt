@@ -225,7 +225,7 @@ class GenericListener : Listener {
             frame?.interactConsumer?.accept(player)
         } else if (entity is ArmorStand) {
             println("?")
-            println(entity.hasMetadata(LobbyConstants.NPC_SERVER_METADATA) + "@")
+            println("${entity.hasMetadata(LobbyConstants.NPC_SERVER_METADATA)}--=@")
         }
     }
 
