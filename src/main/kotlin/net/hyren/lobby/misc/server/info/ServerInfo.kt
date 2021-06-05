@@ -78,14 +78,12 @@ fun Server.spawnNPC(): Giant {
 
 	giant.teleport(getNPCLocation().clone().add(1.9, -8.5, -3.5))
 
-	val armorStand = EntityArmorStand(worldServer)
-
-	armorStand.setPosition(giant.location.x, giant.location.y, giant.location.z)
+	val armorStand = EntityArmorStand(worldServer, getNPCLocation().x, getNPCLocation().y, getNPCLocation().z)
 
 	armorStand.customNameVisible = false
 	armorStand.setBasePlate(false)
 
-	worldServer.addEntity(armorStand)
+	worldServer.addEntity(armorStand, CreatureSpawnEvent.SpawnReason.CUSTOM)
 
 	return giant
 }
