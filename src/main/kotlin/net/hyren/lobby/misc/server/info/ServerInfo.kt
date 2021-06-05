@@ -85,12 +85,6 @@ fun Server.spawnNPC(): Giant {
 	entityArmorStand.customNameVisible = false
 	entityArmorStand.isInvisible = true
 
-	entityArmorStand.setArms(false)
-	entityArmorStand.setGravity(false)
-	entityArmorStand.setBasePlate(false)
-
-	entityArmorStand.n(true)
-
 	worldServer.addEntity(entityArmorStand, CreatureSpawnEvent.SpawnReason.CUSTOM)
 
 	val armorStand = entityArmorStand.bukkitEntity
