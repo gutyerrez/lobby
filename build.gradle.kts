@@ -4,15 +4,13 @@ plugins {
     id("com.github.johnrengelman.shadow") version "6.1.0"
 }
 
-group = "com.redefantasy"
+group = "net.hyren"
 version = "0.1-ALPHA"
 
 repositories {
     mavenCentral()
 
-    maven("http://135.148.58.224:8081/artifactory/releases/") {
-        isAllowInsecureProtocol = true
-
+    maven("https://repository.hyren.net/") {
         credentials {
             username = System.getenv("MAVEN_USERNAME")
             password = System.getenv("MAVEN_PASSWORD")
