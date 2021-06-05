@@ -2,31 +2,21 @@ package net.hyren.lobby.listeners
 
 import net.hyren.core.shared.CoreProvider
 import net.hyren.core.shared.groups.Group
-import net.hyren.core.shared.misc.preferences.FLY_IN_LOBBY
-import net.hyren.core.shared.misc.preferences.PLAYER_VISIBILITY
-import net.hyren.core.shared.misc.preferences.PreferenceState
+import net.hyren.core.shared.misc.preferences.*
 import net.hyren.core.spigot.misc.frame.FrameManager
 import net.hyren.core.spigot.misc.utils.Title
-import net.hyren.lobby.LobbyConstants
-import net.hyren.lobby.LobbyProvider
+import net.hyren.lobby.*
 import net.hyren.lobby.misc.button.HotBarManager
 import net.hyren.lobby.misc.preferences.post
 import net.hyren.lobby.misc.scoreboard.ScoreboardManager
 import net.hyren.lobby.user.data.LobbyUser
 import net.md_5.bungee.api.chat.ComponentBuilder
-import org.bukkit.Bukkit
-import org.bukkit.Location
-import org.bukkit.Material
-import org.bukkit.entity.EntityType
-import org.bukkit.entity.Giant
-import org.bukkit.entity.ItemFrame
-import org.bukkit.entity.Player
-import org.bukkit.event.EventHandler
-import org.bukkit.event.Listener
+import org.bukkit.*
+import org.bukkit.entity.*
+import org.bukkit.event.*
 import org.bukkit.event.block.*
 import org.bukkit.event.entity.*
-import org.bukkit.event.inventory.ClickType
-import org.bukkit.event.inventory.InventoryClickEvent
+import org.bukkit.event.inventory.*
 import org.bukkit.event.player.*
 import org.bukkit.event.weather.WeatherChangeEvent
 
@@ -232,6 +222,8 @@ class GenericListener : Listener {
             val frame = FrameManager.INTERACTABLE_FRAMES[entity.uniqueId]
 
             frame?.interactConsumer?.accept(player)
+        } else if (entity is ArmorStand) {
+            player.sendMessage("Armor stand yeah!")
         }
     }
 
