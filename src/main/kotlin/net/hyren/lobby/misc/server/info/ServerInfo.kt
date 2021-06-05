@@ -1,23 +1,16 @@
 package net.hyren.lobby.misc.server.info
 
 import net.hyren.core.shared.servers.data.Server
-import net.hyren.core.spigot.CoreSpigotConstants
-import net.hyren.core.spigot.CoreSpigotProvider
+import net.hyren.core.spigot.*
 import net.hyren.core.spigot.misc.hologram.Hologram
-import net.hyren.core.spigot.world.WorldCuboid
-import net.hyren.lobby.LobbyConstants
-import net.hyren.lobby.LobbyPlugin
-import net.hyren.lobby.misc.utils.ServerConnectorUtils
-import net.minecraft.server.v1_8_R3.EntityGiantZombie
+import net.hyren.lobby.*
+import net.minecraft.server.v1_8_R3.*
 import org.bukkit.Location
-import org.bukkit.Material
 import org.bukkit.craftbukkit.v1_8_R3.CraftWorld
 import org.bukkit.entity.Giant
 import org.bukkit.event.entity.CreatureSpawnEvent
 import org.bukkit.metadata.FixedMetadataValue
-import org.bukkit.potion.PotionEffect
-import org.bukkit.potion.PotionEffectType
-import java.util.function.Consumer
+import org.bukkit.potion.*
 
 /**
  * @author Gutyerrez
@@ -85,6 +78,13 @@ fun Server.spawnNPC(): Giant {
 
 	npc.teleport(getNPCLocation().clone().add(1.9, -8.5, -3.5))
 
+	val armorStand = EntityArmorStand(worldServer)
+
+	armorStand.setPosition(npc.location.x, npc.location.y, npc.location.z)
+
+	armorStand.customNameVisible = false
+	armorStand.setBasePlate(false)
+
 	return npc
 }
 
@@ -105,7 +105,7 @@ fun Server.spawnHologram(): Hologram {
 	return hologram
 }
 
-fun Server.createWall() {
+/*fun Server.createWall() {
 	val serverConfiguration = CoreSpigotProvider.Cache.Local.SERVER_CONFIGURATION.provide().fetchByServer(
 		this
 	) ?: throw NullPointerException("npc location for server $displayName cannot be null")
@@ -131,7 +131,7 @@ fun Server.createWall() {
 	worldCuboid.getBlocks {
 		it.type = Material.BARRIER
 	}
-}
+}*/
 
 fun Giant.update(
 	server: Server
