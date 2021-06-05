@@ -223,8 +223,6 @@ class GenericListener : Listener {
             val frame = FrameManager.INTERACTABLE_FRAMES[entity.uniqueId]
 
             frame?.interactConsumer?.accept(player)
-        } else if (entity is ArmorStand) {
-            player.sendMessage("Armor stand yeah!")
         }
     }
 
@@ -232,13 +230,14 @@ class GenericListener : Listener {
     fun on(
         event: PlayerInteractAtEntityEvent
     ) {
-        val player = event.player
         val entity = event.rightClicked
 
         event.isCancelled = true
 
-        if (entity is ArmorStand) {
-            player.sendMessage("Armor stand yeah! --")
+        if (entity is ArmorStand && entity.hasMetadata(LobbyConstants.NPC_SERVER_METADATA)) {
+            val callback = entity.getMetadata(LobbyConstants.NPC_SERVER_METADATA)[0].value() as (PlayerInteractAtEntityEvent) -> Unit
+
+            callback(event)
         }
     }
 

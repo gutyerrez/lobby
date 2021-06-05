@@ -4,11 +4,13 @@ import net.hyren.core.shared.servers.data.Server
 import net.hyren.core.spigot.*
 import net.hyren.core.spigot.misc.hologram.Hologram
 import net.hyren.lobby.*
+import net.hyren.lobby.misc.utils.ServerConnectorUtils
 import net.minecraft.server.v1_8_R3.*
 import org.bukkit.Location
 import org.bukkit.craftbukkit.v1_8_R3.CraftWorld
 import org.bukkit.entity.Giant
 import org.bukkit.event.entity.CreatureSpawnEvent
+import org.bukkit.event.player.PlayerInteractAtEntityEvent
 import org.bukkit.metadata.FixedMetadataValue
 import org.bukkit.potion.*
 
@@ -78,12 +80,31 @@ fun Server.spawnNPC(): Giant {
 
 	giant.teleport(getNPCLocation().clone().add(1.9, -8.5, -3.5))
 
-	val armorStand = EntityArmorStand(worldServer, getNPCLocation().x, getNPCLocation().y, getNPCLocation().z)
+	val entityArmorStand = EntityArmorStand(worldServer, getNPCLocation().x, getNPCLocation().y, getNPCLocation().z)
 
-	armorStand.customNameVisible = false
-	armorStand.setBasePlate(false)
+	entityArmorStand.isSmall = false
+	entityArmorStand.customNameVisible = true
+	entityArmorStand.isInvisible = true
+	entityArmorStand.noclip = true
 
-	worldServer.addEntity(armorStand, CreatureSpawnEvent.SpawnReason.CUSTOM)
+	entityArmorStand.setArms(false)
+	entityArmorStand.setGravity(false)
+	entityArmorStand.setBasePlate(false)
+
+	entityArmorStand.n(true)
+
+	worldServer.addEntity(entityArmorStand, CreatureSpawnEvent.SpawnReason.CUSTOM)
+
+	val armorStand = entityArmorStand.bukkitEntity
+
+	armorStand.setMetadata(LobbyConstants.NPC_SERVER_METADATA, FixedMetadataValue(
+		LobbyPlugin.instance,
+		{ event: PlayerInteractAtEntityEvent ->
+			val player = event.player
+
+			ServerConnectorUtils.connect(player, this)
+		}
+	))
 
 	return giant
 }
