@@ -45,17 +45,17 @@ fun Server.spawnNPC(): Giant {
 
 	worldServer.addEntity(customZombie, CreatureSpawnEvent.SpawnReason.CUSTOM)
 
-	val npc = customZombie.bukkitEntity as Giant
+	val giant = customZombie.bukkitEntity as Giant
 
-	npc.setMetadata(LobbyConstants.NPC_METADATA, FixedMetadataValue(
+	giant.setMetadata(LobbyConstants.NPC_METADATA, FixedMetadataValue(
 		LobbyPlugin.instance,
 		true
 	))
 
-	npc.maxHealth = 2048.0
-	npc.health = 2048.0
+	giant.maxHealth = 2048.0
+	giant.health = 2048.0
 
-	npc.setMetadata(
+	giant.setMetadata(
 		LobbyConstants.NPC_METADATA,
 		FixedMetadataValue(
 			LobbyPlugin.instance,
@@ -63,7 +63,7 @@ fun Server.spawnNPC(): Giant {
 		)
 	)
 
-	npc.addPotionEffect(
+	giant.addPotionEffect(
 		PotionEffect(
 			PotionEffectType.INVISIBILITY,
 			Int.MAX_VALUE,
@@ -71,21 +71,23 @@ fun Server.spawnNPC(): Giant {
 		),
 		true
 	)
-	npc.removeWhenFarAway = false
-	npc.equipment.itemInHand = CoreSpigotProvider.Cache.Local.SERVER_CONFIGURATION.provide().fetchByServer(
+	giant.removeWhenFarAway = false
+	giant.equipment.itemInHand = CoreSpigotProvider.Cache.Local.SERVER_CONFIGURATION.provide().fetchByServer(
 		this
 	)?.icon
 
-	npc.teleport(getNPCLocation().clone().add(1.9, -8.5, -3.5))
+	giant.teleport(getNPCLocation().clone().add(1.9, -8.5, -3.5))
 
 	val armorStand = EntityArmorStand(worldServer)
 
-	armorStand.setPosition(npc.location.x, npc.location.y, npc.location.z)
+	armorStand.setPosition(giant.location.x, giant.location.y, giant.location.z)
 
 	armorStand.customNameVisible = false
 	armorStand.setBasePlate(false)
 
-	return npc
+	worldServer.addEntity(armorStand)
+
+	return giant
 }
 
 fun Server.spawnHologram(): Hologram {
