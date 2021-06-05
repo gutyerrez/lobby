@@ -235,9 +235,15 @@ class GenericListener : Listener {
         event.isCancelled = true
 
         if (entity is ArmorStand && entity.hasMetadata(LobbyConstants.NPC_SERVER_METADATA)) {
-            val callback = entity.getMetadata(LobbyConstants.NPC_SERVER_METADATA)[0].value() as (PlayerInteractAtEntityEvent) -> Unit
+            println("Tem a metadata!")
 
-            callback(event)
+            try {
+                val callback = entity.getMetadata(LobbyConstants.NPC_SERVER_METADATA)[0].value() as (PlayerInteractAtEntityEvent) -> Unit
+
+                callback(event)
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
         }
     }
 

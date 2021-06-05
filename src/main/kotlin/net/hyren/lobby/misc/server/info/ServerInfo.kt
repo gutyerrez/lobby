@@ -82,10 +82,8 @@ fun Server.spawnNPC(): Giant {
 
 	val entityArmorStand = EntityArmorStand(worldServer, getNPCLocation().x, getNPCLocation().y, getNPCLocation().z)
 
-	entityArmorStand.isSmall = false
-	entityArmorStand.customNameVisible = true
+	entityArmorStand.customNameVisible = false
 	entityArmorStand.isInvisible = true
-	entityArmorStand.noclip = true
 
 	entityArmorStand.setArms(false)
 	entityArmorStand.setGravity(false)
