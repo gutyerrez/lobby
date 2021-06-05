@@ -223,9 +223,6 @@ class GenericListener : Listener {
             val frame = FrameManager.INTERACTABLE_FRAMES[entity.uniqueId]
 
             frame?.interactConsumer?.accept(player)
-        } else if (entity is ArmorStand) {
-            println("?")
-            println("${entity.hasMetadata(LobbyConstants.NPC_SERVER_METADATA)}--=@")
         }
     }
 
@@ -237,12 +234,7 @@ class GenericListener : Listener {
 
         event.isCancelled = true
 
-        println(entity is ArmorStand)
-        println(entity.hasMetadata(LobbyConstants.NPC_SERVER_METADATA))
-
         if (entity is ArmorStand && entity.hasMetadata(LobbyConstants.NPC_SERVER_METADATA)) {
-            println("Tem a metadata!")
-
             try {
                 val callback = entity.getMetadata(LobbyConstants.NPC_SERVER_METADATA)[0].value() as (PlayerInteractAtEntityEvent) -> Unit
 

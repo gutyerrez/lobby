@@ -118,34 +118,6 @@ fun Server.spawnHologram(): Hologram {
 	return hologram
 }
 
-/*fun Server.createWall() {
-	val serverConfiguration = CoreSpigotProvider.Cache.Local.SERVER_CONFIGURATION.provide().fetchByServer(
-		this
-	) ?: throw NullPointerException("npc location for server $displayName cannot be null")
-
-	val worldCuboid = WorldCuboid(
-		serverConfiguration.settings.npcLocation.x.toInt() - 3,
-		serverConfiguration.settings.npcLocation.y.toInt() + 0,
-		serverConfiguration.settings.npcLocation.z.toInt() - 3,
-		serverConfiguration.settings.npcLocation.x.toInt() + 2,
-		serverConfiguration.settings.npcLocation.y.toInt() + 3,
-		serverConfiguration.settings.npcLocation.z.toInt() + 1
-	)
-
-	LobbyConstants.SERVERS_CUBOIDS[worldCuboid] = Consumer {
-		val player = it.player
-
-		ServerConnectorUtils.connect(
-			player,
-			this
-		)
-	}
-
-	worldCuboid.getBlocks {
-		it.type = Material.BARRIER
-	}
-}*/
-
 fun Giant.update(
 	server: Server
 ) {
