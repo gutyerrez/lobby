@@ -8,7 +8,7 @@ import net.hyren.lobby.misc.utils.ServerConnectorUtils
 import net.minecraft.server.v1_8_R3.*
 import org.bukkit.Location
 import org.bukkit.craftbukkit.v1_8_R3.CraftWorld
-import org.bukkit.entity.Giant
+import org.bukkit.entity.*
 import org.bukkit.event.entity.CreatureSpawnEvent
 import org.bukkit.event.player.PlayerInteractAtEntityEvent
 import org.bukkit.metadata.FixedMetadataValue
@@ -98,6 +98,11 @@ fun Server.spawnNPC(): Giant {
 		}
 	))
 
+	giant.setMetadata("base", FixedMetadataValue(
+		LobbyPlugin.instance,
+		armorStand
+	))
+
 	return giant
 }
 
@@ -128,4 +133,8 @@ fun Giant.update(
 	)?.icon
 
 	this.teleport(server.getNPCLocation().clone().add(1.9, -8.5, -3.5))
+
+	val armorStand = this.getMetadata("base")[0].value() as ArmorStand
+
+	armorStand.teleport(server.getNPCLocation())
 }
