@@ -2,9 +2,7 @@ package net.hyren.lobby.misc.server.utils
 
 import net.hyren.core.shared.servers.data.Server
 import net.hyren.core.spigot.misc.hologram.Hologram
-import net.hyren.lobby.misc.server.info.createWall
-import net.hyren.lobby.misc.server.info.spawnHologram
-import net.hyren.lobby.misc.server.info.spawnNPC
+import net.hyren.lobby.misc.server.info.*
 import org.bukkit.entity.Giant
 
 /**
@@ -17,7 +15,7 @@ object ServerConfigurationUtils {
 		npcsMap: MutableMap<Server, Giant>,
 		hologramsMap: MutableMap<Server, Hologram>
 	) {
-		server.createWall()
+//		server.createWall()
 
 		npcsMap[server] = server.spawnNPC()
 
