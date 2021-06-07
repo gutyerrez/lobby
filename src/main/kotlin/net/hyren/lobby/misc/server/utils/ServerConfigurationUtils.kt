@@ -12,12 +12,10 @@ object ServerConfigurationUtils {
 
 	fun initServer(
 		server: Server,
-		npcsMap: MutableMap<Server, Giant>,
+		npcMap: MutableMap<Server, Giant>,
 		hologramsMap: MutableMap<Server, Hologram>
 	) {
-//		server.createWall()
-
-		npcsMap[server] = server.spawnNPC()
+		npcMap[server] = server.spawnNPC()
 
 		hologramsMap[server] = server.spawnHologram()
 	}
