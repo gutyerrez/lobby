@@ -1,18 +1,24 @@
 package net.hyren.lobby.misc.server.info
 
 import net.hyren.core.shared.servers.data.Server
-import net.hyren.core.spigot.*
+import net.hyren.core.spigot.CoreSpigotConstants
+import net.hyren.core.spigot.CoreSpigotProvider
 import net.hyren.core.spigot.misc.hologram.Hologram
-import net.hyren.lobby.*
+import net.hyren.lobby.LobbyConstants
+import net.hyren.lobby.LobbyPlugin
 import net.hyren.lobby.misc.utils.ServerConnectorUtils
-import net.minecraft.server.v1_8_R3.*
+import net.minecraft.server.EntityArmorStand
+import net.minecraft.server.EntityGiantZombie
 import org.bukkit.Location
-import org.bukkit.craftbukkit.v1_8_R3.CraftWorld
-import org.bukkit.entity.*
+import org.bukkit.craftbukkit.CraftWorld
+import org.bukkit.craftbukkit.entity.CraftEntity
+import org.bukkit.entity.ArmorStand
+import org.bukkit.entity.Giant
 import org.bukkit.event.entity.CreatureSpawnEvent
 import org.bukkit.event.player.PlayerInteractAtEntityEvent
 import org.bukkit.metadata.FixedMetadataValue
-import org.bukkit.potion.*
+import org.bukkit.potion.PotionEffect
+import org.bukkit.potion.PotionEffectType
 
 /**
  * @author Gutyerrez
@@ -47,15 +53,12 @@ fun Server.spawnNPC(): Giant {
 
 	worldServer.addEntity(customZombie, CreatureSpawnEvent.SpawnReason.CUSTOM)
 
-	val giant = customZombie.bukkitEntity as Giant
+	val giant = CraftEntity.getEntity(worldServer.server, customZombie) as Giant
 
 	giant.setMetadata(LobbyConstants.NPC_METADATA, FixedMetadataValue(
 		LobbyPlugin.instance,
 		true
 	))
-
-	giant.maxHealth = 2048.0
-	giant.health = 2048.0
 
 	giant.setMetadata(
 		LobbyConstants.NPC_METADATA,
@@ -126,8 +129,6 @@ fun Server.spawnHologram(): Hologram {
 fun Giant.update(
 	server: Server
 ) {
-	this.health = 2048.0
-
 	this.equipment.itemInHand = CoreSpigotProvider.Cache.Local.SERVER_CONFIGURATION.provide().fetchByServer(
 		server
 	)?.icon

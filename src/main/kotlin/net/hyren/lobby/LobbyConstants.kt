@@ -9,6 +9,7 @@ import java.util.function.Consumer
  */
 object LobbyConstants {
 
+	@Deprecated("")
 	const val NPC_METADATA = "hyren-npc"
 	const val NPC_SERVER_METADATA = "hyren-server-npc"
 
