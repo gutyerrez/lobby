@@ -11,7 +11,7 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
       - name: Build project
-        run: ./gradlew build
+        run: ./gradlew jar
       - name: Deploy to remote servers
         run: |
           sh /home/cloud/scripts/github/deploy.sh build/libs/lobby.jar
