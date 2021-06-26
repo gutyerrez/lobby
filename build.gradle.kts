@@ -34,9 +34,8 @@ dependencies {
     // kotlin
     compileOnly(kotlin("stdlib"))
 
-    // spigot
-    compileOnly("org.spigotmc:spigot-api:1.8.8-R0.1-SNAPSHOT")
-    compileOnly("org.spigotmc:spigot-server:1.8.8-R0.1-SNAPSHOT")
+    // paer-spigot-server
+    compileOnly("org.github.paperspigot:paper-spigot-server:1.8.8-R0.1-SNAPSHOT")
 
     // minecraft-server
     compileOnly("net.hyren:minecraft-server:1.8.8-SNAPSHOT")
