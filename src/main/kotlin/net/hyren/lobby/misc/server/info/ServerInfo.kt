@@ -7,11 +7,11 @@ import net.hyren.core.spigot.misc.hologram.Hologram
 import net.hyren.lobby.LobbyConstants
 import net.hyren.lobby.LobbyPlugin
 import net.hyren.lobby.misc.utils.ServerConnectorUtils
-import net.minecraft.server.EntityArmorStand
-import net.minecraft.server.EntityGiantZombie
+import net.minecraft.server.v1_8_R3.EntityArmorStand
+import net.minecraft.server.v1_8_R3.EntityGiantZombie
 import org.bukkit.Location
-import org.bukkit.craftbukkit.CraftWorld
-import org.bukkit.craftbukkit.entity.CraftEntity
+import org.bukkit.craftbukkit.v1_8_R3.CraftWorld
+import org.bukkit.craftbukkit.v1_8_R3.entity.CraftEntity
 import org.bukkit.entity.ArmorStand
 import org.bukkit.entity.Giant
 import org.bukkit.event.entity.CreatureSpawnEvent
