@@ -14,4 +14,4 @@ jobs:
         run: ./gradlew jar
       - name: Deploy to remote servers
         run: |
-          sh /home/cloud/scripts/github/deploy.sh build/libs/lobby.jar
+          sh /home/cloud/scripts/services/github/actions/deploy.sh build/libs/lobby.jar
