@@ -115,12 +115,11 @@ class LobbyPlugin : CustomPlugin(false) {
          * Theme
          */
 
-        Theme("lobby").also {
+        Theme().also {
             it.load()
 
             it.paste(
-                Bukkit.getWorlds()[0].name,
-                0, 74, 0
+                Bukkit.getWorlds()[0].name, 0, 74, 0
             )
         }
 
