@@ -29,9 +29,7 @@ object ScoreboardManager {
 
         scoreboard.registerTeams()
 
-        if (user != null) {
-            user.scoreboard = scoreboard
-        } else {
+        if (user == null) {
             user = LobbyUser(
                 User(
                     EntityID(
@@ -43,6 +41,8 @@ object ScoreboardManager {
                 )
             )
         }
+
+        user.scoreboard = scoreboard
 
         val fancyGroupName = user.getHighestGroup().getFancyDisplayName()
 
