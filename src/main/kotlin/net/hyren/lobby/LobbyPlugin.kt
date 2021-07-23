@@ -146,7 +146,7 @@ class LobbyPlugin : CustomPlugin(false) {
 
             it.setStorm(false)
 
-            it.setGameRuleValue("randomTickSpeed", "-999")
+            it.setGameRuleValue("randomTickSpeed", "-1")
             it.setGameRuleValue("mobGriefing", "false")
             it.setGameRuleValue("doMobSpawning", "false")
             it.setGameRuleValue("doMobLoot", "false")
@@ -260,55 +260,45 @@ class LobbyPlugin : CustomPlugin(false) {
          * Frames
          */
 
-        val frame = Frame(URL("https://i.imgur.com/YzXizib.png"))
+        Frame(URL("https://i.imgur.com/YzXizib.png")).also {
+            it.interactConsumer = Consumer { player ->
+                val user = CoreProvider.Cache.Local.USERS.provide().fetchById(player.uniqueId)!!
 
-        frame.interactConsumer = Consumer {
-            val user = CoreProvider.Cache.Local.USERS.provide().fetchById(it.uniqueId)!!
+                if (CoreConstants.COOLDOWNS.inCooldown(user, "frame-interact")) return@Consumer
 
-            if (CoreConstants.COOLDOWNS.inCooldown(user, "frame-interact")) return@Consumer
-
-            it.sendMessage(
-                ComponentBuilder()
-                    .append("\n")
-                    .append("§e Clique ")
-                    .append("§e§lAQUI")
-                    .event(
-                        ClickEvent(
-                            ClickEvent.Action.OPEN_URL,
-                            "https://loja.redefantasy.com/"
+                player.sendMessage(
+                    ComponentBuilder()
+                        .append("\n")
+                        .append("§e Clique ")
+                        .append("§e§lAQUI")
+                        .event(
+                            ClickEvent(
+                                ClickEvent.Action.OPEN_URL,
+                                CoreConstants.Info.SHOP_URL
+                            )
                         )
-                    )
-                    .append("§e para adquirir seu plano §6VIP§e!")
-                    .append("\n")
-                    .create()
-            )
+                        .append("§e para adquirir seu plano §6VIP§e!")
+                        .append("\n")
+                        .create()
+                )
 
-            CoreConstants.COOLDOWNS.start(
-                user,
-                "frame-interact",
-                TimeUnit.SECONDS.toMillis(3)
+                CoreConstants.COOLDOWNS.start(
+                    user,
+                    "frame-interact",
+                    TimeUnit.SECONDS.toMillis(3)
+                )
+            }
+
+            it.place(
+                Location(
+                    getDefaultWorld(),
+                    -4.0,
+                    89.0,
+                    -39.0
+                ),
+                BlockFace.SOUTH
             )
         }
-
-        frame.place(
-            Location(
-                Bukkit.getWorld("world"),
-                -4.0,
-                89.0,
-                -39.0
-            ),
-            BlockFace.SOUTH
-        )
-
-        frame.place(
-            Location(
-                Bukkit.getWorld("world"),
-                4.0,
-                89.0,
-                -39.0
-            ),
-            BlockFace.NORTH
-        )
 
         /**
          * Slime Jumps

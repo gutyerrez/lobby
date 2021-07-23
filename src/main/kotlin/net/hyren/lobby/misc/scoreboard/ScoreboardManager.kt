@@ -36,7 +36,7 @@ object ScoreboardManager {
         scoreboard.set(13, "§f Grupo: $fancyGroupName")
         scoreboard.set(12, "§1")
 
-        this.update(
+        update(
             player,
             Slot.ONLINE_PLAYERS,
             Slot.SERVER_LIST,
@@ -50,7 +50,7 @@ object ScoreboardManager {
         scoreboard.set(1, "§3")
         scoreboard.set(0, "§e${CoreConstants.Info.SHOP_URL}")
 
-        this.WITH_SCORE_BOARD[player.uniqueId] = System.currentTimeMillis()
+        WITH_SCORE_BOARD[player.uniqueId] = System.currentTimeMillis()
 
         scoreboard.send(arrayOf(player))
     }
