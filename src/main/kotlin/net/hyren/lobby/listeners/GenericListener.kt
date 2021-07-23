@@ -50,7 +50,11 @@ class GenericListener : Listener {
 
         CoreProvider.Cache.Local.USERS.provide().fetchById(player.uniqueId).also {
             if (it == null || !it.hasGroup(Group.VIP)) {
-                player.openInventory(CaptchaInventory())
+                Thread {
+                    Thread.sleep(250)
+
+                    player.openInventory(CaptchaInventory())
+                }.start()
             }
         }
     }
