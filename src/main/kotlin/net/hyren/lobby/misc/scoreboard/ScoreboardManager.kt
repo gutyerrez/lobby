@@ -54,7 +54,7 @@ object ScoreboardManager {
         scoreboard.set(12, "§1")
 
         update(
-            player,
+            user,
             Slot.ONLINE_PLAYERS,
             Slot.SERVER_LIST,
             Slot.TAB_LIST
@@ -72,9 +72,7 @@ object ScoreboardManager {
         scoreboard.send(arrayOf(player))
     }
 
-    fun update(player: Player, vararg slots: Slot) {
-        val user = LobbyProvider.Cache.Local.LOBBY_USERS.provide().fetchById(player.uniqueId)!!
-
+    fun update(user: LobbyUser, vararg slots: Slot) {
         val scoreboard = user.scoreboard
 
         slots.forEach {
