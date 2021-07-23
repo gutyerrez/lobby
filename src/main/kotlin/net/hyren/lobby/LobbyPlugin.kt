@@ -239,11 +239,9 @@ class LobbyPlugin : CustomPlugin(false) {
                 Thread {
                     LobbyProvider.Cache.Local.LOBBY_USERS.provide().fetchAll().forEach {
                         try {
-                            val player = Bukkit.getPlayer(it!!.getUniqueId())
-
-                            if (player != null && !player.isDead) {
+                            if (it.player != null && !it.player.isDead) {
                                 ScoreboardManager.update(
-                                    it.player,
+                                    it,
                                     ScoreboardManager.Slot.ONLINE_PLAYERS,
                                     ScoreboardManager.Slot.SERVER_LIST
                                 )
