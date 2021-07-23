@@ -292,11 +292,11 @@ class LobbyPlugin : CustomPlugin(false) {
             it.place(
                 Location(
                     getDefaultWorld(),
-                    -4.0,
-                    89.0,
-                    -39.0
+                    3.0,
+                    78.0,
+                    72.0
                 ),
-                BlockFace.SOUTH
+                BlockFace.NORTH
             )
         }
 
