@@ -2,21 +2,23 @@ package net.hyren.lobby.listeners
 
 import net.hyren.core.shared.CoreProvider
 import net.hyren.core.shared.groups.Group
-import net.hyren.core.shared.misc.preferences.*
 import net.hyren.core.spigot.misc.frame.FrameManager
 import net.hyren.core.spigot.misc.utils.Title
-import net.hyren.lobby.*
+import net.hyren.lobby.LobbyConstants
+import net.hyren.lobby.LobbyProvider
 import net.hyren.lobby.misc.button.HotBarManager
-import net.hyren.lobby.misc.preferences.post
-import net.hyren.lobby.misc.scoreboard.ScoreboardManager
-import net.hyren.lobby.user.data.LobbyUser
+import net.hyren.lobby.misc.captcha.inventory.CaptchaInventory
 import net.md_5.bungee.api.chat.ComponentBuilder
-import org.bukkit.*
+import org.bukkit.Bukkit
+import org.bukkit.Location
+import org.bukkit.Material
 import org.bukkit.entity.*
-import org.bukkit.event.*
+import org.bukkit.event.EventHandler
+import org.bukkit.event.Listener
 import org.bukkit.event.block.*
 import org.bukkit.event.entity.*
-import org.bukkit.event.inventory.*
+import org.bukkit.event.inventory.ClickType
+import org.bukkit.event.inventory.InventoryClickEvent
 import org.bukkit.event.player.*
 import org.bukkit.event.weather.WeatherChangeEvent
 
@@ -35,25 +37,9 @@ class GenericListener : Listener {
 
         player.maxHealth = 2.0
 
-        player.spigot().collidesWithEntities = false
+        player.spigot().collidesWithEntities = true
 
-        val user = CoreProvider.Cache.Local.USERS.provide().fetchById(player.uniqueId)!!
-
-        LobbyProvider.Cache.Local.LOBBY_USERS.provide().put(
-            LobbyUser(user)
-        )
-
-        if (user.hasGroup(Group.VIP) && user.getPreferences()
-                .find { it == FLY_IN_LOBBY }?.preferenceState === PreferenceState.ENABLED
-        ) {
-            player.allowFlight = true
-            player.isFlying = true
-        }
-
-        ScoreboardManager.construct(player)
-        HotBarManager.giveToPlayer(player)
-
-        user.getPreferences().find { it == PLAYER_VISIBILITY }?.post(user)
+        player.openInventory(CaptchaInventory())
     }
 
     @EventHandler
@@ -73,8 +59,9 @@ class GenericListener : Listener {
 
         event.isCancelled = true
 
-        if (event.click === ClickType.NUMBER_KEY)
+        if (event.click === ClickType.NUMBER_KEY) {
             event.isCancelled = true
+        }
     }
 
     @EventHandler
