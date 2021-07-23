@@ -7,7 +7,6 @@ import net.hyren.core.spigot.misc.utils.Title
 import net.hyren.lobby.LobbyConstants
 import net.hyren.lobby.LobbyProvider
 import net.hyren.lobby.misc.button.HotBarManager
-import net.hyren.lobby.misc.captcha.inventory.CaptchaInventory
 import net.md_5.bungee.api.chat.ComponentBuilder
 import org.bukkit.Bukkit
 import org.bukkit.Location
@@ -39,7 +38,11 @@ class GenericListener : Listener {
 
         player.spigot().collidesWithEntities = true
 
-        player.openInventory(CaptchaInventory())
+        val user = CoreProvider.Cache.Local.USERS.provide().fetchById(player.uniqueId)
+
+        if (user == null || !user.hasGroup(Group.VIP)) {
+//        player.openInventory(CaptchaInventory())
+        }
     }
 
     @EventHandler

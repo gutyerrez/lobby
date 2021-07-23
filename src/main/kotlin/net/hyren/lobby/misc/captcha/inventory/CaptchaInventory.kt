@@ -110,9 +110,7 @@ class CaptchaInventory : CustomInventory(
             filledSlots.add(slot)
         }
 
-        ITEMS_SLOTS.filter {
-            !filledSlots.contains(it)
-        }.forEach { slot ->
+        ITEMS_SLOTS.filter { !filledSlots.contains(it) }.forEach { slot ->
             setItem(
                 slot,
                 FILL_ITEM,
