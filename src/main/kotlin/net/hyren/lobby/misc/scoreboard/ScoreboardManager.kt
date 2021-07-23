@@ -4,10 +4,13 @@ import net.hyren.core.shared.CoreConstants
 import net.hyren.core.shared.CoreProvider
 import net.hyren.core.shared.applications.ApplicationType
 import net.hyren.core.shared.applications.status.ApplicationStatus
+import net.hyren.core.shared.users.data.User
 import net.hyren.core.shared.users.storage.table.UsersTable
 import net.hyren.core.spigot.misc.scoreboard.bukkit.GroupScoreboard
 import net.hyren.lobby.LobbyProvider
+import net.hyren.lobby.user.data.LobbyUser
 import org.bukkit.Bukkit
+import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer
 import org.bukkit.entity.Player
 import org.jetbrains.exposed.dao.id.EntityID
 import java.util.*
@@ -19,15 +22,29 @@ object ScoreboardManager {
 
     private val WITH_SCORE_BOARD = mutableMapOf<UUID, Long>()
 
-    fun construct(player: Player) {
-        val user = LobbyProvider.Cache.Local.LOBBY_USERS.provide().fetchById(player.uniqueId)!!
+    fun construct(player: Player, scores: Boolean = false) {
+        var user = LobbyProvider.Cache.Local.LOBBY_USERS.provide().fetchById(player.uniqueId)
 
-        val fancyGroupName = user.getHighestGroup().getFancyDisplayName()
         val scoreboard = LobbyScoreboard()
 
         scoreboard.registerTeams()
 
-        user.scoreboard = scoreboard
+        if (user != null) {
+            user.scoreboard = scoreboard
+        } else {
+            user = LobbyUser(
+                User(
+                    EntityID(
+                        player.uniqueId,
+                        UsersTable
+                    ),
+                    player.name,
+                    (player as CraftPlayer).address.address.hostAddress
+                )
+            )
+        }
+
+        val fancyGroupName = user.getHighestGroup().getFancyDisplayName()
 
         scoreboard.setTitle(
             CoreConstants.Info.COLORED_SERVER_NAME
