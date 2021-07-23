@@ -5,6 +5,7 @@ import net.hyren.core.shared.groups.Group
 import net.hyren.core.spigot.misc.frame.FrameManager
 import net.hyren.core.spigot.misc.utils.Title
 import net.hyren.lobby.LobbyConstants
+import net.hyren.lobby.LobbyPlugin
 import net.hyren.lobby.LobbyProvider
 import net.hyren.lobby.misc.button.HotBarManager
 import net.md_5.bungee.api.chat.ComponentBuilder
@@ -35,6 +36,11 @@ class GenericListener : Listener {
         Title.clear(player)
 
         player.maxHealth = 2.0
+        player.teleport(
+            Location(
+                LobbyPlugin.instance.getDefaultWorld(), 0.5, 75.0, 0.5
+            )
+        )
 
         player.spigot().collidesWithEntities = true
 
@@ -78,9 +84,7 @@ class GenericListener : Listener {
                 event.isCancelled = true
 
                 if (event.cause === EntityDamageEvent.DamageCause.VOID) {
-                    val world = Bukkit.getWorld("world")
-
-                    entity.teleport(world.spawnLocation)
+                    entity.teleport(LobbyPlugin.instance.getDefaultWorld().spawnLocation)
                 }
             }
         }
@@ -127,7 +131,7 @@ class GenericListener : Listener {
 
         event.isCancelled = true
 
-        if (user === null || !user.hasGroup(Group.HELPER)) {
+        if (user == null || !user.hasGroup(Group.HELPER)) {
             return
         }
 
