@@ -54,7 +54,7 @@ class CaptchaInventory : CustomInventory(
 
         val filledSlots = mutableListOf<Int>()
 
-        for ((index, _) in (remainingItems downTo 0).withIndex()) {
+        for (index in 0 until remainingItems) {
             val slot = ITEMS_SLOTS[index]
             val material = MATERIALS[index]
 
