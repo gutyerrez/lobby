@@ -118,9 +118,22 @@ object ScoreboardManager {
                                 player.uniqueId,
                                 UsersTable
                             )
-                        )!!
+                        ) ?: LobbyUser(
+                            User(
+                                EntityID(
+                                    player.uniqueId,
+                                    UsersTable
+                                ),
+                                player.name,
+                                (player as CraftPlayer).address.address.hostAddress
+                            )
+                        )
 
                         scoreboard as GroupScoreboard
+
+                        if (!targetUser.isScoreboardInitialized()) {
+                            targetUser.scoreboard = LobbyScoreboard()
+                        }
 
                         val groupBoard = targetUser.scoreboard as GroupScoreboard
 

@@ -27,4 +27,6 @@ data class LobbyUser(val user: User) : User(
 
     val player = Bukkit.getPlayer(this.id.value)
 
+    fun isScoreboardInitialized() = this::scoreboard.isInitialized
+
 }
