@@ -18,16 +18,12 @@ class UserGroupsUpdatedEchoPacketListener : EchoPacketListener {
         val userId = packet.userId!!
         val lobbyUser = LobbyProvider.Cache.Local.LOBBY_USERS.provide().fetchById(userId)
 
-        if (lobbyUser === null) return
-
-        if (!lobbyUser.isOnline()) return
-
-        val player = lobbyUser.player
-
-        if (player === null) return
+        if (lobbyUser === null || !lobbyUser.isOnline()) {
+            return
+        }
 
         ScoreboardManager.update(
-            player,
+            lobbyUser,
             ScoreboardManager.Slot.TAB_LIST
         )
     }
