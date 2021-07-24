@@ -6,8 +6,10 @@ import net.hyren.core.shared.applications.ApplicationType
 import net.hyren.core.shared.applications.status.ApplicationStatus
 import net.hyren.core.shared.users.data.User
 import net.hyren.core.shared.users.storage.table.UsersTable
+import net.hyren.core.spigot.misc.scoreboard.bukkit.GroupScoreboard
 import net.hyren.lobby.LobbyProvider
 import net.hyren.lobby.user.data.LobbyUser
+import org.bukkit.Bukkit
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer
 import org.bukkit.entity.Player
 import org.jetbrains.exposed.dao.id.EntityID
@@ -61,7 +63,8 @@ object ScoreboardManager {
 
         val bukkitApplicationName = CoreProvider.application.displayName.split(" ")[1]
 
-        println(bukkitApplicationName.length)
+        println("§f Grupo: $fancyGroupName".length)
+        println("§f Saguão: §7$bukkitApplicationName".length)
         println("§e${CoreConstants.Info.SHOP_URL}".length)
 
         scoreboard.set(3, "§2")
@@ -112,38 +115,38 @@ object ScoreboardManager {
                     }
                 }
                 Slot.TAB_LIST -> {
-//                    Bukkit.getOnlinePlayers().forEach { player ->
-//                        val targetUser = LobbyProvider.Cache.Local.LOBBY_USERS.provide().fetchById(
-//                            EntityID(
-//                                player.uniqueId,
-//                                UsersTable
-//                            )
-//                        ) ?: LobbyUser(
-//                            User(
-//                                EntityID(
-//                                    player.uniqueId,
-//                                    UsersTable
-//                                ),
-//                                player.name,
-//                                (player as CraftPlayer).address.address.hostAddress
-//                            )
-//                        )
-//
-//                        scoreboard as GroupScoreboard
-//
-//                        if (!targetUser.isScoreboardInitialized()) {
-//                            val scoreboard = LobbyScoreboard()
-//
-//                            scoreboard.registerTeams()
-//
-//                            targetUser.scoreboard = scoreboard
-//                        }
-//
-//                        val groupBoard = targetUser.scoreboard as GroupScoreboard
-//
-//                        groupBoard.registerUser(user)
-//                        scoreboard.registerUser(targetUser)
-//                    }
+                    Bukkit.getOnlinePlayers().forEach { player ->
+                        val targetUser = LobbyProvider.Cache.Local.LOBBY_USERS.provide().fetchById(
+                            EntityID(
+                                player.uniqueId,
+                                UsersTable
+                            )
+                        ) ?: LobbyUser(
+                            User(
+                                EntityID(
+                                    player.uniqueId,
+                                    UsersTable
+                                ),
+                                player.name,
+                                (player as CraftPlayer).address.address.hostAddress
+                            )
+                        )
+
+                        scoreboard as GroupScoreboard
+
+                        if (!targetUser.isScoreboardInitialized()) {
+                            val scoreboard = LobbyScoreboard()
+
+                            scoreboard.registerTeams()
+
+                            targetUser.scoreboard = scoreboard
+                        }
+
+                        val groupBoard = targetUser.scoreboard as GroupScoreboard
+
+                        groupBoard.registerUser(user)
+                        scoreboard.registerUser(targetUser)
+                    }
                 }
             }
         }
