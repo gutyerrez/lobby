@@ -12,6 +12,7 @@ import net.hyren.lobby.LobbyPlugin
 import net.hyren.lobby.LobbyProvider
 import net.hyren.lobby.misc.button.HotBarManager
 import net.hyren.lobby.misc.preferences.post
+import net.hyren.lobby.misc.scoreboard.ScoreboardManager
 import net.hyren.lobby.user.data.LobbyUser
 import net.md_5.bungee.api.chat.TextComponent
 import org.bukkit.Bukkit
@@ -97,6 +98,7 @@ class CaptchaInventory : CustomInventory(
                             player.isFlying = true
                         }
 
+                        ScoreboardManager.construct(player)
                         HotBarManager.giveToPlayer(player)
 
                         user.getPreferences().find { preference -> preference == PLAYER_VISIBILITY }?.post(user)
