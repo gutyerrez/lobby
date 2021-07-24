@@ -2,10 +2,8 @@ package net.hyren.lobby.misc.scoreboard
 
 import net.hyren.core.shared.users.data.User
 import net.hyren.core.shared.users.storage.table.UsersTable
-import net.hyren.core.spigot.misc.scoreboard.bukkit.GroupScoreboard
 import net.hyren.lobby.LobbyProvider
 import net.hyren.lobby.user.data.LobbyUser
-import org.bukkit.Bukkit
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer
 import org.bukkit.entity.Player
 import org.jetbrains.exposed.dao.id.EntityID
@@ -68,11 +66,11 @@ object ScoreboardManager {
     }
 
     fun update(user: LobbyUser, vararg slots: Slot) {
-        val scoreboard = user.scoreboard
+        /*val scoreboard = user.scoreboard
 
         slots.forEach {
             when (it) {
-                /*Slot.ONLINE_PLAYERS -> {
+                Slot.ONLINE_PLAYERS -> {
                     val onlineUsers = CoreProvider.Cache.Redis.USERS_STATUS.provide().fetchUsers()
 
                     scoreboard.set(14, "§f Online: §7${onlineUsers.size}")
@@ -103,7 +101,7 @@ object ScoreboardManager {
                             }"
                         )
                     }
-                }*/
+                }
                 Slot.TAB_LIST -> {
                     Bukkit.getOnlinePlayers().forEach { player ->
                         val targetUser = LobbyProvider.Cache.Local.LOBBY_USERS.provide().fetchById(
@@ -139,7 +137,7 @@ object ScoreboardManager {
                     }
                 }
             }
-        }
+        }*/
     }
 
     enum class Slot {
