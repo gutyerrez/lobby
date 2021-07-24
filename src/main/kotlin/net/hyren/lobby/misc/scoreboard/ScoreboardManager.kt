@@ -1,12 +1,19 @@
 package net.hyren.lobby.misc.scoreboard
 
+import net.hyren.core.shared.CoreConstants
+import net.hyren.core.shared.CoreProvider
+import net.hyren.core.shared.applications.ApplicationType
+import net.hyren.core.shared.applications.status.ApplicationStatus
 import net.hyren.core.shared.users.data.User
 import net.hyren.core.shared.users.storage.table.UsersTable
+import net.hyren.core.spigot.misc.scoreboard.bukkit.GroupScoreboard
 import net.hyren.lobby.LobbyProvider
 import net.hyren.lobby.user.data.LobbyUser
+import org.bukkit.Bukkit
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer
 import org.bukkit.entity.Player
 import org.jetbrains.exposed.dao.id.EntityID
+import java.util.concurrent.atomic.AtomicInteger
 
 /**
  * @author Gutyerrez
@@ -35,30 +42,30 @@ object ScoreboardManager {
             }
 
             user.scoreboard = scoreboard
-//
-//            val fancyGroupName = user.getHighestGroup().getFancyDisplayName()
-//
-//            scoreboard.setTitle(
-//                CoreConstants.Info.COLORED_SERVER_NAME
-//            )
-//            scoreboard.set(15, "§0")
-//            scoreboard.set(13, "§f Grupo: $fancyGroupName")
-//            scoreboard.set(12, "§1")
-//
-//            update(
-//                user,
-//                Slot.ONLINE_PLAYERS,
-//                Slot.SERVER_LIST,
-//                Slot.TAB_LIST
-//            )
-//
-//            val bukkitApplicationName = CoreProvider.application.displayName.split(" ")[1]
-//
-//            scoreboard.set(3, "§2")
-//            scoreboard.set(2, "§f Saguão: §7$bukkitApplicationName")
-//            scoreboard.set(1, "§3")
-//            scoreboard.set(0, "§e${CoreConstants.Info.SHOP_URL}")
-//
+
+            val fancyGroupName = user.getHighestGroup().getFancyDisplayName()
+
+            scoreboard.setTitle(
+                CoreConstants.Info.COLORED_SERVER_NAME
+            )
+            scoreboard.set(15, "§0")
+            scoreboard.set(13, "§f Grupo: $fancyGroupName")
+            scoreboard.set(12, "§1")
+
+            update(
+                user,
+                Slot.ONLINE_PLAYERS,
+                Slot.SERVER_LIST,
+                Slot.TAB_LIST
+            )
+
+            val bukkitApplicationName = CoreProvider.application.displayName.split(" ")[1]
+
+            scoreboard.set(3, "§2")
+            scoreboard.set(2, "§f Saguão: §7$bukkitApplicationName")
+            scoreboard.set(1, "§3")
+            scoreboard.set(0, "§e${CoreConstants.Info.SHOP_URL}")
+
             scoreboard.send(arrayOf(player))
         } catch (e: Exception) {
             e.printStackTrace()
@@ -66,7 +73,7 @@ object ScoreboardManager {
     }
 
     fun update(user: LobbyUser, vararg slots: Slot) {
-        /*val scoreboard = user.scoreboard
+        val scoreboard = user.scoreboard
 
         slots.forEach {
             when (it) {
@@ -137,7 +144,7 @@ object ScoreboardManager {
                     }
                 }
             }
-        }*/
+        }
     }
 
     enum class Slot {
