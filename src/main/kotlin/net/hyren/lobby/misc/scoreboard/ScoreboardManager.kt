@@ -1,5 +1,6 @@
 package net.hyren.lobby.misc.scoreboard
 
+import net.hyren.core.shared.CoreConstants
 import net.hyren.core.shared.CoreProvider
 import net.hyren.core.shared.applications.ApplicationType
 import net.hyren.core.shared.applications.status.ApplicationStatus
@@ -12,7 +13,6 @@ import org.bukkit.Bukkit
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer
 import org.bukkit.entity.Player
 import org.jetbrains.exposed.dao.id.EntityID
-import java.util.*
 import java.util.concurrent.atomic.AtomicInteger
 
 /**
@@ -20,56 +20,56 @@ import java.util.concurrent.atomic.AtomicInteger
  */
 object ScoreboardManager {
 
-    private val WITH_SCORE_BOARD = mutableMapOf<UUID, Long>()
-
     fun construct(player: Player) {
-        var user = LobbyProvider.Cache.Local.LOBBY_USERS.provide().fetchById(player.uniqueId)
+        try {
+            var user = LobbyProvider.Cache.Local.LOBBY_USERS.provide().fetchById(player.uniqueId)
 
-        val scoreboard = LobbyScoreboard()
+            val scoreboard = LobbyScoreboard()
 
-        scoreboard.registerTeams()
+            scoreboard.registerTeams()
 
-        if (user == null) {
-            user = LobbyUser(
-                User(
-                    EntityID(
-                        player.uniqueId,
-                        UsersTable
-                    ),
-                    player.name,
-                    (player as CraftPlayer).address.address.hostAddress
+            if (user == null) {
+                user = LobbyUser(
+                    User(
+                        EntityID(
+                            player.uniqueId,
+                            UsersTable
+                        ),
+                        player.name,
+                        (player as CraftPlayer).address.address.hostAddress
+                    )
                 )
+            }
+
+            user.scoreboard = scoreboard
+
+            val fancyGroupName = user.getHighestGroup().getFancyDisplayName()
+
+            scoreboard.setTitle(
+                CoreConstants.Info.COLORED_SERVER_NAME
             )
+            scoreboard.set(15, "§0")
+            scoreboard.set(13, "§f Grupo: $fancyGroupName")
+            scoreboard.set(12, "§1")
+
+            update(
+                user,
+                Slot.ONLINE_PLAYERS,
+                Slot.SERVER_LIST,
+                Slot.TAB_LIST
+            )
+
+            val bukkitApplicationName = CoreProvider.application.displayName.split(" ")[1]
+
+            scoreboard.set(3, "§2")
+            scoreboard.set(2, "§f Saguão: §7$bukkitApplicationName")
+            scoreboard.set(1, "§3")
+            scoreboard.set(0, "§e${CoreConstants.Info.SHOP_URL}")
+
+            scoreboard.send(arrayOf(player))
+        } catch (e: Exception) {
+            e.printStackTrace()
         }
-
-        user.scoreboard = scoreboard
-
-        val fancyGroupName = user.getHighestGroup().getFancyDisplayName()
-
-//        scoreboard.setTitle(
-//            CoreConstants.Info.COLORED_SERVER_NAME
-//        )
-//        scoreboard.set(15, "§0")
-//        scoreboard.set(13, "§f Grupo: $fancyGroupName")
-//        scoreboard.set(12, "§1")
-
-        update(
-            user,
-//            Slot.ONLINE_PLAYERS,
-//            Slot.SERVER_LIST,
-            Slot.TAB_LIST
-        )
-
-        val bukkitApplicationName = CoreProvider.application.displayName.split(" ")[1]
-
-//        scoreboard.set(3, "§2")
-//        scoreboard.set(2, "§f Saguão: §7$bukkitApplicationName")
-//        scoreboard.set(1, "§3")
-//        scoreboard.set(0, "§e${CoreConstants.Info.SHOP_URL}")
-
-        WITH_SCORE_BOARD[player.uniqueId] = System.currentTimeMillis()
-
-        scoreboard.send(arrayOf(player))
     }
 
     fun update(user: LobbyUser, vararg slots: Slot) {
