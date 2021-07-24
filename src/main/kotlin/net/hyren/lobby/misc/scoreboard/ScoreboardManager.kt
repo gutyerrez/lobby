@@ -45,11 +45,13 @@ object ScoreboardManager {
 
         val fancyGroupName = user.getHighestGroup().getFancyDisplayName()
 
+        println(fancyGroupName)
+
         scoreboard.setTitle(
             CoreConstants.Info.COLORED_SERVER_NAME
         )
         scoreboard.set(15, "§0")
-        scoreboard.set(13, "§f Grupo: $fancyGroupName")
+//        scoreboard.set(13, "§f Grupo: $fancyGroupName")
         scoreboard.set(12, "§1")
 
         update(
@@ -64,7 +66,7 @@ object ScoreboardManager {
         scoreboard.set(3, "§2")
         scoreboard.set(2, "§f Saguão: §7#$bukkitApplicationName")
         scoreboard.set(1, "§3")
-//        scoreboard.set(0, "§e${CoreConstants.Info.SHOP_URL}")
+        scoreboard.set(0, "§e${CoreConstants.Info.SHOP_URL}")
 
         WITH_SCORE_BOARD[player.uniqueId] = System.currentTimeMillis()
 
