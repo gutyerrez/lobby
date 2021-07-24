@@ -54,8 +54,8 @@ object ScoreboardManager {
 
         update(
             user,
-            Slot.ONLINE_PLAYERS,
-            Slot.SERVER_LIST,
+//            Slot.ONLINE_PLAYERS,
+//            Slot.SERVER_LIST,
             Slot.TAB_LIST
         )
 
