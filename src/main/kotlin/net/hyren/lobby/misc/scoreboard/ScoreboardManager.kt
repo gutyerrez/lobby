@@ -63,7 +63,7 @@ object ScoreboardManager {
         scoreboard.set(3, "§2")
         scoreboard.set(2, "§f Saguão: §7$bukkitApplicationName")
         scoreboard.set(1, "§3")
-        scoreboard.set(0, "§3${CoreConstants.Info.SHOP_URL}")
+        scoreboard.set(0, "  §9${CoreConstants.Info.SHOP_URL}")
 
         scoreboard.send(arrayOf(player))
     }
