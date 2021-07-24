@@ -9,7 +9,6 @@ import net.hyren.lobby.LobbyPlugin
 import net.hyren.lobby.LobbyProvider
 import net.hyren.lobby.misc.button.HotBarManager
 import net.hyren.lobby.misc.captcha.inventory.CaptchaInventory
-import net.hyren.lobby.misc.scoreboard.ScoreboardManager
 import net.md_5.bungee.api.chat.ComponentBuilder
 import org.bukkit.Bukkit
 import org.bukkit.Location
@@ -46,7 +45,7 @@ class GenericListener : Listener {
 
         player.spigot().collidesWithEntities = true
 
-        ScoreboardManager.construct(player)
+//        ScoreboardManager.construct(player)
 
         CoreProvider.Cache.Local.USERS.provide().fetchById(player.uniqueId).also {
             if (it == null || !it.hasGroup(Group.VIP)) {
