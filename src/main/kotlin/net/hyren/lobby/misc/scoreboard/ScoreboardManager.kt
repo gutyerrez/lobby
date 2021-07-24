@@ -1,6 +1,5 @@
 package net.hyren.lobby.misc.scoreboard
 
-import net.hyren.core.shared.CoreConstants
 import net.hyren.core.shared.CoreProvider
 import net.hyren.core.shared.applications.ApplicationType
 import net.hyren.core.shared.applications.status.ApplicationStatus
@@ -50,27 +49,23 @@ object ScoreboardManager {
 //        scoreboard.setTitle(
 //            CoreConstants.Info.COLORED_SERVER_NAME
 //        )
-        scoreboard.set(15, "§0")
-        scoreboard.set(13, "§f Grupo: $fancyGroupName")
-        scoreboard.set(12, "§1")
+//        scoreboard.set(15, "§0")
+//        scoreboard.set(13, "§f Grupo: $fancyGroupName")
+//        scoreboard.set(12, "§1")
 
         update(
             user,
-            Slot.ONLINE_PLAYERS,
-            Slot.SERVER_LIST,
+//            Slot.ONLINE_PLAYERS,
+//            Slot.SERVER_LIST,
             Slot.TAB_LIST
         )
 
         val bukkitApplicationName = CoreProvider.application.displayName.split(" ")[1]
 
-        println("§f Grupo: $fancyGroupName".length)
-        println("§f Saguão: §7$bukkitApplicationName".length)
-        println("§e${CoreConstants.Info.SHOP_URL}".length)
-
-        scoreboard.set(3, "§2")
-        scoreboard.set(2, "§f Saguão: §7$bukkitApplicationName")
-        scoreboard.set(1, "§3")
-        scoreboard.set(0, "§e${CoreConstants.Info.SHOP_URL}")
+//        scoreboard.set(3, "§2")
+//        scoreboard.set(2, "§f Saguão: §7$bukkitApplicationName")
+//        scoreboard.set(1, "§3")
+//        scoreboard.set(0, "§e${CoreConstants.Info.SHOP_URL}")
 
         WITH_SCORE_BOARD[player.uniqueId] = System.currentTimeMillis()
 
