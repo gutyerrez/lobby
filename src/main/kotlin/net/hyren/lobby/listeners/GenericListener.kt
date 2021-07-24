@@ -45,7 +45,7 @@ class GenericListener : Listener {
 
         player.spigot().collidesWithEntities = true
 
-//        ScoreboardManager.construct(player)
+        ScoreboardManager.construct(player)
 
         CoreProvider.Cache.Local.USERS.provide().fetchById(player.uniqueId).also {
             if (it == null || !it.hasGroup(Group.VIP)) {
