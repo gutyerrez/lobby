@@ -21,55 +21,51 @@ import java.util.concurrent.atomic.AtomicInteger
 object ScoreboardManager {
 
     fun construct(player: Player) {
-        try {
-            var user = LobbyProvider.Cache.Local.LOBBY_USERS.provide().fetchById(player.uniqueId)
+        var user = LobbyProvider.Cache.Local.LOBBY_USERS.provide().fetchById(player.uniqueId)
 
-            val scoreboard = LobbyScoreboard()
+        val scoreboard = LobbyScoreboard()
 
-            scoreboard.registerTeams()
+        scoreboard.registerTeams()
 
-            if (user == null) {
-                user = LobbyUser(
-                    User(
-                        EntityID(
-                            player.uniqueId,
-                            UsersTable
-                        ),
-                        player.name,
-                        (player as CraftPlayer).address.address.hostAddress
-                    )
+        if (user == null) {
+            user = LobbyUser(
+                User(
+                    EntityID(
+                        player.uniqueId,
+                        UsersTable
+                    ),
+                    player.name,
+                    (player as CraftPlayer).address.address.hostAddress
                 )
-            }
-
-            user.scoreboard = scoreboard
-
-            val fancyGroupName = user.getHighestGroup().getFancyDisplayName()
-
-            scoreboard.setTitle(
-                CoreConstants.Info.COLORED_SERVER_NAME
             )
-            scoreboard.set(15, "§0")
-            scoreboard.set(13, "§f Grupo: $fancyGroupName")
-            scoreboard.set(12, "§1")
-
-            update(
-                user,
-                Slot.ONLINE_PLAYERS,
-                Slot.SERVER_LIST,
-                Slot.TAB_LIST
-            )
-
-            val bukkitApplicationName = CoreProvider.application.displayName.split(" ")[1]
-
-            scoreboard.set(3, "§2")
-            scoreboard.set(2, "§f Saguão: §7$bukkitApplicationName")
-            scoreboard.set(1, "§3")
-            scoreboard.set(0, "§e${CoreConstants.Info.SHOP_URL}")
-
-            scoreboard.send(arrayOf(player))
-        } catch (e: Exception) {
-            e.printStackTrace()
         }
+
+        user.scoreboard = scoreboard
+
+        val fancyGroupName = user.getHighestGroup().getFancyDisplayName()
+
+        scoreboard.setTitle(
+            CoreConstants.Info.COLORED_SERVER_NAME
+        )
+        scoreboard.set(15, "§0")
+        scoreboard.set(13, "§f Grupo: $fancyGroupName")
+        scoreboard.set(12, "§1")
+
+        update(
+            user,
+            Slot.ONLINE_PLAYERS,
+            Slot.SERVER_LIST,
+            Slot.TAB_LIST
+        )
+
+        val bukkitApplicationName = CoreProvider.application.displayName.split(" ")[1]
+
+        scoreboard.set(3, "§2")
+        scoreboard.set(2, "§f Saguão: §7$bukkitApplicationName")
+        scoreboard.set(1, "§3")
+        scoreboard.set(0, "§3${CoreConstants.Info.SHOP_URL}")
+
+        scoreboard.send(arrayOf(player))
     }
 
     fun update(user: LobbyUser, vararg slots: Slot) {
@@ -85,7 +81,9 @@ object ScoreboardManager {
                 Slot.SERVER_LIST -> {
                     val score = AtomicInteger(11)
 
-                    CoreProvider.Cache.Local.SERVERS.provide().fetchAll().filter { !it.isAlphaServer() }.forEach { server ->
+                    CoreProvider.Cache.Local.SERVERS.provide().fetchAll().filter { server ->
+                        !server.isAlphaServer()
+                    }.forEach { server ->
                         val bukkitSpawnApplication = CoreProvider.Cache.Local.APPLICATIONS.provide().fetchByServerAndApplicationType(
                             server,
                             ApplicationType.SERVER_SPAWN
@@ -110,7 +108,9 @@ object ScoreboardManager {
                     }
                 }
                 Slot.TAB_LIST -> {
-                    Bukkit.getOnlinePlayers().forEach { player ->
+                    Bukkit.getOnlinePlayers().filter { player ->
+                        player.uniqueId != user.getUniqueId()
+                    }.forEach { player ->
                         val targetUser = LobbyProvider.Cache.Local.LOBBY_USERS.provide().fetchById(
                             EntityID(
                                 player.uniqueId,
