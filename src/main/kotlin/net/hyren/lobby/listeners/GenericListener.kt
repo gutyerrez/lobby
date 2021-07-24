@@ -50,11 +50,13 @@ class GenericListener : Listener {
 
         CoreProvider.Cache.Local.USERS.provide().fetchById(player.uniqueId).also {
             if (it == null || !it.hasGroup(Group.VIP)) {
-                Thread {
-                    Thread.sleep(500)
-
-                    player.openInventory(CaptchaInventory())
-                }.start()
+                Bukkit.getScheduler().runTaskLater(
+                    LobbyPlugin.instance,
+                    {
+                        player.openInventory(CaptchaInventory())
+                    },
+                    5L
+                )
             }
         }
     }
@@ -238,7 +240,9 @@ class GenericListener : Listener {
 
         if (entity is ArmorStand && entity.hasMetadata(LobbyConstants.NPC_SERVER_METADATA)) {
             try {
-                val callback = entity.getMetadata(LobbyConstants.NPC_SERVER_METADATA)[0].value() as (PlayerInteractAtEntityEvent) -> Unit
+                val callback = entity.getMetadata(
+                    LobbyConstants.NPC_SERVER_METADATA
+                )[0].value() as (PlayerInteractAtEntityEvent) -> Unit
 
                 callback(event)
             } catch (e: Exception) {
