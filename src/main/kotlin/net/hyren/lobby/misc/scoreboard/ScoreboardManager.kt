@@ -108,9 +108,7 @@ object ScoreboardManager {
                     }
                 }
                 Slot.TAB_LIST -> {
-                    Bukkit.getOnlinePlayers().filter { player ->
-                        player.uniqueId != user.getUniqueId()
-                    }.forEach { player ->
+                    Bukkit.getOnlinePlayers().forEach { player ->
                         val targetUser = LobbyProvider.Cache.Local.LOBBY_USERS.provide().fetchById(
                             EntityID(
                                 player.uniqueId,
