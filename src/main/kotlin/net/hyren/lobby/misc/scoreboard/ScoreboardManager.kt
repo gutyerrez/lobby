@@ -6,14 +6,13 @@ import net.hyren.core.shared.applications.ApplicationType
 import net.hyren.core.shared.applications.status.ApplicationStatus
 import net.hyren.core.shared.users.data.User
 import net.hyren.core.shared.users.storage.table.UsersTable
-import net.hyren.core.spigot.misc.scoreboard.bukkit.GroupScoreboard
 import net.hyren.lobby.LobbyProvider
 import net.hyren.lobby.user.data.LobbyUser
-import org.bukkit.Bukkit
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer
 import org.bukkit.entity.Player
 import org.jetbrains.exposed.dao.id.EntityID
 import java.util.*
+import java.util.concurrent.atomic.AtomicInteger
 
 /**
  * @author Gutyerrez
@@ -22,7 +21,7 @@ object ScoreboardManager {
 
     private val WITH_SCORE_BOARD = mutableMapOf<UUID, Long>()
 
-    fun construct(player: Player, scores: Boolean = false) {
+    fun construct(player: Player) {
         var user = LobbyProvider.Cache.Local.LOBBY_USERS.provide().fetchById(player.uniqueId)
 
         val scoreboard = LobbyScoreboard()
@@ -83,7 +82,7 @@ object ScoreboardManager {
                     scoreboard.set(14, "§f Online: §7${onlineUsers.size}")
                 }
                 Slot.SERVER_LIST -> {
-                    var i = 11
+                    val score = AtomicInteger(11)
 
                     CoreProvider.Cache.Local.SERVERS.provide().fetchAll().filter { !it.isAlphaServer() }.forEach { server ->
                         val bukkitSpawnApplication = CoreProvider.Cache.Local.APPLICATIONS.provide().fetchByServerAndApplicationType(
@@ -94,7 +93,7 @@ object ScoreboardManager {
                         val onlineUsers = CoreProvider.Cache.Redis.USERS_STATUS.provide().fetchUsersByServer(server)
 
                         scoreboard.set(
-                            i, "§f ${server.getFancyDisplayName()}: ${
+                            score.getAndDecrement(), "§f ${server.getFancyDisplayName()}: ${
                                 when {
                                     bukkitSpawnApplication === null || CoreProvider.Cache.Redis.APPLICATIONS_STATUS.provide().fetchApplicationStatusByApplication(
                                         bukkitSpawnApplication,
@@ -107,39 +106,41 @@ object ScoreboardManager {
                                 }
                             }"
                         )
-
-                        if (i >= 4) i--
                     }
                 }
                 Slot.TAB_LIST -> {
-                    Bukkit.getOnlinePlayers().forEach { player ->
-                        val targetUser = LobbyProvider.Cache.Local.LOBBY_USERS.provide().fetchById(
-                            EntityID(
-                                player.uniqueId,
-                                UsersTable
-                            )
-                        ) ?: LobbyUser(
-                            User(
-                                EntityID(
-                                    player.uniqueId,
-                                    UsersTable
-                                ),
-                                player.name,
-                                (player as CraftPlayer).address.address.hostAddress
-                            )
-                        )
-
-                        scoreboard as GroupScoreboard
-
-                        if (!targetUser.isScoreboardInitialized()) {
-                            targetUser.scoreboard = LobbyScoreboard()
-                        }
-
-                        val groupBoard = targetUser.scoreboard as GroupScoreboard
-
-                        groupBoard.registerUser(user)
-                        scoreboard.registerUser(targetUser)
-                    }
+//                    Bukkit.getOnlinePlayers().forEach { player ->
+//                        val targetUser = LobbyProvider.Cache.Local.LOBBY_USERS.provide().fetchById(
+//                            EntityID(
+//                                player.uniqueId,
+//                                UsersTable
+//                            )
+//                        ) ?: LobbyUser(
+//                            User(
+//                                EntityID(
+//                                    player.uniqueId,
+//                                    UsersTable
+//                                ),
+//                                player.name,
+//                                (player as CraftPlayer).address.address.hostAddress
+//                            )
+//                        )
+//
+//                        scoreboard as GroupScoreboard
+//
+//                        if (!targetUser.isScoreboardInitialized()) {
+//                            val scoreboard = LobbyScoreboard()
+//
+//                            scoreboard.registerTeams()
+//
+//                            targetUser.scoreboard = scoreboard
+//                        }
+//
+//                        val groupBoard = targetUser.scoreboard as GroupScoreboard
+//
+//                        groupBoard.registerUser(user)
+//                        scoreboard.registerUser(targetUser)
+//                    }
                 }
             }
         }
