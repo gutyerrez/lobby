@@ -6,8 +6,6 @@ import net.hyren.core.spigot.CoreSpigotProvider
 import net.hyren.core.spigot.inventory.CustomInventory
 import net.hyren.lobby.misc.utils.ServerConnectorUtils
 import org.bukkit.entity.Player
-import java.util.*
-import java.util.stream.Collectors
 
 /**
  * @author Gutyerrez
@@ -24,29 +22,31 @@ class ServerSelectorInventory : CustomInventory(
     )
 
     init {
-        val servers = Arrays.stream(CoreProvider.Cache.Local.SERVERS.provide().fetchAll()).filter {
+        val servers = CoreProvider.Cache.Local.SERVERS.provide().fetchAll().filter {
             CoreSpigotProvider.Cache.Local.SERVER_CONFIGURATION.provide().fetchByServer(it) !== null
         }.filter {
             CoreProvider.Cache.Local.APPLICATIONS.provide().fetchByServerAndApplicationType(
                 it,
                 ApplicationType.SERVER_SPAWN
-            ) !== null
-        }.collect(Collectors.toSet())
+            ) != null
+        }.toSet()
 
-        val slots = this.SLOTS[
-                if (servers.size >= this.SLOTS.size) {
-                    this.SLOTS.lastIndex
-                } else servers.size - 1
+        val slots = SLOTS[
+                if (servers.size >= SLOTS.size) {
+                    SLOTS.lastIndex
+                } else {
+                    servers.size - 1
+                }
         ]
 
         servers.forEachIndexed { index, server ->
             val slot = slots[index]
 
-            this.setItem(
+            setItem(
                 slot,
-	            CoreSpigotProvider.Cache.Local.SERVER_CONFIGURATION.provide().fetchByServer(
-		            server
-	            )?.icon
+                CoreSpigotProvider.Cache.Local.SERVER_CONFIGURATION.provide().fetchByServer(
+                    server
+                )?.icon
             ) { it ->
                 val player = it.whoClicked as Player
 
