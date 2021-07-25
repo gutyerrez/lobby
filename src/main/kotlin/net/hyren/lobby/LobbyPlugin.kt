@@ -260,7 +260,7 @@ class LobbyPlugin : CustomPlugin(false) {
          * Frames
          */
 
-        Frame(URL("https://i.imgur.com/YzXizib.png")).also {
+        Frame(URL("https://i.imgur.com/G053pKt.png")).also {
             it.interactConsumer = Consumer { player ->
                 val user = CoreProvider.Cache.Local.USERS.provide().fetchById(player.uniqueId)!!
 
