@@ -2,6 +2,7 @@ package net.hyren.lobby.listeners
 
 import net.hyren.core.shared.CoreProvider
 import net.hyren.core.shared.groups.Group
+import net.hyren.core.shared.misc.preferences.FLY_IN_LOBBY
 import net.hyren.core.spigot.misc.frame.FrameManager
 import net.hyren.core.spigot.misc.utils.Title
 import net.hyren.lobby.LobbyConstants
@@ -9,6 +10,7 @@ import net.hyren.lobby.LobbyPlugin
 import net.hyren.lobby.LobbyProvider
 import net.hyren.lobby.misc.button.HotBarManager
 import net.hyren.lobby.misc.captcha.inventory.CaptchaInventory
+import net.hyren.lobby.misc.preferences.post
 import net.hyren.lobby.misc.scoreboard.ScoreboardManager
 import net.md_5.bungee.api.chat.ComponentBuilder
 import org.bukkit.Bukkit
@@ -69,6 +71,18 @@ class GenericListener : Listener {
         ScoreboardManager.construct(player)
 
         CoreProvider.Cache.Local.USERS.provide().fetchById(player.uniqueId).also {
+            /**
+             * Fly preference
+             */
+
+            if (it != null && it.hasGroup(Group.VIP)) {
+                it.getPreferences().find { preference -> preference == FLY_IN_LOBBY }?.post(it)
+            }
+
+            /**
+             * Captcha
+             */
+
             if (it == null || !it.hasGroup(Group.VIP)) {
                 Bukkit.getScheduler().runTaskLater(
                     LobbyPlugin.instance,

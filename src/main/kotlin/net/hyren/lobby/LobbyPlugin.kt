@@ -235,25 +235,37 @@ class LobbyPlugin : CustomPlugin(false) {
                 }
 
                 NPCS.forEach { (server, npc) -> npc.update(server) }
-
-                Thread {
-                    LobbyProvider.Cache.Local.LOBBY_USERS.provide().fetchAll().forEach {
-                        try {
-                            if (it.player != null && !it.player.isDead) {
-                                ScoreboardManager.update(
-                                    it,
-                                    ScoreboardManager.Slot.ONLINE_PLAYERS,
-                                    ScoreboardManager.Slot.SERVER_LIST
-                                )
-                            }
-                        } catch (e: Exception) {
-                            e.printStackTrace()
-                        }
-                    }
-                }.start()
             },
             20L,
             20L * 5
+        )
+
+        /**
+         * Scoreboard task
+         */
+
+
+        Bukkit.getScheduler().runTaskTimer(
+            this,
+            {
+                Thread {
+                    run {
+                        LobbyProvider.Cache.Local.LOBBY_USERS.provide().fetchAll().forEach {
+                            try {
+                                if (it.player != null && ! it.player.isDead) {
+                                    ScoreboardManager.update(
+                                        it,
+                                        ScoreboardManager.Slot.ONLINE_PLAYERS,
+                                        ScoreboardManager.Slot.SERVER_LIST
+                                    )
+                                }
+                            } catch (e: Exception) {
+                                e.printStackTrace()
+                            }
+                        }
+                    }
+                }.start()
+            }, 0, 20
         )
 
         /**
