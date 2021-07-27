@@ -11,7 +11,6 @@ import net.hyren.lobby.LobbyPlugin
 import net.hyren.lobby.LobbyProvider
 import net.hyren.lobby.misc.button.HotBarManager
 import net.hyren.lobby.misc.captcha.inventory.CaptchaInventory
-import net.hyren.lobby.misc.preferences.post
 import net.hyren.lobby.misc.scoreboard.ScoreboardManager
 import net.md_5.bungee.api.chat.ComponentBuilder
 import org.bukkit.Bukkit
@@ -76,12 +75,11 @@ class GenericListener : Listener {
              * Fly preference
              */
 
-            if (it != null && it.hasGroup(Group.VIP)) {
-                println("Check if fly in lobby is enabled")
-
-                it.getPreferences().find { preference ->
-                    preference == FLY_IN_LOBBY && preference.preferenceState == PreferenceState.ENABLED
-                }?.post(it)
+            if (it != null && it.hasGroup(Group.VIP) && it.getPreferences().any { preference ->
+                preference == FLY_IN_LOBBY && preference.preferenceState == PreferenceState.ENABLED
+            }) {
+                player.allowFlight = true
+                player.isFlying = true
             }
 
             /**

@@ -19,12 +19,24 @@ class SlimeJumpListener : Listener {
         val fromLocation = event.from
         val toLocation = event.to
 
-        if (toLocation.x == fromLocation.x && toLocation.y == fromLocation.y && toLocation.z == fromLocation.z) return
+        if (toLocation.x == fromLocation.x && toLocation.y == fromLocation.y && toLocation.z == fromLocation.z) {
+            return
+        }
 
         val slimeJump = SlimeJumpManager.fetchByLocation(toLocation)
 
-        if (slimeJump !== null) {
+        val subtract = if (player.isSprinting) {
+            0.05
+        } else {
+            0.0
+        }
+
+        if (slimeJump != null) {
             val vector = slimeJump.toVector
+
+            vector.x -= subtract
+            vector.y -= subtract
+            vector.z -= subtract
 
             player.velocity = vector
 

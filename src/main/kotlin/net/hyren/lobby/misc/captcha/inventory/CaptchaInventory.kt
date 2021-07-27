@@ -1,10 +1,7 @@
 package net.hyren.lobby.misc.captcha.inventory
 
 import net.hyren.core.shared.CoreProvider
-import net.hyren.core.shared.groups.Group
-import net.hyren.core.shared.misc.preferences.FLY_IN_LOBBY
 import net.hyren.core.shared.misc.preferences.PLAYER_VISIBILITY
-import net.hyren.core.shared.misc.preferences.PreferenceState
 import net.hyren.core.shared.users.storage.dto.CreateUserDTO
 import net.hyren.core.spigot.inventory.CustomInventory
 import net.hyren.core.spigot.misc.utils.ItemBuilder
@@ -90,13 +87,6 @@ class CaptchaInventory : CustomInventory(
                         LobbyProvider.Cache.Local.LOBBY_USERS.provide().put(
                             LobbyUser(user)
                         )
-
-                        if (user.hasGroup(Group.VIP) && user.getPreferences()
-                                .find { preference -> preference == FLY_IN_LOBBY }?.preferenceState === PreferenceState.ENABLED
-                        ) {
-                            player.allowFlight = true
-                            player.isFlying = true
-                        }
 
                         ScoreboardManager.construct(player)
                         HotBarManager.giveToPlayer(player)
