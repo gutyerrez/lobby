@@ -153,7 +153,7 @@ class LobbyPlugin : CustomPlugin(false) {
             it.setGameRuleValue("doFireTick", "false")
             it.setGameRuleValue("doDaylightCycle", "false")
 
-            it.time = 1200
+            it.time = 6000
 
             it.setSpawnLocation(0, 75, 0)
         }
