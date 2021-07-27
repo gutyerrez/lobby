@@ -35,9 +35,6 @@ dependencies {
     // paer-spigot-server
     compileOnly("org.github.paperspigot:paper-spigot-server:1.8.8-R0.1-SNAPSHOT")
 
-    // minecraft-server
-    compileOnly("net.hyren:minecraft-server:1.8.8-SNAPSHOT")
-
     // waterfall chat
     compileOnly("io.github.waterfallmc:waterfall-chat:1.16-R0.5-SNAPSHOT")
 
