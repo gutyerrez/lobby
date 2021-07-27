@@ -9,7 +9,6 @@ import net.hyren.lobby.LobbyPlugin
 import net.hyren.lobby.misc.utils.ServerConnectorUtils
 import net.minecraft.server.v1_8_R3.EntityArmorStand
 import net.minecraft.server.v1_8_R3.EntityGiantZombie
-import org.bukkit.Bukkit
 import org.bukkit.Location
 import org.bukkit.craftbukkit.v1_8_R3.CraftWorld
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftEntity
@@ -37,6 +36,8 @@ fun Server.spawnNPC(): Giant {
 
 	val entityGiantZombie = EntityGiantZombie(worldServer)
 
+	entityGiantZombie.health = entityGiantZombie.maxHealth
+
 	entityGiantZombie.setLocation(
 		getNPCLocation().x,
 		getNPCLocation().y,
@@ -52,7 +53,9 @@ fun Server.spawnNPC(): Giant {
 		getNPCLocation().pitch
 	)
 
-	worldServer.addEntity(entityGiantZombie, CreatureSpawnEvent.SpawnReason.CUSTOM)
+	val spawned = worldServer.addEntity(entityGiantZombie, CreatureSpawnEvent.SpawnReason.CUSTOM)
+
+	println("Spawnou: $spawned")
 
 	val giant = CraftEntity.getEntity(worldServer.server, entityGiantZombie) as Giant
 
@@ -79,7 +82,7 @@ fun Server.spawnNPC(): Giant {
 		),
 		true
 	)
-	giant.removeWhenFarAway = false
+	giant.removeWhenFarAway = true
 	giant.equipment.itemInHand = CoreSpigotProvider.Cache.Local.SERVER_CONFIGURATION.provide().fetchByServer(
 		this
 	)?.icon
@@ -134,7 +137,9 @@ fun Server.spawnHologram(): Hologram {
 fun Giant.update(
 	server: Server
 ) {
-	println("Está morto? $isDead")
+	if (isDead) {
+		return
+	}
 
 	equipment.itemInHand = CoreSpigotProvider.Cache.Local.SERVER_CONFIGURATION.provide().fetchByServer(
 		server
@@ -145,6 +150,4 @@ fun Giant.update(
 	val armorStand = getMetadata("base")[0].value() as ArmorStand
 
 	armorStand.teleport(server.getNPCLocation())
-
-	Bukkit.getOnlinePlayers().forEach { it.teleport(location) }
 }
