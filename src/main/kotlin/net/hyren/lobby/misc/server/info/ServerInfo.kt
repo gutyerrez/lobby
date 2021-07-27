@@ -28,7 +28,9 @@ fun Server.getNPCLocation(): Location {
 		this
 	) ?: throw NullPointerException("server configuration cannot be null")
 
-	return CoreSpigotConstants.BUKKIT_LOCATION_PARSER.apply(serverConfiguration.settings.npcLocation)
+	return CoreSpigotConstants.BUKKIT_LOCATION_PARSER.apply(serverConfiguration.settings.npcLocation).also {
+		it.chunk.load(true)
+	}
 }
 
 fun Server.spawnNPC(): Giant {
@@ -53,13 +55,9 @@ fun Server.spawnNPC(): Giant {
 		getNPCLocation().pitch
 	)
 
-	val spawned = worldServer.addEntity(entityGiantZombie, CreatureSpawnEvent.SpawnReason.CUSTOM)
-
-	println("Spawnou: $spawned")
+	worldServer.addEntity(entityGiantZombie, CreatureSpawnEvent.SpawnReason.CUSTOM)
 
 	val giant = CraftEntity.getEntity(worldServer.server, entityGiantZombie) as Giant
-
-	println("Spawnei, está vivo ainda? ${!giant.isDead}")
 
 	giant.setMetadata(LobbyConstants.NPC_METADATA, FixedMetadataValue(
 		LobbyPlugin.instance,
@@ -111,8 +109,6 @@ fun Server.spawnNPC(): Giant {
 		LobbyPlugin.instance,
 		armorStand
 	))
-
-	println("Vamos verificar novamente, zumbi gigante está morto? ${giant.isDead}")
 
 	return giant
 }
