@@ -61,9 +61,7 @@ class GenericListener : Listener {
 
         player.maxHealth = 2.0
         player.teleport(
-            Location(
-                LobbyPlugin.instance.getDefaultWorld(), 0.5, 75.0, 0.5
-            )
+            Location(LobbyPlugin.instance.getDefaultWorld(), 0.5, 75.0, 0.5)
         )
 
         player.spigot().collidesWithEntities = true
@@ -132,9 +130,7 @@ class GenericListener : Listener {
 
                 if (event.cause === EntityDamageEvent.DamageCause.VOID) {
                     entity.teleport(
-                        Location(
-                            LobbyPlugin.instance.getDefaultWorld(), 0.5, 75.0, 0.5
-                        )
+                        Location(LobbyPlugin.instance.getDefaultWorld(), 0.5, 75.0, 0.5)
                     )
                 }
             }
@@ -189,7 +185,7 @@ class GenericListener : Listener {
         Bukkit.getOnlinePlayers().forEach {
             it.sendMessage(
                 ComponentBuilder()
-                    .append(user.getHighestGroup().getColoredPrefix())
+                    .append(user.getHighestGroup().prefix)
                     .append(user.name)
                     .append("§7: ${event.message}")
                     .create()
@@ -201,16 +197,7 @@ class GenericListener : Listener {
     fun on(
         event: PlayerInitialSpawnEvent
     ) {
-        val world = Bukkit.getWorld("world")
-
-        event.spawnLocation = Location(
-            world,
-            0.5,
-            78.0,
-            -0.5,
-            180F,
-            0F
-        )
+        event.spawnLocation = Location(LobbyPlugin.instance.getDefaultWorld(), 0.5, 75.0, 0.5)
     }
 
     @EventHandler(ignoreCancelled = false)

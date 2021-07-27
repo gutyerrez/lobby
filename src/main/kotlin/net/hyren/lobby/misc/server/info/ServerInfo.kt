@@ -56,6 +56,8 @@ fun Server.spawnNPC(): Giant {
 
 	val giant = CraftEntity.getEntity(worldServer.server, customZombie) as Giant
 
+	println("Spawnei, está vivo ainda? ${!giant.isDead}")
+
 	giant.setMetadata(LobbyConstants.NPC_METADATA, FixedMetadataValue(
 		LobbyPlugin.instance,
 		true
@@ -107,7 +109,7 @@ fun Server.spawnNPC(): Giant {
 		armorStand
 	))
 
-	println("Spawnei, está vivo ainda? ${!giant.isDead}")
+	println("Vamos verificar novamente, zumbi gigante está morto? ${giant.isDead}")
 
 	return giant
 }
@@ -132,7 +134,7 @@ fun Server.spawnHologram(): Hologram {
 fun Giant.update(
 	server: Server
 ) {
-	println("Está morto? ${!isDead}")
+	println("Está morto? $isDead")
 
 	equipment.itemInHand = CoreSpigotProvider.Cache.Local.SERVER_CONFIGURATION.provide().fetchByServer(
 		server
