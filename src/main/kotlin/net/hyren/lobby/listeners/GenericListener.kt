@@ -3,6 +3,7 @@ package net.hyren.lobby.listeners
 import net.hyren.core.shared.CoreProvider
 import net.hyren.core.shared.groups.Group
 import net.hyren.core.shared.misc.preferences.FLY_IN_LOBBY
+import net.hyren.core.shared.misc.preferences.PreferenceState
 import net.hyren.core.spigot.misc.frame.FrameManager
 import net.hyren.core.spigot.misc.utils.Title
 import net.hyren.lobby.LobbyConstants
@@ -76,7 +77,11 @@ class GenericListener : Listener {
              */
 
             if (it != null && it.hasGroup(Group.VIP)) {
-                it.getPreferences().find { preference -> preference == FLY_IN_LOBBY }?.post(it)
+                println("Check if fly in lobby is enabled")
+
+                it.getPreferences().find { preference ->
+                    preference == FLY_IN_LOBBY && preference.preferenceState == PreferenceState.ENABLED
+                }?.post(it)
             }
 
             /**
