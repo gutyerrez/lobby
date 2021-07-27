@@ -9,6 +9,7 @@ import net.hyren.lobby.LobbyPlugin
 import net.hyren.lobby.misc.utils.ServerConnectorUtils
 import net.minecraft.server.v1_8_R3.EntityArmorStand
 import net.minecraft.server.v1_8_R3.EntityGiantZombie
+import org.bukkit.Bukkit
 import org.bukkit.Location
 import org.bukkit.craftbukkit.v1_8_R3.CraftWorld
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftEntity
@@ -142,4 +143,6 @@ fun Giant.update(
 	val armorStand = getMetadata("base")[0].value() as ArmorStand
 
 	armorStand.teleport(server.getNPCLocation())
+
+	Bukkit.getOnlinePlayers().forEach { it.teleport(location) }
 }
