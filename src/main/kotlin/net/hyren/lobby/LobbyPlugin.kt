@@ -223,9 +223,9 @@ class LobbyPlugin : CustomPlugin(false) {
                     )
 
                     if (bukkitSpawnApplication === null || CoreProvider.Cache.Redis.APPLICATIONS_STATUS.provide().fetchApplicationStatusByApplication(
-                            bukkitSpawnApplication,
-                            ApplicationStatus::class
-                    ) === null) {
+                        bukkitSpawnApplication,
+                        ApplicationStatus::class
+                    ) == null) {
                         hologram.update(2, "§cOffline")
                     } else if (CoreProvider.Cache.Local.MAINTENANCE.provide().fetch(bukkitSpawnApplication) == true) {
                         hologram.update(2, "§cEm manutenção")

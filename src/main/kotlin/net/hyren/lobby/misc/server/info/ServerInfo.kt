@@ -32,23 +32,23 @@ fun Server.getNPCLocation(): Location {
 }
 
 fun Server.spawnNPC(): Giant {
-	val worldServer = (this.getNPCLocation().world as CraftWorld).handle
+	val worldServer = (getNPCLocation().world as CraftWorld).handle
 
 	val customZombie = EntityGiantZombie(worldServer)
 
 	customZombie.setLocation(
-		this.getNPCLocation().x,
-		this.getNPCLocation().y,
-		this.getNPCLocation().z,
-		this.getNPCLocation().yaw,
-		this.getNPCLocation().pitch
+		getNPCLocation().x,
+		getNPCLocation().y,
+		getNPCLocation().z,
+		getNPCLocation().yaw,
+		getNPCLocation().pitch
 	)
 	customZombie.setPositionRotation(
-		this.getNPCLocation().x,
-		this.getNPCLocation().y,
-		this.getNPCLocation().z,
-		this.getNPCLocation().yaw,
-		this.getNPCLocation().pitch
+		getNPCLocation().x,
+		getNPCLocation().y,
+		getNPCLocation().z,
+		getNPCLocation().yaw,
+		getNPCLocation().pitch
 	)
 
 	worldServer.addEntity(customZombie, CreatureSpawnEvent.SpawnReason.CUSTOM)
@@ -106,6 +106,8 @@ fun Server.spawnNPC(): Giant {
 		armorStand
 	))
 
+	println("Spawnei, está vivo ainda? ${!giant.isDead}")
+
 	return giant
 }
 
@@ -129,13 +131,15 @@ fun Server.spawnHologram(): Hologram {
 fun Giant.update(
 	server: Server
 ) {
-	this.equipment.itemInHand = CoreSpigotProvider.Cache.Local.SERVER_CONFIGURATION.provide().fetchByServer(
+	println("Está morto? ${!isDead}")
+
+	equipment.itemInHand = CoreSpigotProvider.Cache.Local.SERVER_CONFIGURATION.provide().fetchByServer(
 		server
 	)?.icon
 
-	this.teleport(server.getNPCLocation().clone().add(1.9, -8.5, -3.5))
+	teleport(server.getNPCLocation().clone().add(1.9, -8.5, -3.5))
 
-	val armorStand = this.getMetadata("base")[0].value() as ArmorStand
+	val armorStand = getMetadata("base")[0].value() as ArmorStand
 
 	armorStand.teleport(server.getNPCLocation())
 }
