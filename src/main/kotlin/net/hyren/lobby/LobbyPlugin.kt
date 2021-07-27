@@ -306,8 +306,8 @@ class LobbyPlugin : CustomPlugin(false) {
          * Slime Jumps
          */
 
-        val leftJumperVector = Vector(-9.5, 1.0, -11.25)
-        val rightJumperVector = Vector(0.5, 1.0, -11.25)
+        val leftJumperVector = Vector(-9.5, 1.0, 11.25)
+        val rightJumperVector = Vector(0.5, 1.0, 11.25)
 
         SlimeJumpManager.register(
             /**
