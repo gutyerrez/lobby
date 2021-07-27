@@ -33,6 +33,7 @@ import org.bukkit.event.entity.EntityChangeBlockEvent
 import org.bukkit.event.entity.EntityCombustEvent
 import org.bukkit.event.entity.EntityDamageByEntityEvent
 import org.bukkit.event.entity.EntityDamageEvent
+import org.bukkit.event.entity.EntityDeathEvent
 import org.bukkit.event.entity.FoodLevelChangeEvent
 import org.bukkit.event.inventory.ClickType
 import org.bukkit.event.inventory.InventoryClickEvent
@@ -116,6 +117,15 @@ class GenericListener : Listener {
         if (event.click === ClickType.NUMBER_KEY) {
             event.isCancelled = true
         }
+    }
+
+    @EventHandler
+    fun on(
+        event: EntityDeathEvent
+    ) {
+        val entity = event.entity
+
+        println("${entity.type} morreu em: ${entity.location.blockX} | ${entity.location.blockY} | ${entity.location.blockZ}")
     }
 
     @EventHandler

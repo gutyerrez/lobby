@@ -154,8 +154,6 @@ class LobbyPlugin : CustomPlugin(false) {
             it.setGameRuleValue("doDaylightCycle", "false")
 
             it.time = 6000
-
-            it.setSpawnLocation(0, 75, 0)
         }
 
         /**

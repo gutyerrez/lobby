@@ -35,16 +35,16 @@ fun Server.getNPCLocation(): Location {
 fun Server.spawnNPC(): Giant {
 	val worldServer = (getNPCLocation().world as CraftWorld).handle
 
-	val customZombie = EntityGiantZombie(worldServer)
+	val entityGiantZombie = EntityGiantZombie(worldServer)
 
-	customZombie.setLocation(
+	entityGiantZombie.setLocation(
 		getNPCLocation().x,
 		getNPCLocation().y,
 		getNPCLocation().z,
 		getNPCLocation().yaw,
 		getNPCLocation().pitch
 	)
-	customZombie.setPositionRotation(
+	entityGiantZombie.setPositionRotation(
 		getNPCLocation().x,
 		getNPCLocation().y,
 		getNPCLocation().z,
@@ -52,9 +52,9 @@ fun Server.spawnNPC(): Giant {
 		getNPCLocation().pitch
 	)
 
-	worldServer.addEntity(customZombie, CreatureSpawnEvent.SpawnReason.CUSTOM)
+	worldServer.addEntity(entityGiantZombie, CreatureSpawnEvent.SpawnReason.CUSTOM)
 
-	val giant = CraftEntity.getEntity(worldServer.server, customZombie) as Giant
+	val giant = CraftEntity.getEntity(worldServer.server, entityGiantZombie) as Giant
 
 	println("Spawnei, está vivo ainda? ${!giant.isDead}")
 
