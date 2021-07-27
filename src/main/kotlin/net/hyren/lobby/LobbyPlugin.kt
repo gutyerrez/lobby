@@ -131,29 +131,32 @@ class LobbyPlugin : CustomPlugin(false) {
         /**
          * World settings
          */
-        Bukkit.getServer().worlds.forEach {
-            it.isAutoSave = false
 
-            it.isThundering = false
-            it.weatherDuration = 0
+        getDefaultWorld().apply {
+            isAutoSave = false
 
-            it.ambientSpawnLimit = 0
-            it.animalSpawnLimit = 0
-            it.monsterSpawnLimit = 0
+            isThundering = false
+            weatherDuration = 0
 
-            it.setTicksPerAnimalSpawns(99999)
-            it.setTicksPerMonsterSpawns(99999)
+            ambientSpawnLimit = 0
+            animalSpawnLimit = 0
+            monsterSpawnLimit = 0
 
-            it.setStorm(false)
+            setTicksPerAnimalSpawns(99999)
+            setTicksPerMonsterSpawns(99999)
 
-            it.setGameRuleValue("randomTickSpeed", "-1")
-            it.setGameRuleValue("mobGriefing", "false")
-            it.setGameRuleValue("doMobSpawning", "false")
-            it.setGameRuleValue("doMobLoot", "false")
-            it.setGameRuleValue("doFireTick", "false")
-            it.setGameRuleValue("doDaylightCycle", "false")
+            setStorm(false)
 
-            it.time = 6000
+            setGameRuleValue("randomTickSpeed", "-1")
+            setGameRuleValue("mobGriefing", "false")
+            setGameRuleValue("doMobSpawning", "false")
+            setGameRuleValue("doMobLoot", "false")
+            setGameRuleValue("doFireTick", "false")
+            setGameRuleValue("doDaylightCycle", "false")
+
+            time = 6000
+
+            livingEntities.forEach { it.remove() }
         }
 
         /**

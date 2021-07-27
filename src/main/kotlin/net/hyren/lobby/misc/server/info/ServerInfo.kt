@@ -29,7 +29,9 @@ fun Server.getNPCLocation(): Location {
 	) ?: throw NullPointerException("server configuration cannot be null")
 
 	return CoreSpigotConstants.BUKKIT_LOCATION_PARSER.apply(serverConfiguration.settings.npcLocation).also {
-		it.chunk.load(true)
+		if (!it.chunk.isLoaded) {
+			it.chunk.load(true)
+		}
 	}
 }
 
@@ -37,8 +39,6 @@ fun Server.spawnNPC(): Giant {
 	val worldServer = (getNPCLocation().world as CraftWorld).handle
 
 	val entityGiantZombie = EntityGiantZombie(worldServer)
-
-	entityGiantZombie.health = entityGiantZombie.maxHealth
 
 	entityGiantZombie.setLocation(
 		getNPCLocation().x,
@@ -80,7 +80,7 @@ fun Server.spawnNPC(): Giant {
 		),
 		true
 	)
-	giant.removeWhenFarAway = true
+	giant.removeWhenFarAway = false
 	giant.equipment.itemInHand = CoreSpigotProvider.Cache.Local.SERVER_CONFIGURATION.provide().fetchByServer(
 		this
 	)?.icon
@@ -134,6 +134,12 @@ fun Giant.update(
 	server: Server
 ) {
 	if (isDead) {
+		return
+	}
+
+	println(location == server.getNPCLocation())
+	
+	if (location.distance(server.getNPCLocation()) <= 0) {
 		return
 	}
 
