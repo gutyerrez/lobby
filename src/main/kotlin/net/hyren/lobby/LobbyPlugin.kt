@@ -262,9 +262,11 @@ class LobbyPlugin : CustomPlugin(false) {
 
         Frame(URL("https://i.imgur.com/G053pKt.png")).also {
             it.interactConsumer = Consumer { player ->
-                val user = CoreProvider.Cache.Local.USERS.provide().fetchById(player.uniqueId)!!
+                val user = CoreProvider.Cache.Local.USERS.provide().fetchById(player.uniqueId) ?: return@Consumer
 
-                if (CoreConstants.COOLDOWNS.inCooldown(user, "frame-interact")) return@Consumer
+                if (CoreConstants.COOLDOWNS.inCooldown(user, "frame-interact")) {
+                    return@Consumer
+                }
 
                 player.sendMessage(
                     ComponentBuilder()
@@ -304,19 +306,39 @@ class LobbyPlugin : CustomPlugin(false) {
          * Slime Jumps
          */
 
+        val leftJumperVector = Vector(-9.5, 1.0, -11.25)
+        val rightJumperVector = Vector(0.5, 1.0, -11.25)
+
         SlimeJumpManager.register(
-            SlimeJump(
-                20.5,
-                77.0,
-                -7.5,
-                Vector(0.4, 1.0, -2.245)
-            ),
-            SlimeJump(
-                -19.5,
-                77.0,
-                -7.5,
-                Vector(-0.4, 1.0, -2.245)
-            )
+            /**
+             * left jumpers
+             */
+
+            SlimeJump(9.5, 76.0, 13.5, leftJumperVector),
+            SlimeJump(9.5, 76.0, 12.5, leftJumperVector),
+            SlimeJump(9.5, 76.0, 11.5, leftJumperVector),
+            SlimeJump(9.5, 76.0, 10.5, leftJumperVector),
+            SlimeJump(8.5, 76.0, 13.5, leftJumperVector),
+            SlimeJump(8.5, 76.0, 12.5, leftJumperVector),
+            SlimeJump(8.5, 76.0, 11.5, leftJumperVector),
+            SlimeJump(8.5, 76.0, 10.5, leftJumperVector),
+            SlimeJump(7.5, 76.0, 12.5, leftJumperVector),
+            SlimeJump(7.5, 76.0, 11.5, leftJumperVector),
+
+            /**
+             * right jumpers
+             */
+
+            SlimeJump(-8.5, 76.0, 13.5, rightJumperVector),
+            SlimeJump(-8.5, 76.0, 12.5, rightJumperVector),
+            SlimeJump(-8.5, 76.0, 11.5, rightJumperVector),
+            SlimeJump(-8.5, 76.0, 10.5, rightJumperVector),
+            SlimeJump(-7.5, 76.0, 13.5, rightJumperVector),
+            SlimeJump(-7.5, 76.0, 12.5, rightJumperVector),
+            SlimeJump(-7.5, 76.0, 11.5, rightJumperVector),
+            SlimeJump(-7.5, 76.0, 10.5, rightJumperVector),
+            SlimeJump(-6.5, 76.0, 12.5, rightJumperVector),
+            SlimeJump(-6.5, 76.0, 11.5, rightJumperVector),
         )
 
         SlimeJumpManager.setup()
