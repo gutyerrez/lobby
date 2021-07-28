@@ -110,11 +110,13 @@ class GenericListener : Listener {
     fun on(
         event: InventoryClickEvent
     ) {
-        if (event.whoClicked !is Player) return
+        if (event.whoClicked !is Player) {
+            return
+        }
 
         event.isCancelled = true
 
-        if (event.click === ClickType.NUMBER_KEY) {
+        if (event.click == ClickType.NUMBER_KEY) {
             event.isCancelled = true
         }
     }
@@ -125,20 +127,26 @@ class GenericListener : Listener {
     ) {
         val entity = event.entity
 
-        println("${entity.type} morreu em: ${entity.location.blockX} | ${entity.location.blockY} | ${entity.location.blockZ}")
+        if (entity.type == EntityType.GIANT) {
+            println("Tinha metadata? ${entity.hasMetadata(LobbyConstants.NPC_METADATA)}")
+
+            println("${entity.type} morreu em: ${entity.location.blockX} | ${entity.location.blockY} | ${entity.location.blockZ}")
+        }
     }
 
     @EventHandler
     fun on(
         event: EntityDamageEvent
     ) {
+        println("A entidade: ${event.entityType} recebeu dano em ${event.entity.location.blockX} | ${event.entity.location.blockY} | ${event.entity.location.blockZ}")
+
         when (val entity = event.entity) {
             is ItemFrame -> event.isCancelled = true
             is Giant -> event.isCancelled = entity.hasMetadata(LobbyConstants.NPC_METADATA)
             is Player -> {
                 event.isCancelled = true
 
-                if (event.cause === EntityDamageEvent.DamageCause.VOID) {
+                if (event.cause == EntityDamageEvent.DamageCause.VOID) {
                     entity.teleport(
                         Location(LobbyPlugin.instance.getDefaultWorld(), 0.5, 75.0, 0.5)
                     )

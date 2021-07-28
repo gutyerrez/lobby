@@ -59,11 +59,6 @@ fun Server.spawnNPC(): Giant {
 
 	val giant = CraftEntity.getEntity(worldServer.server, entityGiantZombie) as Giant
 
-	giant.setMetadata(LobbyConstants.NPC_METADATA, FixedMetadataValue(
-		LobbyPlugin.instance,
-		true
-	))
-
 	giant.setMetadata(
 		LobbyConstants.NPC_METADATA,
 		FixedMetadataValue(
@@ -85,7 +80,7 @@ fun Server.spawnNPC(): Giant {
 		this
 	)?.icon
 
-	giant.teleport(getNPCLocation().clone().add(0.0, -8.0, 0.0))
+	giant.teleport(getNPCLocation().clone().add(0.0, -8.0, -6.0))
 
 	val entityArmorStand = EntityArmorStand(worldServer, getNPCLocation().x, getNPCLocation().y, getNPCLocation().z)
 
@@ -137,7 +132,7 @@ fun Giant.update(
 		return
 	}
 
-	val cloned = server.getNPCLocation().clone().add(0.0, 3.5, 0.0)
+	val cloned = server.getNPCLocation().clone().add(0.0, -8.0, 0.0)
 
 	if (location.x == cloned.x && location.y == cloned.y && location.z == cloned.z && location.yaw == cloned.yaw && location.pitch == cloned.pitch) {
 		return
