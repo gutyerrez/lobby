@@ -46,7 +46,7 @@ import java.util.function.Consumer
 /**
  * @author Gutyerrez
  */
-class LobbyPlugin : CustomPlugin(false) {
+class LobbyPlugin : CustomPlugin() {
 
     companion object {
 
