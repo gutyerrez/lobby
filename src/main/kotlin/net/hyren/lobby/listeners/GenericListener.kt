@@ -64,7 +64,7 @@ class GenericListener : Listener {
             Location(LobbyPlugin.instance.getDefaultWorld(), 0.5, 75.0, 0.5)
         )
 
-        player.spigot().collidesWithEntities = true
+        player.spigot().collidesWithEntities = false
 
         ScoreboardManager.construct(player)
 
