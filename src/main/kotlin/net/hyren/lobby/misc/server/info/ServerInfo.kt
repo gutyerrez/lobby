@@ -137,9 +137,7 @@ fun Giant.update(
 		return
 	}
 
-	println(location == server.getNPCLocation())
-	
-	if (location.distance(server.getNPCLocation()) <= 0) {
+	if (location.x == server.getNPCLocation().x && location.y == server.getNPCLocation().y && location.z == server.getNPCLocation().z && server.getNPCLocation().yaw == server.getNPCLocation().yaw && location.pitch == server.getNPCLocation().pitch) {
 		return
 	}
 
