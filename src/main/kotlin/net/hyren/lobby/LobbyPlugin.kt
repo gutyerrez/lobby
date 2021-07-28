@@ -28,7 +28,6 @@ import net.hyren.lobby.misc.button.server.selector.button.ServerSelectorHotBarBu
 import net.hyren.lobby.misc.queue.QueueRunnable
 import net.hyren.lobby.misc.queue.command.QueueCommand
 import net.hyren.lobby.misc.scoreboard.ScoreboardManager
-import net.hyren.lobby.misc.server.info.update
 import net.hyren.lobby.misc.server.utils.ServerConfigurationUtils
 import net.hyren.lobby.misc.slime.jump.SlimeJumpManager
 import net.hyren.lobby.misc.slime.jump.data.SlimeJump
@@ -132,31 +131,29 @@ class LobbyPlugin : CustomPlugin(false) {
          * World settings
          */
 
-        getDefaultWorld().apply {
-            isAutoSave = false
+        Bukkit.getWorlds().forEach {
+            it.isAutoSave = false
 
-            isThundering = false
-            weatherDuration = 0
+            it.isThundering = false
+            it.weatherDuration = 0
 
-            ambientSpawnLimit = 0
-            animalSpawnLimit = 0
-            monsterSpawnLimit = 0
+            it.ambientSpawnLimit = 0
+            it.animalSpawnLimit = 0
+            it.monsterSpawnLimit = 0
 
-            setTicksPerAnimalSpawns(99999)
-            setTicksPerMonsterSpawns(99999)
+            it.setTicksPerAnimalSpawns(99999)
+            it.setTicksPerMonsterSpawns(99999)
 
-            setStorm(false)
+            it.setStorm(false)
 
-            setGameRuleValue("randomTickSpeed", "-1")
-            setGameRuleValue("mobGriefing", "false")
-            setGameRuleValue("doMobSpawning", "false")
-            setGameRuleValue("doMobLoot", "false")
-            setGameRuleValue("doFireTick", "false")
-            setGameRuleValue("doDaylightCycle", "false")
+            it.setGameRuleValue("randomTickSpeed", "-1")
+            it.setGameRuleValue("mobGriefing", "false")
+            it.setGameRuleValue("doMobSpawning", "false")
+            it.setGameRuleValue("doMobLoot", "false")
+            it.setGameRuleValue("doFireTick", "false")
+            it.setGameRuleValue("doDaylightCycle", "false")
 
-            time = 6000
-
-            livingEntities.forEach { it.remove() }
+            it.time = 6000
         }
 
         /**
@@ -234,8 +231,6 @@ class LobbyPlugin : CustomPlugin(false) {
                         hologram.remove(2)
                     }
                 }
-
-                NPCS.forEach { (server, npc) -> npc.update(server) }
             },
             20L,
             20L * 5

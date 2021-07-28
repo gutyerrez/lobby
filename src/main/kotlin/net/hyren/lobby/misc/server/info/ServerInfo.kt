@@ -11,7 +11,7 @@ import net.minecraft.server.v1_8_R3.EntityArmorStand
 import net.minecraft.server.v1_8_R3.EntityGiantZombie
 import org.bukkit.Location
 import org.bukkit.craftbukkit.v1_8_R3.CraftWorld
-import org.bukkit.craftbukkit.v1_8_R3.entity.CraftEntity
+import org.bukkit.entity.ArmorStand
 import org.bukkit.entity.Giant
 import org.bukkit.event.entity.CreatureSpawnEvent
 import org.bukkit.event.player.PlayerInteractAtEntityEvent
@@ -56,7 +56,7 @@ fun Server.spawnNPC(): Giant {
 
 	worldServer.addEntity(entityGiantZombie, CreatureSpawnEvent.SpawnReason.CUSTOM)
 
-	val giant = CraftEntity.getEntity(worldServer.server, entityGiantZombie) as Giant
+	val giant = entityGiantZombie.bukkitEntity as Giant
 
 	giant.setMetadata(
 		LobbyConstants.NPC_METADATA,
@@ -88,7 +88,7 @@ fun Server.spawnNPC(): Giant {
 
 	worldServer.addEntity(entityArmorStand, CreatureSpawnEvent.SpawnReason.CUSTOM)
 
-	val armorStand = entityArmorStand.bukkitEntity
+	val armorStand = entityArmorStand.bukkitEntity as ArmorStand
 
 	armorStand.setMetadata(LobbyConstants.NPC_SERVER_METADATA, FixedMetadataValue(
 		LobbyPlugin.instance,
@@ -117,33 +117,9 @@ fun Server.spawnHologram(): Hologram {
 		Hologram.HologramPosition.DOWN
 	)
 
-	val cloned = getNPCLocation().clone().add(0.0, 3.5, 0.0)
+	val cloned = getNPCLocation().clone().add(0.0, 2.7, 0.0)
 
 	hologram.spawn(cloned)
 
 	return hologram
-}
-
-fun Giant.update(
-	server: Server
-) {
-//	if (isDead) {
-//		return
-//	}
-//
-//	val cloned = server.getNPCLocation().clone().add(0.0, -8.0, 0.0)
-//
-//	if (location.x == cloned.x && location.y == cloned.y && location.z == cloned.z && location.yaw == cloned.yaw && location.pitch == cloned.pitch) {
-//		return
-//	}
-//
-//	equipment.itemInHand = CoreSpigotProvider.Cache.Local.SERVER_CONFIGURATION.provide().fetchByServer(
-//		server
-//	)?.icon
-//
-//	teleport(server.getNPCLocation().clone().add(1.9, -8.5, -3.5))
-//
-//	val armorStand = getMetadata("base")[0].value() as ArmorStand
-//
-//	armorStand.teleport(server.getNPCLocation())
 }

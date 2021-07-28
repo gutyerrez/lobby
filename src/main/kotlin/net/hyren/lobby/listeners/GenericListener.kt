@@ -33,7 +33,6 @@ import org.bukkit.event.entity.EntityChangeBlockEvent
 import org.bukkit.event.entity.EntityCombustEvent
 import org.bukkit.event.entity.EntityDamageByEntityEvent
 import org.bukkit.event.entity.EntityDamageEvent
-import org.bukkit.event.entity.EntityDeathEvent
 import org.bukkit.event.entity.FoodLevelChangeEvent
 import org.bukkit.event.inventory.ClickType
 import org.bukkit.event.inventory.InventoryClickEvent
@@ -123,23 +122,8 @@ class GenericListener : Listener {
 
     @EventHandler
     fun on(
-        event: EntityDeathEvent
-    ) {
-        val entity = event.entity
-
-        if (entity.type == EntityType.GIANT) {
-            println("Tinha metadata? ${entity.hasMetadata(LobbyConstants.NPC_METADATA)}")
-
-            println("${entity.type} morreu em: ${entity.location.blockX} | ${entity.location.blockY} | ${entity.location.blockZ}")
-        }
-    }
-
-    @EventHandler
-    fun on(
         event: EntityDamageEvent
     ) {
-        println("A entidade: ${event.entityType} recebeu dano em ${event.entity.location.blockX} | ${event.entity.location.blockY} | ${event.entity.location.blockZ}")
-
         when (val entity = event.entity) {
             is ItemFrame -> event.isCancelled = true
             is Giant -> event.isCancelled = entity.hasMetadata(LobbyConstants.NPC_METADATA)
@@ -285,15 +269,11 @@ class GenericListener : Listener {
         event.isCancelled = true
 
         if (entity is ArmorStand && entity.hasMetadata(LobbyConstants.NPC_SERVER_METADATA)) {
-            try {
-                val callback = entity.getMetadata(
-                    LobbyConstants.NPC_SERVER_METADATA
-                )[0].value() as (PlayerInteractAtEntityEvent) -> Unit
+            val callback = entity.getMetadata(
+                LobbyConstants.NPC_SERVER_METADATA
+            )[0].value() as (PlayerInteractAtEntityEvent) -> Unit
 
-                callback(event)
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
+            callback(event)
         }
     }
 
