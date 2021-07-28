@@ -137,7 +137,9 @@ fun Giant.update(
 		return
 	}
 
-	if (location.x == server.getNPCLocation().x && location.y == server.getNPCLocation().y && location.z == server.getNPCLocation().z && server.getNPCLocation().yaw == server.getNPCLocation().yaw && location.pitch == server.getNPCLocation().pitch) {
+	val cloned = server.getNPCLocation().clone().add(0.0, 3.5, 0.0)
+
+	if (location.x == cloned.x && location.y == cloned.y && location.z == cloned.z && location.yaw == cloned.yaw && location.pitch == cloned.pitch) {
 		return
 	}
 
