@@ -31,7 +31,7 @@ object ServerConnectorUtils {
 
         if (bukkitSpawnApplication === null) {
             player.sendMessage(
-                TextComponent("§cNão foi possível localizar o spawn desse servidor.")
+                TextComponent("§cEste servidor não está disponível no momento.")
             )
             return
         }
