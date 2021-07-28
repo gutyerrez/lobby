@@ -79,7 +79,7 @@ fun Server.spawnNPC(): Giant {
 		this
 	)?.icon
 
-	giant.teleport(getNPCLocation().clone().add(0.5, -8.0, 12.5))
+	giant.teleport(getNPCLocation().clone().add(1.9, -8.5, -3.5))
 
 	val entityArmorStand = EntityArmorStand(worldServer, getNPCLocation().x, getNPCLocation().y, getNPCLocation().z)
 
