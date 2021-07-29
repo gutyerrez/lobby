@@ -73,11 +73,15 @@ class GenericListener : Listener {
              * Fly preference
              */
 
-            if (it != null && it.hasGroup(Group.VIP) && it.getPreferences().any { preference ->
-                preference == FLY_IN_LOBBY && preference.preferenceState == PreferenceState.ENABLED
-            }) {
-                player.allowFlight = true
-                player.isFlying = true
+            if (it != null) {
+                HotBarManager.giveToPlayer(player)
+
+                if (it.hasGroup(Group.VIP) && it.getPreferences().any { preference ->
+                    preference == FLY_IN_LOBBY && preference.preferenceState == PreferenceState.ENABLED
+                }) {
+                    player.allowFlight = true
+                    player.isFlying = true
+                }
             }
 
             /**
@@ -85,13 +89,14 @@ class GenericListener : Listener {
              */
 
             if (it == null || !it.hasGroup(Group.VIP)) {
-                Bukkit.getScheduler().runTaskLater(
-                    LobbyPlugin.instance,
-                    {
-                        player.openInventory(CaptchaInventory())
-                    },
-                    5L
-                )
+                    Bukkit.getScheduler().runTaskLater(
+                        LobbyPlugin.instance,
+                        {
+                            player.openInventory(CaptchaInventory())
+                        },
+                        5L
+                    )
+                }
             }
         }
     }

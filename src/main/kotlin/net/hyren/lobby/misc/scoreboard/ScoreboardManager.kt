@@ -131,12 +131,14 @@ object ScoreboardManager {
                         scoreboard as GroupScoreboard
 
                         if (!targetUser.isScoreboardInitialized()) {
-                            val scoreboard = LobbyScoreboard()
-
                             scoreboard.registerTeams()
 
-                            targetUser.scoreboard = scoreboard
+                            println("Test")
+
+                            targetUser.scoreboard = LobbyScoreboard()
                         }
+
+                        println("asd")
 
                         val groupBoard = targetUser.scoreboard as GroupScoreboard
 
