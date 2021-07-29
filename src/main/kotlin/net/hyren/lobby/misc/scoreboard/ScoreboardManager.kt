@@ -144,8 +144,8 @@ object ScoreboardManager {
 
                         val groupBoard = targetUser.scoreboard as GroupScoreboard
 
-                        groupBoard.registerUser(targetUser)
-                        scoreboard.registerUser(user)
+                        groupBoard.registerUser(user)
+                        scoreboard.registerUser(targetUser)
                     }
                 }
             }
