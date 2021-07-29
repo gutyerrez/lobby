@@ -131,19 +131,21 @@ object ScoreboardManager {
                         scoreboard as GroupScoreboard
 
                         if (!targetUser.isScoreboardInitialized()) {
+                            val scoreboard = LobbyScoreboard()
+
                             scoreboard.registerTeams()
 
-                            println("Test")
+                            targetUser.scoreboard = scoreboard
 
-                            targetUser.scoreboard = LobbyScoreboard()
+                            scoreboard.registerUser(targetUser)
                         }
 
                         println("asd")
 
                         val groupBoard = targetUser.scoreboard as GroupScoreboard
 
-                        groupBoard.registerUser(user)
-                        scoreboard.registerUser(targetUser)
+                        groupBoard.registerUser(targetUser)
+                        scoreboard.registerUser(user)
                     }
                 }
             }
