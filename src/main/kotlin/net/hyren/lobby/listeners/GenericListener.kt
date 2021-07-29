@@ -89,14 +89,13 @@ class GenericListener : Listener {
              */
 
             if (it == null || !it.hasGroup(Group.VIP)) {
-                    Bukkit.getScheduler().runTaskLater(
-                        LobbyPlugin.instance,
-                        {
-                            player.openInventory(CaptchaInventory())
-                        },
-                        5L
-                    )
-                }
+                Bukkit.getScheduler().runTaskLater(
+                    LobbyPlugin.instance,
+                    {
+                        player.openInventory(CaptchaInventory())
+                    },
+                    5L
+                )
             }
         }
     }
