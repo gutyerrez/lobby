@@ -12,7 +12,6 @@ import net.hyren.lobby.LobbyProvider
 import net.hyren.lobby.misc.button.HotBarManager
 import net.hyren.lobby.misc.captcha.inventory.CaptchaInventory
 import net.hyren.lobby.misc.scoreboard.ScoreboardManager
-import net.hyren.lobby.user.data.LobbyUser
 import net.md_5.bungee.api.chat.ComponentBuilder
 import org.bukkit.Bukkit
 import org.bukkit.Location
@@ -94,8 +93,6 @@ class GenericListener : Listener {
                     5L
                 )
             } else {
-                LobbyProvider.Cache.Local.LOBBY_USERS.provide().put(LobbyUser(it))
-
                 HotBarManager.giveToPlayer(player)
             }
         }

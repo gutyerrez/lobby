@@ -69,6 +69,8 @@ object ScoreboardManager {
         )}")
 
         scoreboard.send(arrayOf(player))
+
+        LobbyProvider.Cache.Local.LOBBY_USERS.provide().put(LobbyUser(user))
     }
 
     fun update(user: LobbyUser, vararg slots: Slot) {
