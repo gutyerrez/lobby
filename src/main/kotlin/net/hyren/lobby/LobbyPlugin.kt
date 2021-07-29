@@ -16,6 +16,7 @@ import net.hyren.core.spigot.misc.frame.data.Frame
 import net.hyren.core.spigot.misc.hologram.Hologram
 import net.hyren.core.spigot.misc.plugin.CustomPlugin
 import net.hyren.core.spigot.misc.skin.command.SkinCommand
+import net.hyren.core.spigot.misc.theme.data.Theme
 import net.hyren.core.spigot.world.generator.VoidChunkGenerator
 import net.hyren.lobby.echo.packets.listeners.UserGroupsUpdatedEchoPacketListener
 import net.hyren.lobby.listeners.GenericListener
@@ -155,6 +156,13 @@ class LobbyPlugin : CustomPlugin() {
 
             it.time = 6000
         }
+
+        val theme = Theme()
+
+        theme.load()
+        theme.paste(
+            getDefaultWorld().name, 0, 75, 0
+        )
 
         /**
          * Application status

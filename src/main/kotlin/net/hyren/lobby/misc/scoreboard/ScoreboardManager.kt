@@ -113,16 +113,12 @@ object ScoreboardManager {
                 }
                 Slot.TAB_LIST -> {
                     Bukkit.getOnlinePlayers().forEach { player ->
-                        println("Atualizar o player: ${player.name}")
-
                         val targetUser = LobbyProvider.Cache.Local.LOBBY_USERS.provide().fetchById(
                             EntityID(
                                 player.uniqueId,
                                 UsersTable
                             )
                         ) ?: return
-
-                        println("Peguei o player ${player.name}")
 
                         scoreboard as GroupScoreboard
 
