@@ -65,6 +65,8 @@ object ScoreboardManager {
             Regex("(https|http)://"),
         )[1]}")
 
+        scoreboard.registerUser(lobbyUser)
+
         scoreboard.send(arrayOf(player))
 
         LobbyProvider.Cache.Local.LOBBY_USERS.provide().put(lobbyUser)
