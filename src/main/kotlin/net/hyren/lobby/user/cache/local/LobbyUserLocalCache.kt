@@ -15,19 +15,23 @@ class LobbyUserLocalCache : LocalCache {
     private val CACHE_BY_ID = Caffeine.newBuilder()
         .build<EntityID<UUID>, LobbyUser>()
 
-    fun fetchById(userId: EntityID<UUID>) = this.CACHE_BY_ID.getIfPresent(userId)
+    fun fetchById(
+        userId: EntityID<UUID>
+    ) = CACHE_BY_ID.getIfPresent(userId)
 
-    fun fetchById(userId: UUID) = this.CACHE_BY_ID.getIfPresent(
+    fun fetchById(
+        userId: UUID
+    ) = fetchById(
         EntityID(
             userId,
             UsersTable
         )
     )
 
-    fun fetchAll() = this.CACHE_BY_ID.asMap().values
+    fun fetchAll() = CACHE_BY_ID.asMap().values
 
     fun put(lobbyUser: LobbyUser) {
-        this.CACHE_BY_ID.put(lobbyUser.id, lobbyUser)
+        CACHE_BY_ID.put(lobbyUser.id, lobbyUser)
     }
 
     fun remove(userId: EntityID<UUID>) = this.CACHE_BY_ID.invalidate(userId)
